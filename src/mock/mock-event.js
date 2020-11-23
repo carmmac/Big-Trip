@@ -4,6 +4,7 @@ dayjs.extend(objectSupport);
 
 const INFO_SENTENCE_MAX_NUM = 5;
 const OFFERS_MAX_NUM = 5;
+const PHOTOS_MAX_NUM = 4;
 
 const getRadomNum = (min, max) => {
   min = Math.ceil(min);
@@ -27,39 +28,58 @@ const eventTypes = [
 const destinations = [`Madrid`, `New-York`, `Las Vegas`, `Tokyo`, `Deli`];
 const offers = [
   {
-    type: `food`,
+    type: `Check-in`,
     title: `Add breakfast`,
     price: `${getRadomNum(10, 100)}`,
+    isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
-    type: `food`,
+    type: `Restaurant`,
     title: `Lunch in city`,
     price: `${getRadomNum(10, 100)}`,
+    isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
-    type: `transport`,
+    type: `Sightseeing`,
     title: `Order Uber`,
     price: `${getRadomNum(10, 100)}`,
+    isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
-    type: `transport`,
+    type: `Drive`,
     title: `Rent a car`,
     price: `${getRadomNum(10, 100)}`,
+    isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
-    type: `flight`,
+    type: `Flight`,
     title: `Add luggage`,
     price: `${getRadomNum(10, 100)}`,
+    isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
-    type: `flight`,
+    type: `Ship`,
+    title: `Add luggage`,
+    price: `${getRadomNum(10, 100)}`,
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Flight`,
     title: `Switch to comfort`,
     price: `${getRadomNum(10, 100)}`,
+    isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
     type: `Sightseeing`,
     title: `Book tickets`,
     price: `${getRadomNum(10, 100)}`,
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Bus`,
+    title: `Book tickets`,
+    price: `${getRadomNum(10, 100)}`,
+    isChecked: Boolean(getRadomNum(0, 1)),
   },
 ];
 
@@ -83,6 +103,14 @@ const generateOffers = () => {
     randomOffers.push(offers[getRadomNum(0, offers.length - 1)]);
   }
   return randomOffers;
+};
+
+const generatePhotos = () => {
+  const photos = [];
+  for (let i = 0; i < getRadomNum(1, PHOTOS_MAX_NUM); i++) {
+    photos.push(`http://picsum.photos/248/152?r=${Math.random()}`);
+  }
+  return photos;
 };
 
 const generateDate = () => {
@@ -126,7 +154,7 @@ export const generateEvent = () => {
     date,
     time,
     info,
-    photo: `http://picsum.photos/248/152?r=${Math.random()}`,
+    photos: generatePhotos(),
     price: getRadomNum(10, 500),
     offers: generateOffers(),
     isFavorite: Boolean(getRadomNum(0, 1)),

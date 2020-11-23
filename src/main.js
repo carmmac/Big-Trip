@@ -6,7 +6,7 @@ import {createList} from './view/list.js';
 import {listEmpty} from './view/list-empty.js';
 import {listSort} from './view/list-sort.js';
 import {edit} from './view/edit.js';
-import {newPoint} from './view/new-point.js';
+import {createNewPoint} from './view/new-point.js';
 import {newPointWithoutOffers} from './view/new-point-without-offers.js';
 import {newPointWithoutDestinations} from './view/new-point-without-destination.js';
 import {listFilter} from './view/list-filter.js';
@@ -32,14 +32,14 @@ render(siteMainElement, statistics(), `beforeend`);
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
 // render(tripEventsElement, listEmpty(), `afterbegin`);
 // render(tripEventsElement, listSort(), `afterbegin`);
-for (let i = 0; i < EVENTS_NUM; i++) {
+for (let i = 1; i < EVENTS_NUM; i++) {
   render(tripEventsElement, createList(events[i]), `afterbegin`);
 }
 // render(tripEventsElement, listFilter(), `beforeend`);
 
-// const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
+const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 // render(tripEventsListElement, edit(), `afterbegin`);
 // render(tripEventsListElement, newPointWithoutDestinations(), `afterbegin`);
 // render(tripEventsListElement, newPointWithoutOffers(), `afterbegin`);
-// render(tripEventsListElement, newPoint(), `afterbegin`);
+render(tripEventsListElement, createNewPoint(events[0]), `afterbegin`);
 
