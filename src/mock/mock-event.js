@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import objectSupport from 'dayjs/plugin/objectSupport';
+dayjs.extend(objectSupport);
 
 const INFO_SENTENCE_MAX_NUM = 5;
 const OFFERS_MAX_NUM = 5;
@@ -27,37 +29,37 @@ const offers = [
   {
     type: `food`,
     title: `Add breakfast`,
-    price: `${getRadomNum(10, 100)}$`,
+    price: `${getRadomNum(10, 100)}`,
   },
   {
     type: `food`,
     title: `Lunch in city`,
-    price: `${getRadomNum(10, 100)}$`,
+    price: `${getRadomNum(10, 100)}`,
   },
   {
     type: `transport`,
     title: `Order Uber`,
-    price: `${getRadomNum(10, 100)}$`,
+    price: `${getRadomNum(10, 100)}`,
   },
   {
     type: `transport`,
     title: `Rent a car`,
-    price: `${getRadomNum(10, 100)}$`,
+    price: `${getRadomNum(10, 100)}`,
   },
   {
     type: `flight`,
     title: `Add luggage`,
-    price: `${getRadomNum(10, 100)}$`,
+    price: `${getRadomNum(10, 100)}`,
   },
   {
     type: `flight`,
     title: `Switch to comfort`,
-    price: `${getRadomNum(10, 100)}$`,
+    price: `${getRadomNum(10, 100)}`,
   },
   {
     type: `Sightseeing`,
     title: `Book tickets`,
-    price: `${getRadomNum(10, 100)}$`,
+    price: `${getRadomNum(10, 100)}`,
   },
 ];
 
@@ -77,7 +79,7 @@ const generateInfo = () => {
 
 const generateOffers = () => {
   let randomOffers = [];
-  for (let i = 0; i < OFFERS_MAX_NUM; i++) {
+  for (let i = 0; i < getRadomNum(1, OFFERS_MAX_NUM); i++) {
     randomOffers.push(offers[getRadomNum(0, offers.length - 1)]);
   }
   return randomOffers;
@@ -91,11 +93,24 @@ const generateDate = () => {
 
 const generateTime = () => {
   const eventTime = {
-    START: getRadomNum(0, 11),
-    END: getRadomNum(12, 23),
+    START: {
+      HOUR: getRadomNum(0, 11),
+      MINUTE: getRadomNum(0, 29)
+    },
+    END: {
+      HOUR: getRadomNum(12, 23),
+      MINUTE: getRadomNum(30, 59)
+    },
+
   };
-  eventTime.DURATION = eventTime.END - eventTime.START;
-  return eventTime;
+  return {
+    START: dayjs(eventTime.START),
+    END: dayjs(eventTime.END),
+    DURATION: {
+      HOUR: eventTime.END.HOUR - eventTime.START.HOUR,
+      MINUTE: eventTime.END.MINUTE - eventTime.START.MINUTE
+    }
+  };
 };
 
 export const generateEvent = () => {
@@ -112,8 +127,8 @@ export const generateEvent = () => {
     time,
     info,
     photo: `http://picsum.photos/248/152?r=${Math.random()}`,
-    price: `${getRadomNum(10, 1000)}$`,
+    price: getRadomNum(10, 500),
     offers: generateOffers(),
-    isFavourite: Boolean(getRadomNum(0, 1)),
+    isFavorite: Boolean(getRadomNum(0, 1)),
   };
 };
