@@ -16,3 +16,11 @@ export const humanizeDate = (format, date) => {
 };
 
 export const getEmptyDataClassName = (data) => data.length === 0 ? `visually-hidden` : ``;
+
+export const filterData = (data, param) => {
+  const sortedEvents = data.slice();
+  sortedEvents.sort((left, right) => {
+    return left[param] - right[param];
+  });
+  return sortedEvents;
+};
