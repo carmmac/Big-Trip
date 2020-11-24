@@ -107,7 +107,7 @@ const generateOffers = () => {
 
 const generatePhotos = () => {
   const photos = [];
-  for (let i = 0; i < getRadomNum(1, PHOTOS_MAX_NUM); i++) {
+  for (let i = 0; i < getRadomNum(0, PHOTOS_MAX_NUM); i++) {
     photos.push(`http://picsum.photos/248/152?r=${Math.random()}`);
   }
   return photos;

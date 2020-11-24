@@ -11,6 +11,7 @@ export const createNewPoint = function (event) {
   } = event;
   const eventDate = `${dayjs().format(`DD/MM/YY HH:mm`)}`;
   const emptyOffersClassName = offers.length === 0 ? `visually-hidden` : ``;
+  const emptyPhotosClassName = photos.length === 0 ? `visually-hidden` : ``;
 
   const renderOffers = (offersArr) => {
     let offersToRender = ``;
@@ -36,8 +37,10 @@ export const createNewPoint = function (event) {
 
   const renderPhotos = (pics) => {
     let photosToRender = ``;
-    for (const pic of pics) {
-      photosToRender += `<img class="event__photo" src="${pic}" alt="Event photo"></img>`;
+    if (pics.length !== 0) {
+      for (const pic of pics) {
+        photosToRender += `<img class="event__photo" src="${pic}" alt="Event photo"></img>`;
+      }
     }
     return photosToRender;
   };
@@ -153,7 +156,7 @@ export const createNewPoint = function (event) {
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${info.join()}</p>
 
-          <div class="event__photos-container">
+          <div class="event__photos-container ${emptyPhotosClassName}">
             <div class="event__photos-tape">
               ${renderPhotos(photos)}
             </div>
