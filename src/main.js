@@ -1,4 +1,4 @@
-import {info} from './view/info.js';
+import {createInfo} from './view/info.js';
 import {menu} from './view/menu.js';
 import {filters} from './view/filters.js';
 import {statistics} from './view/statistics.js';
@@ -20,7 +20,7 @@ const render = function (container, template, position) {
 };
 
 const tripHeaderElement = document.querySelector(`.trip-main`);
-render(tripHeaderElement, info(), `afterbegin`);
+render(tripHeaderElement, createInfo(events), `afterbegin`);
 
 const tripMenuElement = tripHeaderElement.querySelector(`.trip-controls`);
 render(tripMenuElement, menu(), `afterbegin`);
@@ -32,8 +32,8 @@ render(siteMainElement, statistics(), `beforeend`);
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
 // render(tripEventsElement, listEmpty(), `afterbegin`);
 // render(tripEventsElement, listSort(), `afterbegin`);
-for (let i = 1; i < EVENTS_NUM; i++) {
-  render(tripEventsElement, createList(events[i]), `afterbegin`);
+for (let i = 2; i < EVENTS_NUM; i++) {
+  render(tripEventsElement, createList(events[i]), `beforeend`);
 }
 // render(tripEventsElement, listFilter(), `beforeend`);
 
