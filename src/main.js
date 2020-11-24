@@ -5,7 +5,7 @@ import {statistics} from './view/statistics.js';
 import {createList} from './view/list.js';
 import {listEmpty} from './view/list-empty.js';
 import {listSort} from './view/list-sort.js';
-import {edit} from './view/edit.js';
+import {createEditPoint} from './view/edit.js';
 import {createNewPoint} from './view/new-point.js';
 import {newPointWithoutOffers} from './view/new-point-without-offers.js';
 import {newPointWithoutDestinations} from './view/new-point-without-destination.js';
@@ -38,7 +38,7 @@ for (let i = 1; i < EVENTS_NUM; i++) {
 // render(tripEventsElement, listFilter(), `beforeend`);
 
 const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
-// render(tripEventsListElement, edit(), `afterbegin`);
+render(tripEventsListElement, createEditPoint(events[1]), `afterbegin`);
 // render(tripEventsListElement, newPointWithoutDestinations(), `afterbegin`);
 // render(tripEventsListElement, newPointWithoutOffers(), `afterbegin`);
 render(tripEventsListElement, createNewPoint(events[0]), `afterbegin`);
