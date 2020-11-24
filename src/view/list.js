@@ -28,7 +28,7 @@ export const createList = function (event) {
 
   const renderOffers = (offersArr) => {
     let offersToRender = ``;
-    for (let item of offersArr) {
+    for (const item of offersArr) {
       const offer = `
       <li class="event__offer">
         <span class="event__offer-title">${item.title}</span>

@@ -7,7 +7,7 @@ export const createEditPoint = function (event = {}) {
 
   const renderOffers = (offersArr) => {
     let offersToRender = ``;
-    for (let item of offersArr) {
+    for (const item of offersArr) {
       const offer = `
         <div class="event__offer-selector">
           <input class="event__offer-checkbox  visually-hidden" id="event-offer-${item.type}-1" type="checkbox" name="event-offer-${item.type}" ${item.isChecked ? `checked` : ``}>

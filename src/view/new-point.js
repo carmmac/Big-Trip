@@ -26,7 +26,7 @@ export const createNewPoint = function (event) {
 
   const renderOffers = (offersArr) => {
     let offersToRender = ``;
-    for (let item of offersArr) {
+    for (const item of offersArr) {
       const offer = `
         <div class="event__available-offers">
           <div class="event__offer-selector">
