@@ -7,7 +7,7 @@ import {listEmpty} from './view/list-empty.js';
 import {listSort} from './view/list-sort.js';
 import {createEditPoint} from './view/edit.js';
 import {createNewPoint} from './view/new-point.js';
-import {newPointWithoutOffers} from './view/new-point-without-offers.js';
+import {createNewPointWithoutOffers} from './view/new-point-without-offers.js';
 import {newPointWithoutDestinations} from './view/new-point-without-destination.js';
 import {listFilter} from './view/list-filter.js';
 import {generateEvent} from './mock/mock-event.js';
@@ -41,5 +41,5 @@ const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__lis
 render(tripEventsListElement, createEditPoint(events[1]), `afterbegin`);
 render(tripEventsListElement, createNewPoint(events[0]), `afterbegin`);
 // render(tripEventsListElement, newPointWithoutDestinations(), `afterbegin`);
-// render(tripEventsListElement, newPointWithoutOffers(), `afterbegin`);
+render(tripEventsListElement, createNewPointWithoutOffers(events[0]), `afterbegin`);
 

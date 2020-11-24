@@ -35,10 +35,8 @@ export const createNewPoint = function (event) {
 
   const renderPhotos = (pics) => {
     let photosToRender = ``;
-    if (pics.length !== 0) {
-      for (const pic of pics) {
-        photosToRender += `<img class="event__photo" src="${pic}" alt="Event photo"></img>`;
-      }
+    for (const pic of pics) {
+      photosToRender += `<img class="event__photo" src="${pic}" alt="Event photo"></img>`;
     }
     return photosToRender;
   };
