@@ -1,27 +1,28 @@
-import dayjs from "dayjs";
+import {humanizeDate, getEmptyDataClassName} from '../utils.js';
 
 export const createList = function (event) {
 
   const {type, destination, date, time, price, offers, isFavorite} = event;
 
-  const eventDate = dayjs(date).format(`MMM DD`);
-  const eventDateTime = dayjs(date).format(`YYYY-MM-DD`);
-  const eventDateTimeFull = dayjs(date).format(`YYYY-MM-DDTHH:mm`);
+  const eventDate = humanizeDate(`MMM DD`, date);
+  const eventDateTime = humanizeDate(`YYYY-MM-DD`, date);
+  const eventDateTimeFull = humanizeDate(`YYYY-MM-DDTHH:mm`, date);
+  const emptyOffersClassName = getEmptyDataClassName(offers);
 
   const getEventTime = ({START, END, DURATION}) => {
     const eventTime = {
       START: {
-        HOUR: START.format(`HH`),
-        MINUTE: START.format(`mm`),
+        HOUR: humanizeDate(`HH`, START),
+        MINUTE: humanizeDate(`mm`, START),
       },
       END: {
-        HOUR: END.format(`HH`),
-        MINUTE: END.format(`mm`),
+        HOUR: humanizeDate(`HH`, END),
+        MINUTE: humanizeDate(`mm`, END),
       }
     };
     const start = `${eventTime.START.HOUR}:${eventTime.START.MINUTE}`;
     const end = `${eventTime.END.HOUR}:${eventTime.END.MINUTE}`;
-    const duration = `${dayjs(DURATION).format(`HH`)}:${dayjs(DURATION).format(`mm`)}`;
+    const duration = `${humanizeDate(`HH`, DURATION)}:${humanizeDate(`mm`, DURATION)}`;
     return {start, end, duration};
   };
 
@@ -63,7 +64,7 @@ export const createList = function (event) {
             &euro;&nbsp;<span class="event__price-value">${price}</span>
           </p>
           <h4 class="visually-hidden">Offers:</h4>
-          <ul class="event__selected-offers">
+          <ul class="event__selected-offers ${emptyOffersClassName}">
             ${renderOffers(offers)}
           </ul>
           <button class="event__favorite-btn ${favoriteClassName}" type="button">

@@ -1,26 +1,24 @@
-import dayjs from "dayjs";
+import {humanizeDate, getEmptyDataClassName} from '../utils.js';
 
 export const createEditPoint = function (event = {}) {
   const {type, destination, info, price, offers} = event;
-  const eventDate = `${dayjs().format(`DD/MM/YY HH:mm`)}`;
-  const emptyOffersClassName = offers.length === 0 ? `visually-hidden` : ``;
+  const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
+  const emptyOffersClassName = getEmptyDataClassName(offers);
 
   const renderOffers = (offersArr) => {
     let offersToRender = ``;
-    if (offersArr.length !== 0) {
-      for (let item of offersArr) {
-        const offer = `
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${item.type}-1" type="checkbox" name="event-offer-${item.type}" ${item.isChecked ? `checked` : ``}>
-            <label class="event__offer-label" for="event-offer-${item.type}-1">
-              <span class="event__offer-title">${item.title}</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">${item.price}</span>
-            </label>
-          </div>
-        `;
-        offersToRender += offer;
-      }
+    for (let item of offersArr) {
+      const offer = `
+        <div class="event__offer-selector">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${item.type}-1" type="checkbox" name="event-offer-${item.type}" ${item.isChecked ? `checked` : ``}>
+          <label class="event__offer-label" for="event-offer-${item.type}-1">
+            <span class="event__offer-title">${item.title}</span>
+            &plus;&euro;&nbsp;
+            <span class="event__offer-price">${item.price}</span>
+          </label>
+        </div>
+      `;
+      offersToRender += offer;
     }
     return offersToRender;
   };

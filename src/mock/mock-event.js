@@ -1,4 +1,5 @@
-import dayjs from "dayjs";
+import {getRadomNum, generateRandomIndex} from '../utils.js';
+import dayjs from 'dayjs';
 import objectSupport from 'dayjs/plugin/objectSupport';
 dayjs.extend(objectSupport);
 
@@ -6,11 +7,6 @@ const INFO_SENTENCE_MAX_NUM = 5;
 const OFFERS_MAX_NUM = 5;
 const PHOTOS_MAX_NUM = 4;
 
-const getRadomNum = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
 
 const infoTest = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 const eventTypes = [
@@ -83,11 +79,6 @@ const offers = [
   },
 ];
 
-const generateData = (data) => {
-  const randomData = data[getRadomNum(0, data.length - 1)];
-  return randomData;
-};
-
 const generateInfo = () => {
   const infoArray = infoTest.split(`. `);
   let randomInfo = [];
@@ -132,8 +123,8 @@ const generateTime = () => {
 
   };
   return {
-    START: dayjs(eventTime.START),
-    END: dayjs(eventTime.END),
+    START: eventTime.START,
+    END: eventTime.END,
     DURATION: {
       HOUR: eventTime.END.HOUR - eventTime.START.HOUR,
       MINUTE: eventTime.END.MINUTE - eventTime.START.MINUTE
@@ -142,8 +133,8 @@ const generateTime = () => {
 };
 
 export const generateEvent = () => {
-  const type = generateData(eventTypes);
-  const destination = generateData(destinations);
+  const type = generateRandomIndex(eventTypes);
+  const destination = generateRandomIndex(destinations);
   const date = generateDate();
   const time = generateTime();
   const info = generateInfo();
