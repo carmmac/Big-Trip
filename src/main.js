@@ -4,7 +4,7 @@ import {filters} from './view/filters.js';
 import {statistics} from './view/statistics.js';
 import {createList} from './view/list.js';
 import {listEmpty} from './view/list-empty.js';
-import {listSort} from './view/list-sort.js';
+import {createListSort} from './view/list-sort.js';
 import {createEditPoint} from './view/edit.js';
 import {createNewPoint} from './view/new-point.js';
 import {createNewPointWithoutOffers} from './view/new-point-without-offers.js';
@@ -31,7 +31,7 @@ render(siteMainElement, statistics(), `beforeend`);
 
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
 // render(tripEventsElement, listEmpty(), `afterbegin`);
-// render(tripEventsElement, listSort(), `afterbegin`);
+render(tripEventsElement, createListSort(), `afterbegin`);
 for (let i = 2; i < EVENTS_NUM; i++) {
   render(tripEventsElement, createList(events[i]), `beforeend`);
 }
