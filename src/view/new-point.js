@@ -12,6 +12,7 @@ export const createNewPoint = function (event) {
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
   const emptyOffersClassName = getEmptyDataClassName(offers);
   const emptyPhotosClassName = getEmptyDataClassName(photos);
+  const emptyInfoClassName = getEmptyDataClassName(info);
 
   const renderOffers = (offersArr) => {
     let offersToRender = ``;
@@ -148,13 +149,13 @@ export const createNewPoint = function (event) {
           </div>
         </section>
 
-        <section class="event__section  event__section--destination">
+        <section class="event__section  event__section--destination ${emptyInfoClassName}">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${info.join()}</p>
 
           <div class="event__photos-container ${emptyPhotosClassName}">
             <div class="event__photos-tape">
-              ${renderPhotos(photos)}
+              ${emptyInfoClassName === `visually-hidden` ? `` : renderPhotos(photos)}
             </div>
           </div>
         </section>
