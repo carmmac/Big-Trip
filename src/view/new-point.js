@@ -1,4 +1,5 @@
 import {humanizeDate, getEmptyDataClassName} from '../utils.js';
+import {destinations} from '../mock/mock-event.js';
 
 export const createNewPoint = function (event) {
   const {
@@ -13,6 +14,15 @@ export const createNewPoint = function (event) {
   const emptyOffersClassName = getEmptyDataClassName(offers);
   const emptyPhotosClassName = getEmptyDataClassName(photos);
   const emptyInfoClassName = getEmptyDataClassName(info);
+
+  const renderDestinationOptions = () => {
+    let optionsToRender = ``;
+    for (const item of destinations) {
+      const option = `<option value="${item}"></option>`;
+      optionsToRender += option;
+    }
+    return optionsToRender;
+  };
 
   const renderOffers = (offersArr) => {
     let offersToRender = ``;
@@ -116,9 +126,7 @@ export const createNewPoint = function (event) {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
           <datalist id="destination-list-1">
-            <option value="Amsterdam"></option>
-            <option value="Geneva"></option>
-            <option value="Chamonix"></option>
+            ${renderDestinationOptions()}
           </datalist>
         </div>
 

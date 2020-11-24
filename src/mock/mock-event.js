@@ -21,7 +21,7 @@ const eventTypes = [
   `Drive`,
   `Flight`,
 ];
-const destinations = [`Madrid`, `New-York`, `Las Vegas`, `Tokyo`, `Deli`];
+export const destinations = [`Madrid`, `New-York`, `Las Vegas`, `Tokyo`, `Deli`];
 const offers = [
   {
     type: `Check-in`,
