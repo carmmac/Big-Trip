@@ -2,13 +2,13 @@ import {createInfo} from './view/info.js';
 import {menu} from './view/menu.js';
 import {filters} from './view/filters.js';
 import {statistics} from './view/statistics.js';
-import {createList} from './view/list.js';
+// import {createList} from './view/list.js';
 // import {listEmpty} from './view/list-empty.js';
 import {createListSort} from './view/list-sort.js';
 import {createEditPoint} from './view/edit.js';
-import {createNewPoint} from './view/new-point.js';
-import {createNewPointWithoutOffers} from './view/new-point-without-offers.js';
-import {createNewPointWithoutDestinations} from './view/new-point-without-destination.js';
+// import {createNewPoint} from './view/new-point.js';
+// import {createNewPointWithoutOffers} from './view/new-point-without-offers.js';
+// import {createNewPointWithoutDestinations} from './view/new-point-without-destination.js';
 import {createlistFiltered} from './view/list-filter.js';
 import {generateEvent} from './mock/mock-event.js';
 import {filterData} from './utils.js';
@@ -31,8 +31,8 @@ const siteMainElement = document.querySelector(`.page-main .page-body__container
 render(siteMainElement, statistics(), `beforeend`);
 
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
-// render(tripEventsElement, listEmpty(), `afterbegin`);
 render(tripEventsElement, createListSort(), `afterbegin`);
+// render(tripEventsElement, listEmpty(), `afterbegin`);
 // for (let i = 2; i < EVENTS_NUM; i++) {
 //   render(tripEventsElement, createList(events[i]), `beforeend`);
 // }
