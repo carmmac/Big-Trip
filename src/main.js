@@ -39,7 +39,7 @@ for (let i = 1; i < EVENTS_NUM; i++) {
 
 const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 render(tripEventsListElement, createEditPoint(events[1]), `afterbegin`);
+render(tripEventsListElement, createNewPoint(events[0]), `afterbegin`);
 // render(tripEventsListElement, newPointWithoutDestinations(), `afterbegin`);
 // render(tripEventsListElement, newPointWithoutOffers(), `afterbegin`);
-render(tripEventsListElement, createNewPoint(events[0]), `afterbegin`);
 

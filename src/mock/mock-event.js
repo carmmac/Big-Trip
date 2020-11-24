@@ -99,7 +99,7 @@ const generateInfo = () => {
 
 const generateOffers = () => {
   let randomOffers = [];
-  for (let i = 0; i < getRadomNum(1, OFFERS_MAX_NUM); i++) {
+  for (let i = 0; i < getRadomNum(0, OFFERS_MAX_NUM); i++) {
     randomOffers.push(offers[getRadomNum(0, offers.length - 1)]);
   }
   return randomOffers;
