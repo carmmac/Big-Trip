@@ -38,8 +38,7 @@ export const createNewPoint = function (event) {
           </div>
         </div>
       `;
-      finalTemplate += currentTemplate;
-      return finalTemplate;
+      return `${currentTemplate}${finalTemplate}`;
     }, draft);
   };
 

@@ -36,8 +36,7 @@ export const createList = function (event) {
         <span class="event__offer-price">${currentOffer.price}</span>
       </li>
       `;
-      finalTemplate += currentTemplate;
-      return finalTemplate;
+      return `${currentTemplate}${finalTemplate}`;
     }, draft);
   };
 

@@ -21,8 +21,7 @@ export const createEditPoint = function (event = {}) {
           </div>
         </div>
       `;
-      finalTemplate += currentTemplate;
-      return finalTemplate;
+      return `${currentTemplate}${finalTemplate}`;
     }, draft);
   };
 
