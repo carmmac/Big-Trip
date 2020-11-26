@@ -1,14 +1,15 @@
 export const createInfo = function (events) {
 
-  const getTotlaPrice = () => {
-    let totalPrice = 0;
-    for (const event of events) {
-      totalPrice += event.price;
-      event.offers.forEach((offer) => {
-        totalPrice += offer.price;
-      });
-    }
-    return totalPrice;
+  const getTotalPrice = () => {
+    const totalPrice = 0;
+    const offerTotalPrice = 0;
+    return events.reduce((totalSum, currEvt) => {
+      totalSum += currEvt.price + currEvt.offers.reduce((sum, currOffer) => {
+        sum += currOffer.price;
+        return sum;
+      }, offerTotalPrice);
+      return totalSum;
+    }, totalPrice);
   };
 
   return `
@@ -20,7 +21,7 @@ export const createInfo = function (events) {
       </div>
 
       <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotlaPrice()}</span>
+        Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalPrice()}</span>
       </p>
     </section>
   `;

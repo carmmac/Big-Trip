@@ -1,4 +1,4 @@
-import {humanizeDate, getEmptyDataClassName} from '../utils.js';
+import {humanizeDate, getEmptyDataClassName, draft} from '../utils.js';
 
 export const createNewPointWithoutDestinations = function (event) {
   const {
@@ -9,26 +9,24 @@ export const createNewPointWithoutDestinations = function (event) {
   } = event;
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
   const emptyOffersClassName = getEmptyDataClassName(offers);
-  const renderOffers = (offersArr) => {
-    let offersToRender = ``;
-    for (const item of offersArr) {
+  const renderOffers = () => {
+    return offers.reduce((offersToRender, currOffer) => {
       const offer = `
         <div class="event__available-offers">
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${item.type}-1" type="checkbox" name="event-offer-${item.type}" ${item.isChecked ? `checked` : ``}>
-            <label class="event__offer-label" for="event-offer-${item.type}-1">
-              <span class="event__offer-title">${item.title}</span>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${currOffer.type}-1" type="checkbox" name="event-offer-${currOffer.type}" ${currOffer.isChecked ? `checked` : ``}>
+            <label class="event__offer-label" for="event-offer-${currOffer.type}-1">
+              <span class="event__offer-title">${currOffer.title}</span>
               &plus;&euro;&nbsp;
-              <span class="event__offer-price">${item.price}</span>
+              <span class="event__offer-price">${currOffer.price}</span>
             </label>
           </div>
         </div>
       `;
       offersToRender += offer;
-    }
-    return offersToRender;
+      return offersToRender;
+    }, draft);
   };
-
 
   return `
   <li class="trip-events__item">
@@ -129,11 +127,11 @@ export const createNewPointWithoutDestinations = function (event) {
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
         <button class="event__reset-btn" type="reset">Cancel</button>
       </header>
-      <section class="event__details">
-        <section class="event__section  event__section--offers ${emptyOffersClassName}">
+      <section class="event__details ${emptyOffersClassName}">
+        <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
-          ${renderOffers(offers)}
+          ${renderOffers()}
           </div>
         </section>
       </section>

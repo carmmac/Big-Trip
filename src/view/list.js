@@ -1,4 +1,4 @@
-import {humanizeDate, getEmptyDataClassName} from '../utils.js';
+import {humanizeDate, getEmptyDataClassName, draft} from '../utils.js';
 
 export const createList = function (event) {
 
@@ -8,6 +8,7 @@ export const createList = function (event) {
   const eventDateTime = humanizeDate(`YYYY-MM-DD`, date);
   const eventDateTimeFull = humanizeDate(`YYYY-MM-DDTHH:mm`, date);
   const emptyOffersClassName = getEmptyDataClassName(offers);
+  const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ``;
 
   const getEventTime = ({START, END, DURATION}) => {
     const eventTime = {
@@ -26,22 +27,20 @@ export const createList = function (event) {
     return {start, end, duration};
   };
 
-  const renderOffers = (offersArr) => {
-    let offersToRender = ``;
-    for (const item of offersArr) {
+  const renderOffers = () => {
+    return offers.reduce((offersToRender, currOffer) => {
       const offer = `
       <li class="event__offer">
-        <span class="event__offer-title">${item.title}</span>
+        <span class="event__offer-title">${currOffer.title}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${item.price}</span>
+        <span class="event__offer-price">${currOffer.price}</span>
       </li>
       `;
       offersToRender += offer;
-    }
-    return offersToRender;
+      return offersToRender;
+    }, draft);
   };
 
-  const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ``;
 
   return `
     <ul class="trip-events__list">
@@ -65,7 +64,7 @@ export const createList = function (event) {
           </p>
           <h4 class="visually-hidden">Offers:</h4>
           <ul class="event__selected-offers ${emptyOffersClassName}">
-            ${renderOffers(offers)}
+            ${renderOffers()}
           </ul>
           <button class="event__favorite-btn ${favoriteClassName}" type="button">
             <span class="visually-hidden">Add to favorite</span>

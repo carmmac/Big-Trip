@@ -1,15 +1,16 @@
-import {humanizeDate, getEmptyDataClassName} from '../utils.js';
+import {humanizeDate, getEmptyDataClassName, draft} from '../utils.js';
 
 export const createNewPointWithoutOffers = function (event) {
   const {type, destination, info, photos, price} = event;
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
   const emptyPhotosClassName = getEmptyDataClassName(photos);
-  const renderPhotos = (pics) => {
-    let photosToRender = ``;
-    for (const pic of pics) {
-      photosToRender += `<img class="event__photo" src="${pic}" alt="Event photo"></img>`;
-    }
-    return photosToRender;
+  const emptyInfoClassName = getEmptyDataClassName(info);
+  const renderPhotos = () => {
+    return photos.reduce((photosToRender, currPhoto) => {
+      const photo = `<img class="event__photo" src="${currPhoto}" alt="Event photo"></img>`;
+      photosToRender += photo;
+      return photosToRender;
+    }, draft);
   };
 
   return `
@@ -112,14 +113,14 @@ export const createNewPointWithoutOffers = function (event) {
         <button class="event__reset-btn" type="reset">Cancel</button>
       </header>
 
-      <section class="event__details">
+      <section class="event__details ${emptyInfoClassName}">
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${info.join()}</p>
 
           <div class="event__photos-container ${emptyPhotosClassName}">
             <div class="event__photos-tape">
-            ${renderPhotos(photos)}
+            ${renderPhotos()}
             </div>
           </div>
         </section>

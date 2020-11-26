@@ -1,12 +1,8 @@
-import {getRadomNum, generateRandomIndex} from '../utils.js';
+import {INFO_SENTENCE_MAX_NUM, OFFERS_MAX_NUM, PHOTOS_MAX_NUM, OFFER_PRICE, EVENT_PRICE} from '../const.js';
+import {getRadomNum, generateRandomIndex, generateData} from '../utils.js';
 import dayjs from 'dayjs';
 import objectSupport from 'dayjs/plugin/objectSupport';
 dayjs.extend(objectSupport);
-
-const INFO_SENTENCE_MAX_NUM = 5;
-const OFFERS_MAX_NUM = 5;
-const PHOTOS_MAX_NUM = 4;
-
 
 const infoTest = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 const eventTypes = [
@@ -26,82 +22,73 @@ const offers = [
   {
     type: `Check-in`,
     title: `Add breakfast`,
-    price: getRadomNum(10, 100),
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
     type: `Restaurant`,
     title: `Lunch in city`,
-    price: getRadomNum(10, 100),
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
     type: `Sightseeing`,
     title: `Order Uber`,
-    price: getRadomNum(10, 100),
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
     type: `Drive`,
     title: `Rent a car`,
-    price: getRadomNum(10, 100),
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
     type: `Flight`,
     title: `Add luggage`,
-    price: getRadomNum(10, 100),
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
     type: `Ship`,
     title: `Add luggage`,
-    price: getRadomNum(10, 100),
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
     type: `Flight`,
     title: `Switch to comfort`,
-    price: getRadomNum(10, 100),
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
     type: `Sightseeing`,
     title: `Book tickets`,
-    price: getRadomNum(10, 100),
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
     type: `Bus`,
     title: `Book tickets`,
-    price: getRadomNum(10, 100),
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
 ];
 
 const generateInfo = () => {
   const infoArray = infoTest.split(`. `);
-  let randomInfo = [];
-  for (let i = 0; i < INFO_SENTENCE_MAX_NUM; i++) {
-    randomInfo.push(infoArray[getRadomNum(0, infoArray.length - 1)]);
-  }
-  return randomInfo;
+  const randomData = infoArray[getRadomNum(0, infoArray.length - 1)];
+  return generateData(randomData, INFO_SENTENCE_MAX_NUM);
 };
 
 const generateOffers = () => {
-  let randomOffers = [];
-  for (let i = 0; i < getRadomNum(0, OFFERS_MAX_NUM); i++) {
-    randomOffers.push(offers[getRadomNum(0, offers.length - 1)]);
-  }
-  return randomOffers;
+  const randomData = offers[getRadomNum(0, offers.length - 1)];
+  return generateData(randomData, OFFERS_MAX_NUM);
 };
 
 const generatePhotos = () => {
-  const photos = [];
-  for (let i = 0; i < getRadomNum(0, PHOTOS_MAX_NUM); i++) {
-    photos.push(`http://picsum.photos/248/152?r=${Math.random()}`);
-  }
-  return photos;
+  const randomData = `http://picsum.photos/248/152?r=${Math.random()}`;
+  return generateData(randomData, PHOTOS_MAX_NUM);
 };
 
 const generateDate = () => {
@@ -146,7 +133,7 @@ export const generateEvent = () => {
     time,
     info,
     photos: generatePhotos(),
-    price: getRadomNum(10, 500),
+    price: getRadomNum(EVENT_PRICE.MIN, EVENT_PRICE.MAX),
     offers: generateOffers(),
     isFavorite: Boolean(getRadomNum(0, 1)),
   };
