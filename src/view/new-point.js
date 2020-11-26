@@ -19,7 +19,7 @@ export const createNewPoint = function (event) {
   const renderDestinationOptions = () => {
     return destinations.reduce((finalTemplate, currentOption) => {
       const currentTemplate = `<option value="${currentOption}"></option>`;
-      return `${currentTemplate}${finalTemplate}`;;
+      return `${currentTemplate}${finalTemplate}`;
     }, draft);
   };
 
