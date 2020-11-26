@@ -19,10 +19,10 @@ export const isEmpty = (data) => data.length === 0;
 
 export const getEmptyDataClassName = (data) => isEmpty(data) ? `visually-hidden` : ``;
 
-export const filterData = (data, param) => {
+export const filterData = (data, parameter) => {
   const sortedEvents = data.slice();
   sortedEvents.sort((left, right) => {
-    return left[param] - right[param];
+    return left[parameter] - right[parameter];
   });
   return sortedEvents;
 };
