@@ -1,4 +1,17 @@
-export const info = function () {
+export const createInfo = function (events) {
+
+  const getTotalPrice = () => {
+    const totalPrice = 0;
+    const offerTotalPrice = 0;
+    return events.reduce((totalSum, currentEvent) => {
+      totalSum += currentEvent.price + currentEvent.offers.reduce((sum, currentOffer) => {
+        sum += currentOffer.price;
+        return sum;
+      }, offerTotalPrice);
+      return totalSum;
+    }, totalPrice);
+  };
+
   return `
     <section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
@@ -8,7 +21,7 @@ export const info = function () {
       </div>
 
       <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+        Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalPrice()}</span>
       </p>
     </section>
   `;

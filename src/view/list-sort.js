@@ -1,4 +1,4 @@
-export const listSort = function () {
+export const createListSort = function () {
   return `
     <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       <div class="trip-sort__item  trip-sort__item--day">
