@@ -1,5 +1,5 @@
 import {INFO_SENTENCE_MAX_NUM, OFFERS_MAX_NUM, PHOTOS_MAX_NUM, OFFER_PRICE, EVENT_PRICE} from '../const.js';
-import {getRadomNum, generateRandomIndex, generateData} from '../utils.js';
+import {getRadomNum, generateRandomIndex} from '../utils.js';
 import dayjs from 'dayjs';
 import objectSupport from 'dayjs/plugin/objectSupport';
 dayjs.extend(objectSupport);
@@ -77,18 +77,27 @@ const offers = [
 
 const generateInfo = () => {
   const infoArray = infoTest.split(`. `);
-  const randomData = infoArray[getRadomNum(0, infoArray.length - 1)];
-  return generateData(randomData, INFO_SENTENCE_MAX_NUM);
+  const randomInfo = [];
+  for (let i = 0; i < getRadomNum(0, INFO_SENTENCE_MAX_NUM); i++) {
+    randomInfo.push(infoArray[getRadomNum(0, infoArray.length - 1)]);
+  }
+  return randomInfo;
 };
 
 const generateOffers = () => {
-  const randomData = offers[getRadomNum(0, offers.length - 1)];
-  return generateData(randomData, OFFERS_MAX_NUM);
+  const randomOffers = [];
+  for (let i = 0; i < getRadomNum(0, OFFERS_MAX_NUM); i++) {
+    randomOffers.push(offers[getRadomNum(0, offers.length - 1)]);
+  }
+  return randomOffers;
 };
 
 const generatePhotos = () => {
-  const randomData = `http://picsum.photos/248/152?r=${Math.random()}`;
-  return generateData(randomData, PHOTOS_MAX_NUM);
+  const randomPhotos = [];
+  for (let i = 0; i < getRadomNum(0, PHOTOS_MAX_NUM); i++) {
+    randomPhotos.push(`http://picsum.photos/248/152?r=${Math.random()}`);
+  }
+  return randomPhotos;
 };
 
 const generateDate = () => {

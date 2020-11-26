@@ -28,11 +28,3 @@ export const filterData = (data, param) => {
 };
 
 export const draft = ``;
-
-export const generateData = (data, randomizationLimit) => {
-  const randomArray = [];
-  for (let i = 0; i < getRadomNum(0, randomizationLimit); i++) {
-    randomArray.push(data);
-  }
-  return randomArray;
-};
