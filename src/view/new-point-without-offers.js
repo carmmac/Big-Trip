@@ -6,10 +6,9 @@ export const createNewPointWithoutOffers = function (event) {
   const emptyPhotosClassName = getEmptyDataClassName(photos);
   const emptyInfoClassName = getEmptyDataClassName(info);
   const renderPhotos = () => {
-    return photos.reduce((photosToRender, currPhoto) => {
-      const photo = `<img class="event__photo" src="${currPhoto}" alt="Event photo"></img>`;
-      photosToRender += photo;
-      return photosToRender;
+    return photos.reduce((finalTemplate, currentPhoto) => {
+      const currentTemplate = `<img class="event__photo" src="${currentPhoto}" alt="Event photo"></img>`;
+      return `${currentTemplate}${finalTemplate}`;
     }, draft);
   };
 

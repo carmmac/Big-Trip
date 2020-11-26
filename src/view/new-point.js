@@ -17,10 +17,9 @@ export const createNewPoint = function (event) {
   const emptyEventDetailsClassName = isEmpty(offers) && isEmpty(info) ? `visually-hidden` : ``;
 
   const renderDestinationOptions = () => {
-    return destinations.reduce((optionsToRender, currOption) => {
-      const option = `<option value="${currOption}"></option>`;
-      optionsToRender += option;
-      return optionsToRender;
+    return destinations.reduce((finalTemplate, currentOption) => {
+      const currentTemplate = `<option value="${currentOption}"></option>`;
+      return `${currentTemplate}${finalTemplate}`;;
     }, draft);
   };
 
@@ -43,10 +42,9 @@ export const createNewPoint = function (event) {
   };
 
   const renderPhotos = () => {
-    return photos.reduce((photosToRender, currPhoto) => {
-      const photo = `<img class="event__photo" src="${currPhoto}" alt="Event photo"></img>`;
-      photosToRender += photo;
-      return photosToRender;
+    return photos.reduce((finalTemplate, currentPhoto) => {
+      const currentTemplate = `<img class="event__photo" src="${currentPhoto}" alt="Event photo"></img>`;
+      return `${currentTemplate}${finalTemplate}`;
     }, draft);
   };
 
