@@ -3,9 +3,9 @@ export const createInfo = function (events) {
   const getTotalPrice = () => {
     const totalPrice = 0;
     const offerTotalPrice = 0;
-    return events.reduce((totalSum, currEvt) => {
-      totalSum += currEvt.price + currEvt.offers.reduce((sum, currOffer) => {
-        sum += currOffer.price;
+    return events.reduce((totalSum, currentEvent) => {
+      totalSum += currentEvent.price + currentEvent.offers.reduce((sum, currentOffer) => {
+        sum += currentOffer.price;
         return sum;
       }, offerTotalPrice);
       return totalSum;

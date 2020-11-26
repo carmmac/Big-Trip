@@ -28,16 +28,16 @@ export const createList = function (event) {
   };
 
   const renderOffers = () => {
-    return offers.reduce((offersToRender, currOffer) => {
-      const offer = `
+    return offers.reduce((finalTemplate, currentOffer) => {
+      const currentTemplate = `
       <li class="event__offer">
-        <span class="event__offer-title">${currOffer.title}</span>
+        <span class="event__offer-title">${currentOffer.title}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${currOffer.price}</span>
+        <span class="event__offer-price">${currentOffer.price}</span>
       </li>
       `;
-      offersToRender += offer;
-      return offersToRender;
+      finalTemplate += currentTemplate;
+      return finalTemplate;
     }, draft);
   };
 

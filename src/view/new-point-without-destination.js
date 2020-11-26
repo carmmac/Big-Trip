@@ -10,21 +10,21 @@ export const createNewPointWithoutDestinations = function (event) {
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
   const emptyOffersClassName = getEmptyDataClassName(offers);
   const renderOffers = () => {
-    return offers.reduce((offersToRender, currOffer) => {
-      const offer = `
+    return offers.reduce((finalTemplate, currentOffer) => {
+      const currentTemplate = `
         <div class="event__available-offers">
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${currOffer.type}-1" type="checkbox" name="event-offer-${currOffer.type}" ${currOffer.isChecked ? `checked` : ``}>
-            <label class="event__offer-label" for="event-offer-${currOffer.type}-1">
-              <span class="event__offer-title">${currOffer.title}</span>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${currentOffer.type}-1" type="checkbox" name="event-offer-${currentOffer.type}" ${currentOffer.isChecked ? `checked` : ``}>
+            <label class="event__offer-label" for="event-offer-${currentOffer.type}-1">
+              <span class="event__offer-title">${currentOffer.title}</span>
               &plus;&euro;&nbsp;
-              <span class="event__offer-price">${currOffer.price}</span>
+              <span class="event__offer-price">${currentOffer.price}</span>
             </label>
           </div>
         </div>
       `;
-      offersToRender += offer;
-      return offersToRender;
+      finalTemplate += currentTemplate;
+      return finalTemplate;
     }, draft);
   };
 
