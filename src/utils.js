@@ -22,11 +22,14 @@ export const renderTemplate = (container, template, place) => {
 };
 
 export const createElement = (template) => {
-  const newElement = document.createElement(`div`);
   const container = document.createElement(`div`);
   container.innerHTML = template;
-  newElement.append(container);
-  return newElement.firstChild;
+  if (container.children.length !== 1) {
+    const newElement = document.createElement(`div`);
+    newElement.append(container);
+    return newElement.firstChild;
+  }
+  return container.firstChild;
 };
 
 export const getRadomNum = (min, max) => {
