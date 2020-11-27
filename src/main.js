@@ -1,5 +1,5 @@
 import {EVENTS_NUM, FIRST_EVENT_TO_SHOW_IDX, EDIT_EVENT_IDX} from './const.js';
-import {createInfo} from './view/info.js';
+import InfoView from './view/info.js';
 import MenuView from './view/menu.js';
 import FiltersView from './view/filters.js';
 import {statistics} from './view/statistics.js';
@@ -12,7 +12,7 @@ import {filterData, renderTemplate, renderElement, RenderPosition} from './utils
 const events = new Array(EVENTS_NUM).fill().map(generateEvent);
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
-renderTemplate(siteHeaderElement, createInfo(events), `afterbegin`);
+renderElement(siteHeaderElement, new InfoView(events).getElement(), RenderPosition.AFTERBEGIN);
 
 const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
 renderElement(siteMenuElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
