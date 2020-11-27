@@ -1,5 +1,32 @@
 import dayjs from 'dayjs';
 
+export const draft = ``;
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
+export const renderElement = (container, element, position) => {
+  switch (position) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+
+export const renderTemplate = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
+
 export const getRadomNum = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -26,5 +53,3 @@ export const filterData = (data, parameter) => {
   });
   return sortedEvents;
 };
-
-export const draft = ``;
