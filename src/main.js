@@ -5,7 +5,7 @@ import FiltersView from './view/filters.js';
 import EventView from './view/event.js';
 import {statistics} from './view/statistics.js';
 import ListSortView from './view/list-sort.js';
-import {createEditPoint} from './view/edit.js';
+import EventEditView from './view/event-edit.js';
 import ListFilteredView from './view/list-filtered.js';
 import {generateEvent} from './mock/mock-event.js';
 import {filterData, renderTemplate, renderElement, RenderPosition} from './utils.js';
@@ -28,10 +28,11 @@ const listFilteredComponent = new ListFilteredView();
 renderElement(tripEventsElement, new ListSortView().getElement(), RenderPosition.AFTERBEGIN);
 renderElement(tripEventsElement, listFilteredComponent.getElement(), RenderPosition.BEFOREEND);
 
+const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
+renderElement(listFilteredComponent.getElement(), new EventEditView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
+
 // const eventComponent = new EventView();
 for (let i = FIRST_EVENT_TO_SHOW_IDX; i < EVENTS_NUM; i++) {
   renderElement(listFilteredComponent.getElement(), new EventView(filteredEvents[i]).getElement(), RenderPosition.BEFOREEND);
 }
 
-// const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
-// renderTemplate(tripEventsListElement, createEditPoint(filteredEvents[EDIT_EVENT_IDX]), `afterbegin`);

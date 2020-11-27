@@ -1,6 +1,6 @@
-import {humanizeDate, getEmptyDataClassName, isEmpty, draft} from '../utils.js';
+import {humanizeDate, getEmptyDataClassName, isEmpty, draft, createElement} from '../utils.js';
 
-export const createEditPoint = function (event = {}) {
+const createEventEditTemplate = (event = {}) => {
   const {type, destination, info, price, offers} = event;
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
   const emptyOffersClassName = getEmptyDataClassName(offers);
@@ -144,3 +144,22 @@ export const createEditPoint = function (event = {}) {
     </li>
   `;
 };
+
+export default class EventEdit {
+  constructor(event) {
+    this._element = null;
+    this._event = event;
+  }
+  getTemplate() {
+    return createEventEditTemplate(this._event);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

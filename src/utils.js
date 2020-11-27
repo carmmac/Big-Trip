@@ -23,7 +23,7 @@ export const renderTemplate = (container, template, place) => {
 
 export const createElement = (template) => {
   const container = document.createElement(`div`);
-  container.innerHTML = template;
+  container.innerHTML = template.trim();
   if (container.children.length !== 1) {
     const newElement = document.createElement(`div`);
     newElement.append(container);
