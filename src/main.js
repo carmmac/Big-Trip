@@ -4,7 +4,7 @@ import MenuView from './view/menu.js';
 import FiltersView from './view/filters.js';
 import EventView from './view/event.js';
 import {statistics} from './view/statistics.js';
-import {createListSort} from './view/list-sort.js';
+import ListSortView from './view/list-sort.js';
 import {createEditPoint} from './view/edit.js';
 import ListFilteredView from './view/list-filtered.js';
 import {generateEvent} from './mock/mock-event.js';
@@ -25,7 +25,7 @@ renderTemplate(siteMainElement, statistics(), `beforeend`);
 
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
 const listFilteredComponent = new ListFilteredView();
-renderTemplate(tripEventsElement, createListSort(), `afterbegin`);
+renderElement(tripEventsElement, new ListSortView().getElement(), RenderPosition.AFTERBEGIN);
 renderElement(tripEventsElement, listFilteredComponent.getElement(), RenderPosition.BEFOREEND);
 
 // const eventComponent = new EventView();
