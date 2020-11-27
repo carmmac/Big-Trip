@@ -1,7 +1,7 @@
 import {EVENTS_NUM, FIRST_EVENT_TO_SHOW_IDX, EDIT_EVENT_IDX} from './const.js';
 import {createInfo} from './view/info.js';
 import MenuView from './view/menu.js';
-import {filters} from './view/filters.js';
+import FiltersView from './view/filters.js';
 import {statistics} from './view/statistics.js';
 import {createListSort} from './view/list-sort.js';
 import {createEditPoint} from './view/edit.js';
@@ -16,8 +16,7 @@ renderTemplate(siteHeaderElement, createInfo(events), `afterbegin`);
 
 const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
 renderElement(siteMenuElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
-
-renderTemplate(siteMenuElement, filters(), `beforeend`);
+renderElement(siteMenuElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
 
 const siteMainElement = document.querySelector(`.page-main .page-body__container`);
 renderTemplate(siteMainElement, statistics(), `beforeend`);
