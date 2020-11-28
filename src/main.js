@@ -25,15 +25,27 @@ const renderEvent = (eventListElement, event) => {
   const replaceFormToCard = () => {
     eventListElement.replaceChild(eventComponent.getElement(), eventEditComponent.getElement());
   };
+
+  render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
+
   eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
     replaceCardToForm();
+    document.addEventListener(`keydown`, EscPressHandler);
   });
   eventEditComponent.getElement().querySelector(`.event--edit`).addEventListener(`submit`, (evt) => {
     evt.preventDefault();
     replaceFormToCard();
   });
-  render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
+
+  const EscPressHandler = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener(`keydown`, EscPressHandler);
+    }
+  };
 };
+
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
 render(siteHeaderElement, new InfoView(events).getElement(), RenderPosition.AFTERBEGIN);
