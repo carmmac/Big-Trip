@@ -18,7 +18,20 @@ const filteredEvents = filterData(events, `date`);
 
 const renderEvent = (eventListElement, event) => {
   const eventComponent = new EventView(event);
-  // const eventEditComponent = new EventEditView(event);
+  const eventEditComponent = new EventEditView(event);
+  const replaceCardToForm = () => {
+    eventListElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
+  };
+  const replaceFormToCard = () => {
+    eventListElement.replaceChild(eventComponent.getElement(), eventEditComponent.getElement());
+  };
+  eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+    replaceCardToForm();
+  });
+  eventEditComponent.getElement().querySelector(`.event--edit`).addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
+  });
   render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
@@ -38,12 +51,12 @@ render(tripEventsElement, new ListSortView().getElement(), RenderPosition.AFTERB
 render(tripEventsElement, listFilteredComponent.getElement(), RenderPosition.BEFOREEND);
 
 // const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
-render(listFilteredComponent.getElement(), new EventEditView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
-render(listFilteredComponent.getElement(), new NewEventView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
-render(listFilteredComponent.getElement(), new NewEventWithoutDestinationsView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
-render(listFilteredComponent.getElement(), new NewEventWithoutOffers(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
+// render(listFilteredComponent.getElement(), new EventEditView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
+// render(listFilteredComponent.getElement(), new NewEventView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
+// render(listFilteredComponent.getElement(), new NewEventWithoutDestinationsView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
+// render(listFilteredComponent.getElement(), new NewEventWithoutOffers(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
 
-for (let i = FIRST_EVENT_TO_SHOW_IDX; i < EVENTS_NUM; i++) {
+for (let i = 0; i < EVENTS_NUM; i++) {
   renderEvent(listFilteredComponent.getElement(), filteredEvents[i]);
 }
 
