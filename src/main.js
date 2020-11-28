@@ -16,6 +16,12 @@ import {filterData, render, RenderPosition} from './utils.js';
 const events = new Array(EVENTS_NUM).fill().map(generateEvent);
 const filteredEvents = filterData(events, `date`);
 
+const renderEvent = (eventListElement, event) => {
+  const eventComponent = new EventView(event);
+  // const eventEditComponent = new EventEditView(event);
+  render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
+};
+
 const siteHeaderElement = document.querySelector(`.trip-main`);
 render(siteHeaderElement, new InfoView(events).getElement(), RenderPosition.AFTERBEGIN);
 
@@ -37,8 +43,7 @@ render(listFilteredComponent.getElement(), new NewEventView(filteredEvents[EDIT_
 render(listFilteredComponent.getElement(), new NewEventWithoutDestinationsView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
 render(listFilteredComponent.getElement(), new NewEventWithoutOffers(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
 
-// const eventComponent = new EventView();
 for (let i = FIRST_EVENT_TO_SHOW_IDX; i < EVENTS_NUM; i++) {
-  render(listFilteredComponent.getElement(), new EventView(filteredEvents[i]).getElement(), RenderPosition.BEFOREEND);
+  renderEvent(listFilteredComponent.getElement(), filteredEvents[i]);
 }
 
