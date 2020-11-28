@@ -6,6 +6,9 @@ import EventView from './view/event.js';
 import {statistics} from './view/statistics.js';
 import ListSortView from './view/list-sort.js';
 import EventEditView from './view/event-edit.js';
+import NewEventView from './view/new-event.js';
+import NewEventWithoutDestinationsView from './view/new-event-without-destinations.js';
+import NewEventWithoutOffers from './view/new-event-without-offers.js';
 import ListFilteredView from './view/list-filtered.js';
 import {generateEvent} from './mock/mock-event.js';
 import {filterData, renderTemplate, renderElement, RenderPosition} from './utils.js';
@@ -28,8 +31,11 @@ const listFilteredComponent = new ListFilteredView();
 renderElement(tripEventsElement, new ListSortView().getElement(), RenderPosition.AFTERBEGIN);
 renderElement(tripEventsElement, listFilteredComponent.getElement(), RenderPosition.BEFOREEND);
 
-const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
+// const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 renderElement(listFilteredComponent.getElement(), new EventEditView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
+renderElement(listFilteredComponent.getElement(), new NewEventView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
+renderElement(listFilteredComponent.getElement(), new NewEventWithoutDestinationsView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
+renderElement(listFilteredComponent.getElement(), new NewEventWithoutOffers(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
 
 // const eventComponent = new EventView();
 for (let i = FIRST_EVENT_TO_SHOW_IDX; i < EVENTS_NUM; i++) {
