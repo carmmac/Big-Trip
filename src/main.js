@@ -1,4 +1,4 @@
-import {EVENTS_NUM, FIRST_EVENT_TO_SHOW_IDX, EDIT_EVENT_IDX} from './const.js';
+import {EVENTS_NUM} from './const.js';
 import InfoView from './view/info.js';
 import MenuView from './view/menu.js';
 import FiltersView from './view/filters.js';
@@ -6,9 +6,9 @@ import EventView from './view/event.js';
 import Statistics from './view/statistics.js';
 import ListSortView from './view/list-sort.js';
 import EventEditView from './view/event-edit.js';
-import NewEventView from './view/new-event.js';
-import NewEventWithoutDestinationsView from './view/new-event-without-destinations.js';
-import NewEventWithoutOffers from './view/new-event-without-offers.js';
+// import NewEventView from './view/new-event.js';
+// import NewEventWithoutDestinationsView from './view/new-event-without-destinations.js';
+// import NewEventWithoutOffers from './view/new-event-without-offers.js';
 import ListFilteredView from './view/list-filtered.js';
 import {generateEvent} from './mock/mock-event.js';
 import {filterData, render, RenderPosition} from './utils.js';
@@ -45,7 +45,6 @@ const renderEvent = (eventListElement, event) => {
     }
   };
 };
-
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
 render(siteHeaderElement, new InfoView(events).getElement(), RenderPosition.AFTERBEGIN);

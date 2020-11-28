@@ -1,12 +1,12 @@
 import dayjs from 'dayjs';
 
-export const draft = ``;
-export const RenderPosition = {
+const draft = ``;
+const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
 };
 
-export const render = (container, element, position) => {
+const render = (container, element, position) => {
   switch (position) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
@@ -17,11 +17,11 @@ export const render = (container, element, position) => {
   }
 };
 
-export const renderTemplate = (container, template, place) => {
+const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-export const createElement = (template) => {
+const createElement = (template) => {
   const container = document.createElement(`div`);
   container.innerHTML = template.trim();
   if (container.children.length !== 1) {
@@ -32,29 +32,43 @@ export const createElement = (template) => {
   return container.firstChild;
 };
 
-export const getRadomNum = (min, max) => {
+const getRadomNum = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const generateRandomIndex = (data) => {
+const generateRandomIndex = (data) => {
   const randomData = data[getRadomNum(0, data.length - 1)];
   return randomData;
 };
 
-export const humanizeDate = (format, date) => {
+const humanizeDate = (format, date) => {
   return dayjs(date).format(format);
 };
 
-export const isEmpty = (data) => data.length === 0;
+const isEmpty = (data) => data.length === 0;
 
-export const getEmptyDataClassName = (data) => isEmpty(data) ? `visually-hidden` : ``;
+const getEmptyDataClassName = (data) => isEmpty(data) ? `visually-hidden` : ``;
 
-export const filterData = (data, parameter) => {
+const filterData = (data, parameter) => {
   const sortedEvents = data.slice();
   sortedEvents.sort((left, right) => {
     return left[parameter] - right[parameter];
   });
   return sortedEvents;
+};
+
+export {
+  draft,
+  RenderPosition,
+  render,
+  renderTemplate,
+  createElement,
+  getRadomNum,
+  generateRandomIndex,
+  humanizeDate,
+  isEmpty,
+  getEmptyDataClassName,
+  filterData,
 };
