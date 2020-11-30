@@ -9,7 +9,7 @@ import EventEditView from './view/event-edit.js';
 // import NewEventView from './view/new-event.js';
 // import NewEventWithoutDestinationsView from './view/new-event-without-destinations.js';
 // import NewEventWithoutOffers from './view/new-event-without-offers.js';
-import ListFilteredView from './view/list-filtered.js';
+import ListView from './view/list.js';
 import {generateEvent} from './mock/mock-event.js';
 import {filterData, render, RenderPosition} from './utils.js';
 
@@ -64,9 +64,9 @@ const siteMainElement = document.querySelector(`.page-main .page-body__container
 render(siteMainElement, new Statistics().getElement(), RenderPosition.BEFOREEND);
 
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
-const listFilteredComponent = new ListFilteredView();
+const listComponent = new ListView();
 render(tripEventsElement, new ListSortView().getElement(), RenderPosition.AFTERBEGIN);
-render(tripEventsElement, listFilteredComponent.getElement(), RenderPosition.BEFOREEND);
+render(tripEventsElement, listComponent.getElement(), RenderPosition.BEFOREEND);
 
 // const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
 // render(listFilteredComponent.getElement(), new EventEditView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
@@ -75,6 +75,6 @@ render(tripEventsElement, listFilteredComponent.getElement(), RenderPosition.BEF
 // render(listFilteredComponent.getElement(), new NewEventWithoutOffers(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
 
 for (let i = 0; i < EVENTS_NUM; i++) {
-  renderEvent(listFilteredComponent.getElement(), filteredEvents[i]);
+  renderEvent(listComponent.getElement(), filteredEvents[i]);
 }
 
