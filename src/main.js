@@ -19,6 +19,7 @@ const filteredEvents = filterData(events, `date`);
 const renderEvent = (eventListElement, event) => {
   const eventComponent = new EventView(event);
   const eventEditComponent = new EventEditView(event);
+  const eventEditCloseBtn = eventEditComponent.getElement().querySelector(`.event__rollup-btn`);
   const replaceCardToForm = () => {
     eventListElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
   };
@@ -28,22 +29,28 @@ const renderEvent = (eventListElement, event) => {
 
   render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
 
-  eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+  const replaceCardToFormHandler = () => {
     replaceCardToForm();
     document.addEventListener(`keydown`, EscPressHandler);
-  });
-  eventEditComponent.getElement().querySelector(`.event--edit`).addEventListener(`submit`, (evt) => {
+    eventEditCloseBtn.addEventListener(`click`, replaceFormToCardHandler);
+  };
+
+  const replaceFormToCardHandler = (evt) => {
     evt.preventDefault();
     replaceFormToCard();
-  });
+    document.removeEventListener(`keydown`, EscPressHandler);
+    eventEditCloseBtn.removeEventListener(`click`, replaceFormToCardHandler);
+  };
 
   const EscPressHandler = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       replaceFormToCard();
-      document.removeEventListener(`keydown`, EscPressHandler);
     }
   };
+
+  eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, replaceCardToFormHandler);
+  eventEditComponent.getElement().querySelector(`.event--edit`).addEventListener(`submit`, replaceFormToCardHandler);
 };
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
