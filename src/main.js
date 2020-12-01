@@ -66,8 +66,10 @@ const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
 if (events.length === 0) {
   render(tripEventsElement, new EmptyListView().getElement(), RenderPosition.BEFOREEND);
 } else {
-  render(tripEventsElement, new ListSortView().getElement(), RenderPosition.AFTERBEGIN);
+  render(siteMenuElement, new HeadingView(HeadingTitle.FILTER).getElement(), RenderPosition.BEFOREEND);
   render(siteMenuElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
+  render(tripEventsElement, new ListSortView().getElement(), RenderPosition.AFTERBEGIN);
+  render(tripEventsElement, new HeadingView(HeadingTitle.LIST).getElement(), RenderPosition.BEFOREEND);
   const listComponent = new ListView();
   render(tripEventsElement, listComponent.getElement(), RenderPosition.BEFOREEND);
   for (let i = 0; i < EVENTS_NUM; i++) {

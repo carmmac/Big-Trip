@@ -1,7 +1,7 @@
 import {createElement} from '../utils.js';
 
 const createHeadingTemplate = (headingName) => {
-  return `<h2 class="visually-hidden">${headingName}</h2>`
+  return `<h2 class="visually-hidden">${headingName}</h2>`;
 };
 
 export default class Heading {
