@@ -5,15 +5,20 @@ const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
 };
+const HeadingTitle = {
+  LIST: `Trip events`,
+  MENU: `Switch trip view`,
+  FILTER: `Filter events`,
+};
 
 const render = (container, element, position) => {
   switch (position) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
-      break;
+      return;
     case RenderPosition.BEFOREEND:
       container.append(element);
-      break;
+      return;
   }
 };
 
@@ -66,4 +71,5 @@ export {
   checkEmptyData,
   getEmptyDataClassName,
   filterData,
+  HeadingTitle,
 };
