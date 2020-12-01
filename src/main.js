@@ -60,19 +60,19 @@ render(siteMenuElement, new HeadingView(HeadingTitle.MENU).getElement(), RenderP
 render(siteMenuElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
 
 const siteMainElement = document.querySelector(`.page-main .page-body__container`);
-render(siteMainElement, new Statistics().getElement(), RenderPosition.BEFOREEND);
-
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
 if (events.length === 0) {
+  render(tripEventsElement, new HeadingView(HeadingTitle.LIST).getElement(), RenderPosition.BEFOREEND);
   render(tripEventsElement, new EmptyListView().getElement(), RenderPosition.BEFOREEND);
 } else {
   render(siteMenuElement, new HeadingView(HeadingTitle.FILTER).getElement(), RenderPosition.BEFOREEND);
   render(siteMenuElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
-  render(tripEventsElement, new ListSortView().getElement(), RenderPosition.AFTERBEGIN);
-  render(tripEventsElement, new HeadingView(HeadingTitle.LIST).getElement(), RenderPosition.BEFOREEND);
+  render(tripEventsElement, new HeadingView(HeadingTitle.LIST).getElement(), RenderPosition.AFTERBEGIN);
+  render(tripEventsElement, new ListSortView().getElement(), RenderPosition.BEFOREEND);
   const listComponent = new ListView();
   render(tripEventsElement, listComponent.getElement(), RenderPosition.BEFOREEND);
   for (let i = 0; i < EVENTS_NUM; i++) {
     renderEvent(listComponent.getElement(), filteredEvents[i]);
   }
+  render(siteMainElement, new Statistics().getElement(), RenderPosition.BEFOREEND);
 }
