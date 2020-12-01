@@ -1,15 +1,12 @@
-import {humanizeDate, getEmptyDataClassName, draft} from '../utils.js';
+import {humanizeDate, getEmptyDataClassName, draft, createElement} from '../utils.js';
 
-export const createlistFiltered = function (event) {
-
+const createEventTemplate = (event) => {
   const {type, destination, date, time, price, offers, isFavorite} = event;
-
   const eventDate = humanizeDate(`MMM DD`, date);
   const eventDateTime = humanizeDate(`YYYY-MM-DD`, date);
   const eventDateTimeFull = humanizeDate(`YYYY-MM-DDTHH:mm`, date);
   const emptyOffersClassName = getEmptyDataClassName(offers);
   const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ``;
-
   const getEventTime = ({START, END, DURATION}) => {
     const eventTime = {
       START: {
@@ -40,9 +37,7 @@ export const createlistFiltered = function (event) {
     }, draft);
   };
 
-  return `
-  <ul class="trip-events__list">
-    <li class="trip-events__item">
+  return `<li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="${eventDateTime}">${eventDate}</time>
         <div class="event__type">
@@ -74,7 +69,24 @@ export const createlistFiltered = function (event) {
           <span class="visually-hidden">Open event</span>
         </button>
       </div>
-    </li>
-  </ul>
-  `;
+    </li>`;
 };
+
+export default class Event {
+  constructor(event) {
+    this._element = null;
+    this._event = event;
+  }
+  getTemplate() {
+    return createEventTemplate(this._event);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,7 +1,7 @@
-import {humanizeDate, getEmptyDataClassName, isEmpty, draft} from '../utils.js';
+import {humanizeDate, getEmptyDataClassName, checkEmptyData, draft, createElement} from '../utils.js';
 import {destinations} from '../mock/mock-event.js';
 
-export const createNewPoint = function (event) {
+const createNewPointTemplate = (event) => {
   const {
     type,
     destination,
@@ -14,7 +14,7 @@ export const createNewPoint = function (event) {
   const emptyOffersClassName = getEmptyDataClassName(offers);
   const emptyPhotosClassName = getEmptyDataClassName(photos);
   const emptyInfoClassName = getEmptyDataClassName(info);
-  const emptyEventDetailsClassName = isEmpty(offers) && isEmpty(info) ? `visually-hidden` : ``;
+  const emptyEventDetailsClassName = checkEmptyData(offers) && checkEmptyData(info) ? `visually-hidden` : ``;
 
   const renderDestinationOptions = () => {
     return destinations.reduce((finalTemplate, currentOption) => {
@@ -168,3 +168,22 @@ export const createNewPoint = function (event) {
   </li>
   `;
 };
+
+export default class NewEvent {
+  constructor(event) {
+    this._element = null;
+    this._event = event;
+  }
+  getTemplate() {
+    return createNewPointTemplate(this._event);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

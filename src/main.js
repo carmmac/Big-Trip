@@ -1,37 +1,66 @@
-import {EVENTS_NUM, FIRST_EVENT_TO_SHOW_IDX, EDIT_EVENT_IDX} from './const.js';
-import {createInfo} from './view/info.js';
-import {menu} from './view/menu.js';
-import {filters} from './view/filters.js';
-import {statistics} from './view/statistics.js';
-import {createListSort} from './view/list-sort.js';
-import {createEditPoint} from './view/edit.js';
-import {createlistFiltered} from './view/list-filter.js';
+import {EVENTS_NUM} from './const.js';
+import InfoView from './view/info.js';
+import MenuView from './view/menu.js';
+import FiltersView from './view/filters.js';
+import EventView from './view/event.js';
+import Statistics from './view/statistics.js';
+import ListSortView from './view/list-sort.js';
+import EventEditView from './view/event-edit.js';
+import ListFilteredView from './view/list-filtered.js';
 import {generateEvent} from './mock/mock-event.js';
-import {filterData} from './utils.js';
+import {filterData, render, RenderPosition} from './utils.js';
 
 const events = new Array(EVENTS_NUM).fill().map(generateEvent);
+const filteredEvents = filterData(events, `date`);
 
-const render = function (container, template, position) {
-  container.insertAdjacentHTML(position, template);
+const renderEvent = (eventListElement, event) => {
+  const eventComponent = new EventView(event);
+  const eventEditComponent = new EventEditView(event);
+  const replaceCardToForm = () => {
+    eventListElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
+  };
+  const replaceFormToCard = () => {
+    eventListElement.replaceChild(eventComponent.getElement(), eventEditComponent.getElement());
+  };
+
+  render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
+
+  const eventFormOpenHandler = () => {
+    replaceCardToForm();
+    document.addEventListener(`keydown`, EscPressHandler);
+  };
+
+  const eventFormCloseHandler = (evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
+    document.removeEventListener(`keydown`, EscPressHandler);
+  };
+
+  const EscPressHandler = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      eventFormCloseHandler();
+    }
+  };
+
+  eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, eventFormOpenHandler);
+  eventEditComponent.getElement().querySelector(`.event--edit`).addEventListener(`submit`, eventFormCloseHandler);
 };
 
-const tripHeaderElement = document.querySelector(`.trip-main`);
-render(tripHeaderElement, createInfo(events), `afterbegin`);
+const siteHeaderElement = document.querySelector(`.trip-main`);
+render(siteHeaderElement, new InfoView(events).getElement(), RenderPosition.AFTERBEGIN);
 
-const tripMenuElement = tripHeaderElement.querySelector(`.trip-controls`);
-render(tripMenuElement, menu(), `afterbegin`);
-render(tripMenuElement, filters(), `beforeend`);
+const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
+render(siteMenuElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
+render(siteMenuElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
 
 const siteMainElement = document.querySelector(`.page-main .page-body__container`);
-render(siteMainElement, statistics(), `beforeend`);
+render(siteMainElement, new Statistics().getElement(), RenderPosition.BEFOREEND);
 
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
-render(tripEventsElement, createListSort(), `afterbegin`);
+const listFilteredComponent = new ListFilteredView();
+render(tripEventsElement, new ListSortView().getElement(), RenderPosition.AFTERBEGIN);
+render(tripEventsElement, listFilteredComponent.getElement(), RenderPosition.BEFOREEND);
 
-const filteredEvents = filterData(events, `date`);
-for (let i = FIRST_EVENT_TO_SHOW_IDX; i < EVENTS_NUM; i++) {
-  render(tripEventsElement, createlistFiltered(filteredEvents[i]), `beforeend`);
+for (let i = 0; i < EVENTS_NUM; i++) {
+  renderEvent(listFilteredComponent.getElement(), filteredEvents[i]);
 }
-
-const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
-render(tripEventsListElement, createEditPoint(filteredEvents[EDIT_EVENT_IDX]), `afterbegin`);

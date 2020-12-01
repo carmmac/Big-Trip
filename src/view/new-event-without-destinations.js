@@ -1,6 +1,6 @@
-import {humanizeDate, getEmptyDataClassName, draft} from '../utils.js';
+import {humanizeDate, getEmptyDataClassName, draft, createElement} from '../utils.js';
 
-export const createNewPointWithoutDestinations = function (event) {
+const createNewPointWithoutDestinationsTemplate = (event) => {
   const {
     type,
     destination,
@@ -138,3 +138,22 @@ export const createNewPointWithoutDestinations = function (event) {
   </li>
   `;
 };
+
+export default class NewEventWithoutDestinations {
+  constructor(event) {
+    this._element = null;
+    this._event = event;
+  }
+  getTemplate() {
+    return createNewPointWithoutDestinationsTemplate(this._event);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

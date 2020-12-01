@@ -1,25 +1,52 @@
 import dayjs from 'dayjs';
 
-export const getRadomNum = (min, max) => {
+const draft = ``;
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
+const render = (container, element, position) => {
+  switch (position) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      return;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      return;
+  }
+};
+
+const renderTemplate = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+const createElement = (template) => {
+  const container = document.createElement(`div`);
+  container.innerHTML = template.trim();
+  return container.firstChild;
+};
+
+const getRadomNum = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const generateRandomIndex = (data) => {
+const generateRandomIndex = (data) => {
   const randomData = data[getRadomNum(0, data.length - 1)];
   return randomData;
 };
 
-export const humanizeDate = (format, date) => {
+const humanizeDate = (format, date) => {
   return dayjs(date).format(format);
 };
 
-export const isEmpty = (data) => data.length === 0;
+const checkEmptyData = (data) => data.length === 0;
 
-export const getEmptyDataClassName = (data) => isEmpty(data) ? `visually-hidden` : ``;
+const getEmptyDataClassName = (data) => checkEmptyData(data) ? `visually-hidden` : ``;
 
-export const filterData = (data, parameter) => {
+const filterData = (data, parameter) => {
   const sortedEvents = data.slice();
   sortedEvents.sort((left, right) => {
     return left[parameter] - right[parameter];
@@ -27,4 +54,16 @@ export const filterData = (data, parameter) => {
   return sortedEvents;
 };
 
-export const draft = ``;
+export {
+  draft,
+  RenderPosition,
+  render,
+  renderTemplate,
+  createElement,
+  getRadomNum,
+  generateRandomIndex,
+  humanizeDate,
+  checkEmptyData,
+  getEmptyDataClassName,
+  filterData,
+};
