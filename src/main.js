@@ -8,8 +8,9 @@ import ListSortView from './view/list-sort.js';
 import EventEditView from './view/event-edit.js';
 import ListView from './view/list.js';
 import EmptyListView from './view/list-empty.js';
+import HeadingView from './view/heading.js';
 import {generateEvent} from './mock/mock-event.js';
-import {filterData, render, RenderPosition} from './utils.js';
+import {filterData, render, RenderPosition, HeadingTitle} from './utils.js';
 
 const events = new Array(EVENTS_NUM).fill().map(generateEvent);
 const filteredEvents = filterData(events, `date`);
@@ -55,6 +56,7 @@ const siteHeaderElement = document.querySelector(`.trip-main`);
 render(siteHeaderElement, new InfoView(events).getElement(), RenderPosition.AFTERBEGIN);
 
 const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
+render(siteMenuElement, new HeadingView(HeadingTitle.MENU).getElement(), RenderPosition.BEFOREEND);
 render(siteMenuElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
 
 const siteMainElement = document.querySelector(`.page-main .page-body__container`);
