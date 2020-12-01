@@ -10,10 +10,10 @@ const render = (container, element, position) => {
   switch (position) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
-      break;
+      return;
     case RenderPosition.BEFOREEND:
       container.append(element);
-      break;
+      return;
   }
 };
 
@@ -24,11 +24,6 @@ const renderTemplate = (container, template, place) => {
 const createElement = (template) => {
   const container = document.createElement(`div`);
   container.innerHTML = template.trim();
-  if (container.children.length !== 1) {
-    const newElement = document.createElement(`div`);
-    newElement.append(container);
-    return newElement.firstChild;
-  }
   return container.firstChild;
 };
 
@@ -47,9 +42,9 @@ const humanizeDate = (format, date) => {
   return dayjs(date).format(format);
 };
 
-const isEmpty = (data) => data.length === 0;
+const checkEmptyData = (data) => data.length === 0;
 
-const getEmptyDataClassName = (data) => isEmpty(data) ? `visually-hidden` : ``;
+const getEmptyDataClassName = (data) => checkEmptyData(data) ? `visually-hidden` : ``;
 
 const filterData = (data, parameter) => {
   const sortedEvents = data.slice();
@@ -68,7 +63,7 @@ export {
   getRadomNum,
   generateRandomIndex,
   humanizeDate,
-  isEmpty,
+  checkEmptyData,
   getEmptyDataClassName,
   filterData,
 };

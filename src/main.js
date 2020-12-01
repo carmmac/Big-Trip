@@ -6,9 +6,6 @@ import EventView from './view/event.js';
 import Statistics from './view/statistics.js';
 import ListSortView from './view/list-sort.js';
 import EventEditView from './view/event-edit.js';
-// import NewEventView from './view/new-event.js';
-// import NewEventWithoutDestinationsView from './view/new-event-without-destinations.js';
-// import NewEventWithoutOffers from './view/new-event-without-offers.js';
 import ListFilteredView from './view/list-filtered.js';
 import {generateEvent} from './mock/mock-event.js';
 import {filterData, render, RenderPosition} from './utils.js';
@@ -28,22 +25,25 @@ const renderEvent = (eventListElement, event) => {
 
   render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
 
-  eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+  const eventFormOpenHandler = () => {
     replaceCardToForm();
     document.addEventListener(`keydown`, EscPressHandler);
-  });
-  eventEditComponent.getElement().querySelector(`.event--edit`).addEventListener(`submit`, (evt) => {
+  };
+
+  const eventFormCloseHandler = (evt) => {
     evt.preventDefault();
     replaceFormToCard();
-  });
+    document.removeEventListener(`keydown`, EscPressHandler);
+  };
 
   const EscPressHandler = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {
-      evt.preventDefault();
-      replaceFormToCard();
-      document.removeEventListener(`keydown`, EscPressHandler);
+      eventFormCloseHandler();
     }
   };
+
+  eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, eventFormOpenHandler);
+  eventEditComponent.getElement().querySelector(`.event--edit`).addEventListener(`submit`, eventFormCloseHandler);
 };
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
@@ -61,13 +61,6 @@ const listFilteredComponent = new ListFilteredView();
 render(tripEventsElement, new ListSortView().getElement(), RenderPosition.AFTERBEGIN);
 render(tripEventsElement, listFilteredComponent.getElement(), RenderPosition.BEFOREEND);
 
-// const tripEventsListElement = tripEventsElement.querySelector(`.trip-events__list`);
-// render(listFilteredComponent.getElement(), new EventEditView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
-// render(listFilteredComponent.getElement(), new NewEventView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
-// render(listFilteredComponent.getElement(), new NewEventWithoutDestinationsView(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
-// render(listFilteredComponent.getElement(), new NewEventWithoutOffers(filteredEvents[EDIT_EVENT_IDX]).getElement(), RenderPosition.AFTERBEGIN);
-
 for (let i = 0; i < EVENTS_NUM; i++) {
   renderEvent(listFilteredComponent.getElement(), filteredEvents[i]);
 }
-

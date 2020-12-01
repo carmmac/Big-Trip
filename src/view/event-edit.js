@@ -1,11 +1,11 @@
-import {humanizeDate, getEmptyDataClassName, isEmpty, draft, createElement} from '../utils.js';
+import {humanizeDate, getEmptyDataClassName, checkEmptyData, draft, createElement} from '../utils.js';
 
 const createEventEditTemplate = (event = {}) => {
   const {type, destination, info, price, offers} = event;
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
   const emptyOffersClassName = getEmptyDataClassName(offers);
   const emptyInfoClassName = getEmptyDataClassName(info);
-  const emptyEventDetailsClassName = isEmpty(offers) && isEmpty(info) ? `visually-hidden` : ``;
+  const emptyEventDetailsClassName = checkEmptyData(offers) && checkEmptyData(info) ? `visually-hidden` : ``;
 
   const renderOffers = () => {
     return offers.reduce((finalTemplate, currentOffer) => {
