@@ -2,8 +2,10 @@ import {createElement} from '../utils.js';
 
 const createEmptyListTemplate = () => {
   return `
-    <h2 class="visually-hidden">Trip events</h2>
-    <p class="trip-events__msg">Click New Event to create your first point</p>
+    <div>
+      <h2 class="visually-hidden">Trip events</h2>
+      <p class="trip-events__msg">Click New Event to create your first point</p>
+    </div>
   `;
 };
 

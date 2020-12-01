@@ -1,7 +1,12 @@
 import {createElement} from '../utils.js';
 
 const createListTemplate = () => {
-  return `<ul class="trip-events__list"></ul>`;
+  return `
+    <div>
+      <h2 class="visually-hidden">Trip events</h2>
+      <ul class="trip-events__list"></ul>
+    </div>
+  `;
 };
 
 export default class List {
