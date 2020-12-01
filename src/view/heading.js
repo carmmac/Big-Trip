@@ -1,17 +1,16 @@
 import {createElement} from '../utils.js';
 
-const createEmptyListTemplate = () => {
-  return `
-      <p class="trip-events__msg">Click New Event to create your first point</p>
-  `;
+const createHeadingTemplate = (headingName) => {
+  return `<h2 class="visually-hidden">${headingName}</h2>`;
 };
 
-export default class EmptyList {
-  constructor() {
+export default class Heading {
+  constructor(headingName) {
     this._element = null;
+    this._headingName = headingName;
   }
   getTemplate() {
-    return createEmptyListTemplate();
+    return createHeadingTemplate(this._headingName);
   }
   getElement() {
     if (!this._element) {
