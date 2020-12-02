@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import AbstractView from './view/absract.js';
 
 const draft = ``;
 const RenderPosition = {
@@ -11,19 +12,39 @@ const HeadingTitle = {
   FILTER: `Filter events`,
 };
 
-const render = (container, element, position) => {
+const render = (container, child, position) => {
+  if (container instanceof AbstractView) {
+    container = container.getElement();
+  }
+  if (child instanceof AbstractView) {
+    child = child.getElement();
+  }
   switch (position) {
     case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
+      container.prepend(child);
       return;
     case RenderPosition.BEFOREEND:
-      container.append(element);
+      container.append(child);
       return;
   }
 };
 
-const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
+const replace = (newChild, oldChild) => {
+  if (oldChild instanceof AbstractView) {
+    oldChild = oldChild.getElement();
+  }
+  if (newChild instanceof AbstractView) {
+    newChild = newChild.getElement();
+  }
+  const parent = oldChild.parentElement;
+  if (parent === null || oldChild === null || newChild === null) {
+    throw new Error(`Can't replace unexisting elements`);
+  }
+  parent.replaceChild(newChild, oldChild);
+};
+
+const renderTemplate = (container, template, position) => {
+  container.insertAdjacentHTML(position, template);
 };
 
 const createElement = (template) => {
@@ -72,4 +93,5 @@ export {
   getEmptyDataClassName,
   filterData,
   HeadingTitle,
+  replace,
 };

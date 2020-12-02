@@ -10,7 +10,7 @@ import ListView from './view/list.js';
 import EmptyListView from './view/list-empty.js';
 import HeadingView from './view/heading.js';
 import {generateEvent} from './mock/mock-event.js';
-import {filterData, render, RenderPosition, HeadingTitle} from './utils.js';
+import {filterData, render, replace, RenderPosition, HeadingTitle} from './utils.js';
 
 const events = new Array(EVENTS_NUM).fill().map(generateEvent);
 const filteredEvents = filterData(events, `date`);
@@ -19,13 +19,13 @@ const renderEvent = (eventListElement, event) => {
   const eventComponent = new EventView(event);
   const eventEditComponent = new EventEditView(event);
   const replaceCardToForm = () => {
-    eventListElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
+    replace(eventEditComponent, eventComponent);
   };
   const replaceFormToCard = () => {
-    eventListElement.replaceChild(eventComponent.getElement(), eventEditComponent.getElement());
+    replace(eventComponent, eventEditComponent);
   };
 
-  render(eventListElement, eventComponent.getElement(), RenderPosition.BEFOREEND);
+  render(eventListElement, eventComponent, RenderPosition.BEFOREEND);
 
   const eventFormOpenHandler = () => {
     replaceCardToForm();
@@ -51,26 +51,27 @@ const renderEvent = (eventListElement, event) => {
 };
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
-render(siteHeaderElement, new InfoView(events).getElement(), RenderPosition.AFTERBEGIN);
+render(siteHeaderElement, new InfoView(events), RenderPosition.AFTERBEGIN);
 
 const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
-render(siteMenuElement, new HeadingView(HeadingTitle.MENU).getElement(), RenderPosition.BEFOREEND);
-render(siteMenuElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
+render(siteMenuElement, new HeadingView(HeadingTitle.MENU), RenderPosition.BEFOREEND);
+render(siteMenuElement, new MenuView(), RenderPosition.BEFOREEND);
 
 const siteMainElement = document.querySelector(`.page-main .page-body__container`);
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
+
 if (events.length === 0) {
-  render(tripEventsElement, new HeadingView(HeadingTitle.LIST).getElement(), RenderPosition.BEFOREEND);
-  render(tripEventsElement, new EmptyListView().getElement(), RenderPosition.BEFOREEND);
+  render(tripEventsElement, new HeadingView(HeadingTitle.LIST), RenderPosition.BEFOREEND);
+  render(tripEventsElement, new EmptyListView(), RenderPosition.BEFOREEND);
 } else {
-  render(siteMenuElement, new HeadingView(HeadingTitle.FILTER).getElement(), RenderPosition.BEFOREEND);
-  render(siteMenuElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
-  render(tripEventsElement, new HeadingView(HeadingTitle.LIST).getElement(), RenderPosition.AFTERBEGIN);
-  render(tripEventsElement, new ListSortView().getElement(), RenderPosition.BEFOREEND);
+  render(siteMenuElement, new HeadingView(HeadingTitle.FILTER), RenderPosition.BEFOREEND);
+  render(siteMenuElement, new FiltersView(), RenderPosition.BEFOREEND);
+  render(tripEventsElement, new HeadingView(HeadingTitle.LIST), RenderPosition.AFTERBEGIN);
+  render(tripEventsElement, new ListSortView(), RenderPosition.BEFOREEND);
   const listComponent = new ListView();
-  render(tripEventsElement, listComponent.getElement(), RenderPosition.BEFOREEND);
+  render(tripEventsElement, listComponent, RenderPosition.BEFOREEND);
   for (let i = 0; i < EVENTS_NUM; i++) {
     renderEvent(listComponent.getElement(), filteredEvents[i]);
   }
-  render(siteMainElement, new Statistics().getElement(), RenderPosition.BEFOREEND);
+  render(siteMainElement, new Statistics(), RenderPosition.BEFOREEND);
 }
