@@ -77,8 +77,17 @@ export default class Event extends AbstractView {
   constructor(event) {
     super();
     this._event = event;
+    this._formOpenHandler = this._formOpenHandler.bind(this);
   }
   getTemplate() {
     return createEventTemplate(this._event);
+  }
+  _formOpenHandler(evt) {
+    evt.preventDefault();
+    this._callback.open();
+  }
+  setFormOpenHandler(cb) {
+    this._callback.open = cb;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._formOpenHandler);
   }
 }

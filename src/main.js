@@ -18,7 +18,6 @@ const filteredEvents = filterData(events, `date`);
 const renderEvent = (eventListElement, event) => {
   const eventComponent = new EventView(event);
   const eventEditComponent = new EventEditView(event);
-  const eventEditCloseBtn = eventEditComponent.getElement().querySelector(`.event__rollup-btn`);
   const replaceCardToForm = () => {
     eventListElement.replaceChild(eventEditComponent.getElement(), eventComponent.getElement());
   };
@@ -31,14 +30,15 @@ const renderEvent = (eventListElement, event) => {
   const eventFormOpenHandler = () => {
     replaceCardToForm();
     document.addEventListener(`keydown`, EscPressHandler);
-    eventEditCloseBtn.addEventListener(`click`, eventFormCloseHandler);
+    eventEditComponent.setFormCloseHandler(eventFormCloseHandler);
+    eventEditComponent.setFormSubmitHandler(eventFormCloseHandler);
   };
 
-  const eventFormCloseHandler = (evt) => {
-    evt.preventDefault();
+  const eventFormCloseHandler = () => {
     replaceFormToCard();
     document.removeEventListener(`keydown`, EscPressHandler);
-    eventEditCloseBtn.removeEventListener(`click`, eventFormCloseHandler);
+    eventEditComponent.removeFormCloseHandler(eventFormCloseHandler);
+    eventEditComponent.removeFormSubmitHandler(eventFormCloseHandler);
   };
 
   const EscPressHandler = (evt) => {
@@ -47,9 +47,7 @@ const renderEvent = (eventListElement, event) => {
       replaceFormToCard();
     }
   };
-
-  eventComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, eventFormOpenHandler);
-  eventEditComponent.getElement().querySelector(`.event--edit`).addEventListener(`submit`, eventFormCloseHandler);
+  eventComponent.setFormOpenHandler(eventFormOpenHandler);
 };
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
