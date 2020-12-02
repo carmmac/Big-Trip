@@ -51,7 +51,6 @@ const renderEvent = (eventListElement, event) => {
 };
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
-render(siteHeaderElement, new InfoView(events), RenderPosition.AFTERBEGIN);
 
 const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
 render(siteMenuElement, new HeadingView(HeadingTitle.MENU), RenderPosition.BEFOREEND);
@@ -59,13 +58,14 @@ render(siteMenuElement, new MenuView(), RenderPosition.BEFOREEND);
 
 const siteMainElement = document.querySelector(`.page-main .page-body__container`);
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
+render(siteMenuElement, new HeadingView(HeadingTitle.FILTER), RenderPosition.BEFOREEND);
+render(siteMenuElement, new FiltersView(), RenderPosition.BEFOREEND);
 
 if (events.length === 0) {
   render(tripEventsElement, new HeadingView(HeadingTitle.LIST), RenderPosition.BEFOREEND);
   render(tripEventsElement, new EmptyListView(), RenderPosition.BEFOREEND);
 } else {
-  render(siteMenuElement, new HeadingView(HeadingTitle.FILTER), RenderPosition.BEFOREEND);
-  render(siteMenuElement, new FiltersView(), RenderPosition.BEFOREEND);
+  render(siteHeaderElement, new InfoView(events), RenderPosition.AFTERBEGIN);
   render(tripEventsElement, new HeadingView(HeadingTitle.LIST), RenderPosition.AFTERBEGIN);
   render(tripEventsElement, new ListSortView(), RenderPosition.BEFOREEND);
   const listComponent = new ListView();
