@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractView from './absract.js';
 
 const createInfoTemplate = (events) => {
   const getTotalPrice = () => {
@@ -23,21 +23,12 @@ const createInfoTemplate = (events) => {
     </section>`;
 };
 
-export default class Info {
+export default class Info extends AbstractView {
   constructor(events) {
-    this._element = null;
+    super();
     this._events = events;
   }
   getTemplate() {
     return createInfoTemplate(this._events);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,5 +1,6 @@
-import {humanizeDate, getEmptyDataClassName, checkEmptyData, draft, createElement} from '../utils.js';
+import {humanizeDate, getEmptyDataClassName, checkEmptyData, draft} from '../utils.js';
 import {destinations} from '../mock/mock-event.js';
+import AbstractView from './absract.js';
 
 const createNewPointTemplate = (event) => {
   const {
@@ -169,21 +170,12 @@ const createNewPointTemplate = (event) => {
   `;
 };
 
-export default class NewEvent {
+export default class NewEvent extends AbstractView {
   constructor(event) {
-    this._element = null;
+    super();
     this._event = event;
   }
   getTemplate() {
     return createNewPointTemplate(this._event);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }
