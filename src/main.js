@@ -10,7 +10,9 @@ import ListView from './view/list.js';
 import EmptyListView from './view/list-empty.js';
 import HeadingView from './view/heading.js';
 import {generateEvent} from './mock/mock-event.js';
-import {filterData, render, replace, RenderPosition, HeadingTitle} from './utils.js';
+import {render, replace, RenderPosition} from './utils/utils-render.js';
+import {filterData} from './utils/utils-event.js';
+import {HeadingTitle} from './utils/utils-common.js';
 
 const events = new Array(EVENTS_NUM).fill().map(generateEvent);
 const filteredEvents = filterData(events, `date`);

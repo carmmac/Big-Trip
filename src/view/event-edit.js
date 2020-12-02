@@ -1,4 +1,5 @@
-import {humanizeDate, getEmptyDataClassName, checkEmptyData, draft} from '../utils.js';
+import {humanizeDate, getEmptyDataClassName, checkEmptyData} from '../utils/utils-event.js';
+import {draft} from '../utils/utils-common.js';
 import AbstractView from './absract.js';
 
 const createEventEditTemplate = (event = {}) => {
