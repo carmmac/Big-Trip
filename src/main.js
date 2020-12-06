@@ -11,7 +11,7 @@ import HeadingView from './view/heading.js';
 import {generateEvent} from './mock/mock-event.js';
 import {render, replace, RenderPosition} from './utils/utils-render.js';
 import {filterData} from './utils/utils-event.js';
-import {HeadingTitle} from './utils/utils-common.js';
+import {HeadingTitle, checkEmptyData} from './utils/utils-common.js';
 
 const events = new Array(EVENTS_NUM).fill().map(generateEvent);
 const filteredEvents = filterData(events, `date`);
@@ -63,19 +63,19 @@ render(siteMenuElement, new MenuView(), RenderPosition.BEFOREEND);
 render(siteMenuElement, new HeadingView(HeadingTitle.FILTER), RenderPosition.BEFOREEND);
 render(siteMenuElement, new FiltersView(), RenderPosition.BEFOREEND);
 
-const renderData = (tripPoints, listContainer) => {
-  if (tripPoints.length === 0) {
-    render(listContainer, new HeadingView(HeadingTitle.LIST), RenderPosition.BEFOREEND);
-    render(listContainer, new EmptyListView(), RenderPosition.BEFOREEND);
+const renderTripEvents = (tripEvents, eventsContainer) => {
+  if (checkEmptyData(tripEvents)) {
+    render(eventsContainer, new HeadingView(HeadingTitle.LIST), RenderPosition.BEFOREEND);
+    render(eventsContainer, new EmptyListView(), RenderPosition.BEFOREEND);
     return;
   }
-  render(listContainer, new HeadingView(HeadingTitle.LIST), RenderPosition.AFTERBEGIN);
-  render(listContainer, new ListSortView(), RenderPosition.BEFOREEND);
+  render(eventsContainer, new HeadingView(HeadingTitle.LIST), RenderPosition.AFTERBEGIN);
+  render(eventsContainer, new ListSortView(), RenderPosition.BEFOREEND);
   const listComponent = new ListView();
-  render(listContainer, listComponent, RenderPosition.BEFOREEND);
+  render(eventsContainer, listComponent, RenderPosition.BEFOREEND);
   for (let i = 0; i < EVENTS_NUM; i++) {
-    renderEvent(listComponent.getElement(), tripPoints[i]);
+    renderEvent(listComponent.getElement(), tripEvents[i]);
   }
 };
 
-renderData(filteredEvents, tripEventsElement);
+renderTripEvents(filteredEvents, tripEventsElement);
