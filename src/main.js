@@ -52,8 +52,7 @@ const renderEvent = (eventListElement, event) => {
 };
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
-const infoComponent = new InfoView(filteredEvents);
-render(siteHeaderElement, infoComponent, RenderPosition.AFTERBEGIN);
+render(siteHeaderElement, new InfoView(filteredEvents), RenderPosition.AFTERBEGIN);
 
 const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
 const siteMainElement = document.querySelector(`.page-main .page-body__container`);
@@ -66,7 +65,6 @@ render(siteMenuElement, new FiltersView(), RenderPosition.BEFOREEND);
 
 const renderData = (tripPoints, listContainer) => {
   if (tripPoints.length === 0) {
-    infoComponent.getElement().classList.add(`visually-hidden`);
     render(listContainer, new HeadingView(HeadingTitle.LIST), RenderPosition.BEFOREEND);
     render(listContainer, new EmptyListView(), RenderPosition.BEFOREEND);
     return;
