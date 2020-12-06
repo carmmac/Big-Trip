@@ -11,8 +11,14 @@ const getRadomNum = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+const checkEmptyData = (data) => data.length === 0;
+
+const getEmptyDataClassName = (data) => checkEmptyData(data) ? `visually-hidden` : ``;
+
 export {
   draft,
   getRadomNum,
   HeadingTitle,
+  checkEmptyData,
+  getEmptyDataClassName,
 };

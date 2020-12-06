@@ -1,5 +1,5 @@
-import {humanizeDate, getEmptyDataClassName} from '../utils/utils-event.js';
-import {draft} from '../utils/utils-common.js';
+import {humanizeDate} from '../utils/utils-event.js';
+import {draft, getEmptyDataClassName} from '../utils/utils-common.js';
 import AbstractView from './absract.js';
 
 const createNewPointWithoutDestinationsTemplate = (event) => {

@@ -1,5 +1,5 @@
-import {humanizeDate, getEmptyDataClassName, checkEmptyData} from '../utils/utils-event.js';
-import {draft} from '../utils/utils-common.js';
+import {humanizeDate} from '../utils/utils-event.js';
+import {draft, getEmptyDataClassName, checkEmptyData} from '../utils/utils-common.js';
 import {destinations} from '../mock/mock-event.js';
 import {AbstractView} from './absract.js';
 

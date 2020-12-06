@@ -10,10 +10,6 @@ const humanizeDate = (format, date) => {
   return dayjs(date).format(format);
 };
 
-const checkEmptyData = (data) => data.length === 0;
-
-const getEmptyDataClassName = (data) => checkEmptyData(data) ? `visually-hidden` : ``;
-
 const filterData = (data, parameter) => {
   const sortedEvents = data.slice();
   sortedEvents.sort((left, right) => {
@@ -25,7 +21,5 @@ const filterData = (data, parameter) => {
 export {
   generateRandomIndex,
   humanizeDate,
-  getEmptyDataClassName,
-  checkEmptyData,
   filterData,
 };
