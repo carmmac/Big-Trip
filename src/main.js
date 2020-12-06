@@ -3,7 +3,6 @@ import InfoView from './view/info.js';
 import MenuView from './view/menu.js';
 import FiltersView from './view/filters.js';
 import EventView from './view/event.js';
-import Statistics from './view/statistics.js';
 import ListSortView from './view/list-sort.js';
 import EventEditView from './view/event-edit.js';
 import ListView from './view/list.js';
@@ -53,27 +52,32 @@ const renderEvent = (eventListElement, event) => {
 };
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
+const infoComponent = new InfoView(filteredEvents);
+render(siteHeaderElement, infoComponent, RenderPosition.AFTERBEGIN);
 
 const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
-render(siteMenuElement, new HeadingView(HeadingTitle.MENU), RenderPosition.BEFOREEND);
-render(siteMenuElement, new MenuView(), RenderPosition.BEFOREEND);
-
 const siteMainElement = document.querySelector(`.page-main .page-body__container`);
 const tripEventsElement = siteMainElement.querySelector(`.trip-events`);
+
+render(siteMenuElement, new HeadingView(HeadingTitle.MENU), RenderPosition.BEFOREEND);
+render(siteMenuElement, new MenuView(), RenderPosition.BEFOREEND);
 render(siteMenuElement, new HeadingView(HeadingTitle.FILTER), RenderPosition.BEFOREEND);
 render(siteMenuElement, new FiltersView(), RenderPosition.BEFOREEND);
 
-if (events.length === 0) {
-  render(tripEventsElement, new HeadingView(HeadingTitle.LIST), RenderPosition.BEFOREEND);
-  render(tripEventsElement, new EmptyListView(), RenderPosition.BEFOREEND);
-} else {
-  render(siteHeaderElement, new InfoView(events), RenderPosition.AFTERBEGIN);
-  render(tripEventsElement, new HeadingView(HeadingTitle.LIST), RenderPosition.AFTERBEGIN);
-  render(tripEventsElement, new ListSortView(), RenderPosition.BEFOREEND);
-  const listComponent = new ListView();
-  render(tripEventsElement, listComponent, RenderPosition.BEFOREEND);
-  for (let i = 0; i < EVENTS_NUM; i++) {
-    renderEvent(listComponent.getElement(), filteredEvents[i]);
+const renderData = (tripPoints, listContainer) => {
+  if (tripPoints.length === 0) {
+    infoComponent.getElement().classList.add(`visually-hidden`);
+    render(listContainer, new HeadingView(HeadingTitle.LIST), RenderPosition.BEFOREEND);
+    render(listContainer, new EmptyListView(), RenderPosition.BEFOREEND);
+    return;
   }
-  render(siteMainElement, new Statistics(), RenderPosition.BEFOREEND);
-}
+  render(listContainer, new HeadingView(HeadingTitle.LIST), RenderPosition.AFTERBEGIN);
+  render(listContainer, new ListSortView(), RenderPosition.BEFOREEND);
+  const listComponent = new ListView();
+  render(listContainer, listComponent, RenderPosition.BEFOREEND);
+  for (let i = 0; i < EVENTS_NUM; i++) {
+    renderEvent(listComponent.getElement(), tripPoints[i]);
+  }
+};
+
+renderData(filteredEvents, tripEventsElement);
