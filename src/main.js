@@ -38,8 +38,8 @@ const renderEvent = (eventListElement, event) => {
   const eventFormCloseHandler = () => {
     replaceFormToCard();
     document.removeEventListener(`keydown`, EscPressHandler);
-    eventEditComponent.removeFormCloseHandler(eventFormCloseHandler);
-    eventEditComponent.removeFormSubmitHandler(eventFormCloseHandler);
+    eventEditComponent.removeFormCloseHandler();
+    eventEditComponent.removeFormSubmitHandler();
   };
 
   const EscPressHandler = (evt) => {
