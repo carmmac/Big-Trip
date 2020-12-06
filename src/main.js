@@ -45,7 +45,7 @@ const renderEvent = (eventListElement, event) => {
   const EscPressHandler = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
-      replaceFormToCard();
+      eventFormCloseHandler();
     }
   };
   eventComponent.setFormOpenHandler(eventFormOpenHandler);
