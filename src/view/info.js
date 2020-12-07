@@ -1,4 +1,6 @@
-import {createElement} from '../utils.js';
+import AbstractView from './absract.js';
+import {getEmptyDataClassName} from '../utils/utils-common.js';
+
 
 const createInfoTemplate = (events) => {
   const getTotalPrice = () => {
@@ -12,7 +14,7 @@ const createInfoTemplate = (events) => {
       return totalSum;
     }, totalPrice);
   };
-  return `<section class="trip-main__trip-info  trip-info">
+  return `<section class="trip-main__trip-info  trip-info ${getEmptyDataClassName(events)}">
       <div class="trip-info__main">
         <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
         <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
@@ -23,21 +25,12 @@ const createInfoTemplate = (events) => {
     </section>`;
 };
 
-export default class Info {
+export default class Info extends AbstractView {
   constructor(events) {
-    this._element = null;
+    super();
     this._events = events;
   }
   getTemplate() {
     return createInfoTemplate(this._events);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,4 +1,6 @@
-import {humanizeDate, getEmptyDataClassName, draft, createElement} from '../utils.js';
+import {humanizeDate} from '../utils/utils-event.js';
+import {draft, getEmptyDataClassName} from '../utils/utils-common.js';
+import AbstractView from './absract.js';
 
 const createNewPointWithoutOffersTemplate = (event) => {
   const {type, destination, info, photos, price} = event;
@@ -129,21 +131,12 @@ const createNewPointWithoutOffersTemplate = (event) => {
   `;
 };
 
-export default class NewEventWithoutOffers {
+export default class NewEventWithoutOffers extends AbstractView {
   constructor(event) {
-    this._element = null;
+    super();
     this._event = event;
   }
   getTemplate() {
     return createNewPointWithoutOffersTemplate(this._event);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

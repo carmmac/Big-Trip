@@ -1,5 +1,6 @@
 import {INFO_SENTENCE_MAX_NUM, OFFERS_MAX_NUM, PHOTOS_MAX_NUM, OFFER_PRICE, EVENT_PRICE} from '../const.js';
-import {getRadomNum, generateRandomIndex} from '../utils.js';
+import {getRadomNum} from '../utils/utils-common.js';
+import {generateRandomIndex} from '../utils/utils-event.js';
 import dayjs from 'dayjs';
 import objectSupport from 'dayjs/plugin/objectSupport';
 dayjs.extend(objectSupport);

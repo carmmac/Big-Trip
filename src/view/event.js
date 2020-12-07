@@ -1,4 +1,6 @@
-import {humanizeDate, getEmptyDataClassName, draft, createElement} from '../utils.js';
+import {humanizeDate} from '../utils/utils-event.js';
+import {draft, getEmptyDataClassName} from '../utils/utils-common.js';
+import AbstractView from './absract.js';
 
 const createEventTemplate = (event) => {
   const {type, destination, date, time, price, offers, isFavorite} = event;
@@ -72,21 +74,22 @@ const createEventTemplate = (event) => {
     </li>`;
 };
 
-export default class Event {
+export default class Event extends AbstractView {
   constructor(event) {
-    this._element = null;
+    super();
     this._event = event;
+    this._formOpenHandler = this._formOpenHandler.bind(this);
   }
   getTemplate() {
     return createEventTemplate(this._event);
   }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
+  _formOpenHandler() {
+    if (typeof this._callback.open === `function`) {
+      this._callback.open();
     }
-    return this._element;
   }
-  removeElement() {
-    this._element = null;
+  setFormOpenHandler(callback) {
+    this._callback.open = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._formOpenHandler);
   }
 }

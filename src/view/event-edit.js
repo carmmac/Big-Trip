@@ -1,4 +1,6 @@
-import {humanizeDate, getEmptyDataClassName, checkEmptyData, draft, createElement} from '../utils.js';
+import {humanizeDate} from '../utils/utils-event.js';
+import {draft, getEmptyDataClassName, checkEmptyData} from '../utils/utils-common.js';
+import AbstractView from './absract.js';
 
 const createEventEditTemplate = (event = {}) => {
   const {type, destination, info, price, offers} = event;
@@ -145,21 +147,39 @@ const createEventEditTemplate = (event = {}) => {
   `;
 };
 
-export default class EventEdit {
+export default class EventEdit extends AbstractView {
   constructor(event) {
-    this._element = null;
+    super();
     this._event = event;
+    this._formCloseHandler = this._formCloseHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
   getTemplate() {
     return createEventEditTemplate(this._event);
   }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
+  _formCloseHandler() {
+    if (typeof this._callback.close === `function`) {
+      this._callback.close();
     }
-    return this._element;
   }
-  removeElement() {
-    this._element = null;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    if (typeof this._callback.formSubmit === `function`) {
+      this._callback.formSubmit(evt);
+    }
+  }
+  setFormCloseHandler(callback) {
+    this._callback.close = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._formCloseHandler);
+  }
+  removeFormCloseHandler() {
+    this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._formCloseHandler);
+  }
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(`.event--edit`).addEventListener(`submit`, this._formSubmitHandler);
+  }
+  removeFormSubmitHandler() {
+    this.getElement().querySelector(`.event--edit`).removeEventListener(`submit`, this._formSubmitHandler);
   }
 }
