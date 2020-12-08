@@ -1,6 +1,6 @@
 import EventView from '../view/event.js';
 import EventEditView from '../view/event-edit.js';
-import {render, RenderPosition, replace} from '../utils/utils-render.js';
+import {render, RenderPosition, replace, remove} from '../utils/utils-render.js';
 
 export default class Point {
   constructor(listContainer) {
@@ -14,11 +14,29 @@ export default class Point {
 
   init(event) {
     this._event = event;
+    const prevEventComponent = this._eventComponent;
+    const prevEventEditComponent = this._eventEditComponent;
     this._eventComponent = new EventView(event);
     this._eventEditComponent = new EventEditView(event);
     this._eventComponent.setFormOpenHandler(this._eventFormOpenHandler);
 
-    render(this._listContainer, this._eventComponent, RenderPosition.BEFOREEND);
+    if (prevEventComponent === null || prevEventEditComponent === null) {
+      render(this._listContainer, this._eventComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+    if (this._listContainer.getElement().contains(prevEventComponent.getElement())) {
+      replace(this._eventComponent, prevEventComponent);
+    }
+    if (this._listContainer.getElement().contains(prevEventEditComponent.getElement())) {
+      replace(this._eventEditComponent, prevEventEditComponent);
+    }
+    remove(prevEventComponent);
+    remove(prevEventEditComponent);
+  }
+
+  _destroy() {
+    remove(this._eventComponent);
+    remove(this._eventEditComponent);
   }
 
   _replaceCardToForm() {

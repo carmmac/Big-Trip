@@ -46,10 +46,19 @@ const createElement = (template) => {
   return container.firstChild;
 };
 
+const remove = (component) => {
+  if (!(component instanceof AbstractView)) {
+    throw new Error(`Can remove only components`);
+  }
+  component.getElement().remove();
+  component.removeElement();
+};
+
 export {
   RenderPosition,
   render,
   renderTemplate,
   createElement,
   replace,
+  remove,
 };

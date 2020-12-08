@@ -10,6 +10,7 @@ import {checkEmptyData} from '../utils/utils-common.js';
 export default class Trip {
   constructor(tripContainer) {
     this._tripContainer = tripContainer;
+    // this._eventPresenter = new Map();
     this._tripBoardComponent = new TripBoardView();
     this._sortComponent = new SortView();
     this._listComponent = new ListView();
@@ -49,6 +50,7 @@ export default class Trip {
   _renderEvent(event) {
     const eventPresenter = new EventPresenter(this._listComponent);
     eventPresenter.init(event);
+    // this._eventPresenter[event] = eventPresenter;
   }
 
   _renderEmptyList() {
