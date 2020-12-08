@@ -25,4 +25,3 @@ render(siteMenuElement, new FiltersView(), RenderPosition.BEFOREEND);
 
 const tripPresenter = new TripPresenter(siteMainElement);
 tripPresenter.init(sortedEvents);
-

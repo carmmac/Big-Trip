@@ -18,6 +18,7 @@ export default class Trip {
     this._headingComponent = new HeadingView();
 
     this._eventChangeHandler = this._eventChangeHandler.bind(this);
+    this._eventModeChangeHandler = this._eventModeChangeHandler.bind(this);
   }
 
   init(tripEvents) {
@@ -50,13 +51,17 @@ export default class Trip {
   }
 
   _renderEvent(event) {
-    const eventPresenter = new EventPresenter(this._listComponent, this._eventChangeHandler);
+    const eventPresenter = new EventPresenter(this._listComponent, this._eventChangeHandler, this._eventModeChangeHandler);
     eventPresenter.init(event);
     this._eventPresenter[event.id] = eventPresenter;
   }
 
   _renderEmptyList() {
     render(this._tripBoardComponent, this._emptyListComponent, RenderPosition.BEFOREEND);
+  }
+
+  _eventModeChangeHandler() {
+    Object.values(this._eventPresenter).forEach((presenter) => presenter.resetView());
   }
 
   _eventChangeHandler(updatedEvent) {

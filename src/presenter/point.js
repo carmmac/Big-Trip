@@ -2,10 +2,16 @@ import EventView from '../view/event.js';
 import EventEditView from '../view/event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/utils-render.js';
 
+const Mode = {
+  DEFAULT: `default`,
+  EDITING: `editing`,
+};
+
 export default class Point {
-  constructor(listContainer, changeData) {
+  constructor(listContainer, changeData, changeMode) {
     this._listContainer = listContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode;
     this._eventComponent = null;
     this._eventEditComponent = null;
     this._eventFormOpenHandler = this._eventFormOpenHandler.bind(this);
@@ -16,6 +22,7 @@ export default class Point {
 
   init(event) {
     this._event = event;
+    this._mode = Mode.DEFAULT;
     const prevEventComponent = this._eventComponent;
     const prevEventEditComponent = this._eventEditComponent;
     this._eventComponent = new EventView(event);
@@ -27,10 +34,10 @@ export default class Point {
       render(this._listContainer, this._eventComponent, RenderPosition.BEFOREEND);
       return;
     }
-    if (this._listContainer.getElement().contains(prevEventComponent.getElement())) {
+    if (this._mode === Mode.DEFAULT) {
       replace(this._eventComponent, prevEventComponent);
     }
-    if (this._listContainer.getElement().contains(prevEventEditComponent.getElement())) {
+    if (this._mode === Mode.EDITING) {
       replace(this._eventEditComponent, prevEventEditComponent);
     }
     remove(prevEventComponent);
@@ -44,10 +51,19 @@ export default class Point {
 
   _replaceCardToForm() {
     replace(this._eventEditComponent, this._eventComponent);
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
   _replaceFormToCard() {
     replace(this._eventComponent, this._eventEditComponent);
+    this._mode = Mode.DEFAULT;
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToCard();
+    }
   }
 
   _eventFormOpenHandler() {
