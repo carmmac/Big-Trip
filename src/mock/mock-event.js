@@ -129,6 +129,8 @@ const generateTime = () => {
   };
 };
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 export const generateEvent = () => {
   const type = generateRandomIndex(eventTypes);
   const destination = generateRandomIndex(destinations);
@@ -137,6 +139,7 @@ export const generateEvent = () => {
   const info = generateInfo();
 
   return {
+    id: generateId(),
     type,
     destination,
     date,
