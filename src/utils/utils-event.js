@@ -10,7 +10,7 @@ const humanizeDate = (format, date) => {
   return dayjs(date).format(format);
 };
 
-const filterData = (data, parameter) => {
+const sortData = (data, parameter) => {
   const sortedEvents = data.slice();
   sortedEvents.sort((left, right) => {
     return left[parameter] - right[parameter];
@@ -21,5 +21,5 @@ const filterData = (data, parameter) => {
 export {
   generateRandomIndex,
   humanizeDate,
-  filterData,
+  sortData,
 };
