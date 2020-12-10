@@ -11,11 +11,9 @@ const getRadomNum = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const checkEmptyData = (data) => data.length === 0;
+const getEmptyDataClassName = (data) => data.length === 0 ? `visually-hidden` : ``;
 
-const getEmptyDataClassName = (data) => checkEmptyData(data) ? `visually-hidden` : ``;
-
-const updateItem = (items, update) => {
+const getUpdatedList = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
   if (index === -1) {
     return items;
@@ -27,7 +25,6 @@ export {
   draft,
   getRadomNum,
   HeadingTitle,
-  checkEmptyData,
   getEmptyDataClassName,
-  updateItem,
+  getUpdatedList,
 };

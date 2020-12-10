@@ -5,7 +5,7 @@ import EmptyListView from '../view/list-empty.js';
 import HeadingView from '../view/heading.js';
 import EventPresenter from './point.js';
 import {render, RenderPosition} from '../utils/utils-render.js';
-import {checkEmptyData, updateItem} from '../utils/utils-common.js';
+import {getUpdatedList} from '../utils/utils-common.js';
 
 export default class Trip {
   constructor(tripContainer) {
@@ -23,13 +23,12 @@ export default class Trip {
 
   init(tripEvents) {
     this._tripEvents = tripEvents.slice();
-    render(this._tripContainer, this._tripBoardComponent, RenderPosition.AFTERBEGIN);
-
     this._renderTrip();
+    render(this._tripContainer, this._tripBoardComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderTrip() {
-    if (checkEmptyData(this._tripEvents)) {
+    if (this._tripEvents.length === 0) {
       this._renderEmptyList();
       return;
     }
@@ -65,7 +64,7 @@ export default class Trip {
   }
 
   _eventChangeHandler(updatedEvent) {
-    this._tripEvents = updateItem(this._tripEvents, updatedEvent);
+    this._tripEvents = getUpdatedList(this._tripEvents, updatedEvent);
     this._eventPresenter[updatedEvent.id].init(updatedEvent);
   }
 }
