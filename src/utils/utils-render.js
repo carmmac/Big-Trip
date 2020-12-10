@@ -10,6 +10,13 @@ const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
 };
+const SortType = {
+  DAY: `day`,
+  EVENT: `event`,
+  TIME: `time`,
+  PRICE: `price`,
+  OFFERS: `offers`,
+};
 
 const render = (container, child, position) => {
   if (container instanceof AbstractView) {
@@ -69,4 +76,5 @@ export {
   remove,
   draft,
   HeadingTitle,
+  SortType,
 };
