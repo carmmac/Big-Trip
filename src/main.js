@@ -7,7 +7,7 @@ import TripPresenter from './presenter/trip.js';
 import {generateEvent} from './mock/mock-event.js';
 import {render, RenderPosition} from './utils/utils-render.js';
 import {sortData} from './utils/utils-event.js';
-import {HeadingTitle} from './utils/utils-common.js';
+import {HeadingTitle} from './utils/utils-render.js';
 
 const events = new Array(EVENTS_NUM).fill().map(generateEvent);
 const sortedEvents = sortData(events, `date`);

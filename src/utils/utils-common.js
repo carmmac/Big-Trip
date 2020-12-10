@@ -1,9 +1,4 @@
-const draft = ``;
-const HeadingTitle = {
-  LIST: `Trip events`,
-  MENU: `Switch trip view`,
-  FILTER: `Filter events`,
-};
+
 
 const getRadomNum = (min, max) => {
   min = Math.ceil(min);
@@ -22,9 +17,7 @@ const getUpdatedList = (items, update) => {
 };
 
 export {
-  draft,
   getRadomNum,
-  HeadingTitle,
   getEmptyDataClassName,
   getUpdatedList,
 };
