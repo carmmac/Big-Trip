@@ -44,7 +44,7 @@ export default class Point {
     remove(prevEventEditComponent);
   }
 
-  _destroy() {
+  destroy() {
     remove(this._eventComponent);
     remove(this._eventEditComponent);
   }

@@ -11,11 +11,11 @@ const humanizeDate = (format, date) => {
 };
 
 const sortData = (data, parameter) => {
-  const sortedEvents = data.slice();
-  sortedEvents.sort((left, right) => {
+  // const sortedEvents = data.slice();
+  data.sort((left, right) => {
     return left[parameter] - right[parameter];
   });
-  return sortedEvents;
+  return data;
 };
 
 export {
