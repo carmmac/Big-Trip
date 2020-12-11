@@ -79,6 +79,7 @@ export default class Event extends AbstractView {
     super();
     this._event = event;
     this._formOpenHandler = this._formOpenHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
   getTemplate() {
     return createEventTemplate(this._event);
@@ -88,8 +89,17 @@ export default class Event extends AbstractView {
       this._callback.open();
     }
   }
+  _favoriteClickHandler() {
+    if (typeof this._callback.favorite === `function`) {
+      this._callback.favorite();
+    }
+  }
   setFormOpenHandler(callback) {
     this._callback.open = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._formOpenHandler);
+  }
+  setFavoriteClickHandler(callback) {
+    this._callback.favorite = callback;
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favoriteClickHandler);
   }
 }

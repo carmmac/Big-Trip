@@ -1,5 +1,5 @@
 import {humanizeDate} from '../utils/utils-event.js';
-import {draft, getEmptyDataClassName, checkEmptyData} from '../utils/utils-common.js';
+import {draft, getEmptyDataClassName} from '../utils/utils-common.js';
 import AbstractView from './absract.js';
 
 const createEventEditTemplate = (event = {}) => {
@@ -7,7 +7,7 @@ const createEventEditTemplate = (event = {}) => {
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
   const emptyOffersClassName = getEmptyDataClassName(offers);
   const emptyInfoClassName = getEmptyDataClassName(info);
-  const emptyEventDetailsClassName = checkEmptyData(offers) && checkEmptyData(info) ? `visually-hidden` : ``;
+  const emptyEventDetailsClassName = (offers.length === 0 && info.length === 0) ? `visually-hidden` : ``;
 
   const renderOffers = () => {
     return offers.reduce((finalTemplate, currentOffer) => {

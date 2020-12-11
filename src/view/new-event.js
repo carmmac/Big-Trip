@@ -1,5 +1,5 @@
 import {humanizeDate} from '../utils/utils-event.js';
-import {draft, getEmptyDataClassName, checkEmptyData} from '../utils/utils-common.js';
+import {draft, getEmptyDataClassName} from '../utils/utils-common.js';
 import {destinations} from '../mock/mock-event.js';
 import {AbstractView} from './absract.js';
 
@@ -16,7 +16,7 @@ const createNewPointTemplate = (event) => {
   const emptyOffersClassName = getEmptyDataClassName(offers);
   const emptyPhotosClassName = getEmptyDataClassName(photos);
   const emptyInfoClassName = getEmptyDataClassName(info);
-  const emptyEventDetailsClassName = checkEmptyData(offers) && checkEmptyData(info) ? `visually-hidden` : ``;
+  const emptyEventDetailsClassName = (offers.length === 0 && info.length === 0) ? `visually-hidden` : ``;
 
   const renderDestinationOptions = () => {
     return destinations.reduce((finalTemplate, currentOption) => {
