@@ -4,8 +4,9 @@ import ListView from '../view/list.js';
 import EmptyListView from '../view/list-empty.js';
 import HeadingView from '../view/heading.js';
 import EventPresenter from './point.js';
-import {render, RenderPosition} from '../utils/utils-render.js';
+import {render, RenderPosition, SortType} from '../utils/utils-render.js';
 import {getUpdatedList} from '../utils/utils-common.js';
+import {sortData} from '../utils/utils-event.js';
 
 export default class Trip {
   constructor(tripContainer) {
@@ -16,13 +17,16 @@ export default class Trip {
     this._listComponent = new ListView();
     this._emptyListComponent = new EmptyListView();
     this._headingComponent = new HeadingView();
+    this._currentSortType = SortType.DAY;
 
     this._eventChangeHandler = this._eventChangeHandler.bind(this);
     this._eventModeChangeHandler = this._eventModeChangeHandler.bind(this);
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   init(tripEvents) {
     this._tripEvents = tripEvents.slice();
+    this._originalEvents = tripEvents.slice();
     this._renderTrip();
     render(this._tripContainer, this._tripBoardComponent, RenderPosition.AFTERBEGIN);
   }
@@ -38,6 +42,7 @@ export default class Trip {
   }
 
   _renderSort() {
+    this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
     render(this._tripBoardComponent, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
@@ -59,6 +64,22 @@ export default class Trip {
     render(this._tripBoardComponent, this._emptyListComponent, RenderPosition.BEFOREEND);
   }
 
+  _sortEvents(sortType) {
+    switch (sortType) {
+      case SortType.PRICE:
+        this._tripEvents = sortData(this._tripEvents, SortType.PRICE);
+        break;
+      default:
+        this._tripEvents = this._originalEvents;
+    }
+    this._currentSortType = sortType;
+  }
+
+  _clearList() {
+    Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
+    this._eventPresenter = {};
+  }
+
   _eventModeChangeHandler() {
     Object.values(this._eventPresenter).forEach((presenter) => presenter.resetView());
   }
@@ -66,5 +87,13 @@ export default class Trip {
   _eventChangeHandler(updatedEvent) {
     this._tripEvents = getUpdatedList(this._tripEvents, updatedEvent);
     this._eventPresenter[updatedEvent.id].init(updatedEvent);
+  }
+  _sortTypeChangeHandler(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortEvents(sortType);
+    this._clearList();
+    this._renderEvents();
   }
 }

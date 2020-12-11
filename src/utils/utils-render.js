@@ -1,8 +1,21 @@
 import AbstractView from '../view/absract.js';
 
+const draft = ``;
+const HeadingTitle = {
+  LIST: `Trip events`,
+  MENU: `Switch trip view`,
+  FILTER: `Filter events`,
+};
 const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
+};
+const SortType = {
+  DAY: `day`,
+  EVENT: `event`,
+  TIME: `time`,
+  PRICE: `price`,
+  OFFERS: `offers`,
 };
 
 const render = (container, child, position) => {
@@ -61,4 +74,7 @@ export {
   createElement,
   replace,
   remove,
+  draft,
+  HeadingTitle,
+  SortType,
 };
