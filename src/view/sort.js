@@ -42,6 +42,9 @@ export default class ListSort extends AbstractView {
   }
   _sortTypeChangeHandler(evt) {
     if (typeof this._callback.sort === `function`) {
+      if (!evt.target.closest(`.trip-sort__btn`)) {
+        return;
+      }
       this._callback.sort(evt.target.dataset.sortType);
     }
   }

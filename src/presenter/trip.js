@@ -42,8 +42,8 @@ export default class Trip {
   }
 
   _renderSort() {
-    this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
     render(this._tripBoardComponent, this._sortComponent, RenderPosition.BEFOREEND);
+    this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
   }
 
   _renderList() {
@@ -70,7 +70,7 @@ export default class Trip {
         this._tripEvents = sortData(this._tripEvents, SortType.PRICE);
         break;
       default:
-        this._tripEvents = this._originalEvents;
+        this._tripEvents = this._originalEvents.slice();
     }
     this._currentSortType = sortType;
   }
