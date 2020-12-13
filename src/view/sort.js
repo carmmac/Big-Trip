@@ -1,5 +1,5 @@
 import AbstractView from './absract.js';
-import {SortType} from '../utils/utils-render.js';
+import {SortType} from '../utils/utils-event.js';
 
 const createListSortTemplate = () => {
   return `
@@ -16,7 +16,7 @@ const createListSortTemplate = () => {
 
       <div class="trip-sort__item  trip-sort__item--time">
         <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
-        <label class="trip-sort__btn" for="sort-time" data-sort-type="${SortType.TIME}">Time</label>
+        <label class="trip-sort__btn" for="sort-time" data-sort-type="${SortType.DURATION}">Time</label>
       </div>
 
       <div class="trip-sort__item  trip-sort__item--price">
