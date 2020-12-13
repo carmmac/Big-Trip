@@ -4,9 +4,9 @@ import ListView from '../view/list.js';
 import EmptyListView from '../view/list-empty.js';
 import HeadingView from '../view/heading.js';
 import EventPresenter from './point.js';
-import {render, RenderPosition, SortType} from '../utils/utils-render.js';
+import {render, RenderPosition} from '../utils/utils-render.js';
 import {getUpdatedList} from '../utils/utils-common.js';
-import {sortData} from '../utils/utils-event.js';
+import {sortData, SortType} from '../utils/utils-event.js';
 
 export default class Trip {
   constructor(tripContainer) {
@@ -68,6 +68,9 @@ export default class Trip {
     switch (sortType) {
       case SortType.PRICE:
         this._tripEvents = sortData(this._tripEvents, SortType.PRICE);
+        break;
+      case SortType.DURATION:
+        this._tripEvents = sortData(this._tripEvents, SortType.DURATION);
         break;
       default:
         this._tripEvents = this._originalEvents.slice();
