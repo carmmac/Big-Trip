@@ -2,11 +2,9 @@ import dayjs from 'dayjs';
 import {getRadomNum} from './utils-common.js';
 
 const SortType = {
-  DAY: `day`,
-  EVENT: `event`,
+  DAY: `date`,
   DURATION: `duration`,
   PRICE: `price`,
-  OFFERS: `offers`,
 };
 
 const generateRandomIndex = (data) => {
@@ -19,32 +17,23 @@ const humanizeDate = (format, date) => {
 };
 
 const sortData = (data, parameter) => {
-  if (parameter === SortType.DURATION) {
-    data.sort((left, right) => {
-      if (left[parameter].HOUR < right[parameter].HOUR) {
-        return -1;
-      }
-      if (left[parameter].HOUR > right[parameter].HOUR) {
-        return 1;
-      }
-      if (left[parameter].HOUR === right[parameter].HOUR) {
-        if (left[parameter].MINUTE < right[parameter].MINUTE) {
-          return -1;
-        }
-        if (left[parameter].MINUTE > right[parameter].MINUTE) {
-          return 1;
-        }
-        return 0;
-      }
-      return null;
-    });
-    return data;
-  } else {
-    data.sort((left, right) => {
-      return left[parameter] - right[parameter];
-    });
-    return data;
+  switch (parameter) {
+    case SortType.DURATION:
+      data.sort((left, right) => {
+        return (right[parameter].HOUR * 60 + right[parameter].MINUTE) - (left[parameter].HOUR * 60 + left[parameter].MINUTE);
+      });
+      break;
+    case SortType.PRICE:
+      data.sort((left, right) => {
+        return right[parameter] - left[parameter];
+      });
+      break;
+    default:
+      data.sort((left, right) => {
+        return left[parameter] - right[parameter];
+      });
   }
+  return data;
 };
 
 export {
