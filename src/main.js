@@ -6,14 +6,12 @@ import HeadingView from './view/heading.js';
 import TripPresenter from './presenter/trip.js';
 import {generateEvent} from './mock/mock-event.js';
 import {render, RenderPosition} from './utils/utils-render.js';
-import {sortData} from './utils/utils-event.js';
 import {HeadingTitle} from './utils/utils-render.js';
 
 const events = new Array(EVENTS_NUM).fill().map(generateEvent);
-const sortedEvents = sortData(events, `date`);
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
-render(siteHeaderElement, new InfoView(sortedEvents), RenderPosition.AFTERBEGIN);
+render(siteHeaderElement, new InfoView(events), RenderPosition.AFTERBEGIN);
 
 const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
 const siteMainElement = document.querySelector(`.page-main .page-body__container`);
@@ -24,4 +22,4 @@ render(siteMenuElement, new HeadingView(HeadingTitle.FILTER), RenderPosition.BEF
 render(siteMenuElement, new FiltersView(), RenderPosition.BEFOREEND);
 
 const tripPresenter = new TripPresenter(siteMainElement);
-tripPresenter.init(sortedEvents);
+tripPresenter.init(events);
