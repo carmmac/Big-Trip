@@ -25,7 +25,7 @@ export default class Trip {
   }
 
   init(tripEvents) {
-    this._tripEvents = tripEvents.slice();
+    this._tripEvents = sortData(tripEvents, this._currentSortType);
     this._originalEvents = tripEvents.slice();
     this._renderTrip();
     render(this._tripContainer, this._tripBoardComponent, RenderPosition.AFTERBEGIN);
@@ -65,15 +65,10 @@ export default class Trip {
   }
 
   _sortEvents(sortType) {
-    switch (sortType) {
-      case SortType.PRICE:
-        this._tripEvents = sortData(this._tripEvents, SortType.PRICE);
-        break;
-      case SortType.DURATION:
-        this._tripEvents = sortData(this._tripEvents, SortType.DURATION);
-        break;
-      default:
-        this._tripEvents = this._originalEvents.slice();
+    if (sortType === SortType.DAY) {
+      this._tripEvents = this._originalEvents.slice();
+    } else {
+      this._tripEvents = sortData(this._tripEvents, sortType);
     }
     this._currentSortType = sortType;
   }
