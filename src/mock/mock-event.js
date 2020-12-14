@@ -137,6 +137,10 @@ export const generateEvent = () => {
   const date = generateDate();
   const time = generateTime();
   const info = generateInfo();
+  const duration = {
+    HOUR: time.END.HOUR - time.START.HOUR,
+    MINUTE: time.END.MINUTE - time.START.MINUTE
+  };
 
   return {
     id: generateId(),
@@ -144,6 +148,7 @@ export const generateEvent = () => {
     destination,
     date,
     time,
+    duration,
     info,
     photos: generatePhotos(),
     price: getRadomNum(EVENT_PRICE.MIN, EVENT_PRICE.MAX),

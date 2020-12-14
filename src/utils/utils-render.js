@@ -1,9 +1,16 @@
 import AbstractView from '../view/absract.js';
 
+const draft = ``;
+const HeadingTitle = {
+  LIST: `Trip events`,
+  MENU: `Switch trip view`,
+  FILTER: `Filter events`,
+};
 const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
 };
+
 
 const render = (container, child, position) => {
   if (container instanceof AbstractView) {
@@ -61,4 +68,6 @@ export {
   createElement,
   replace,
   remove,
+  draft,
+  HeadingTitle,
 };
