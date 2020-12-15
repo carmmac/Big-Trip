@@ -1,15 +1,33 @@
 import {humanizeDate} from '../utils/utils-event.js';
-import {getEmptyDataClassName} from '../utils/utils-common.js';
 import {draft} from '../utils/utils-render.js';
+import {eventTypes, destinations} from '../mock/mock-event.js';
 import AbstractView from './absract.js';
 
-const createEventEditTemplate = (event = {}) => {
-  const {type, destination, info, price, offers} = event;
-  const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
-  const emptyOffersClassName = getEmptyDataClassName(offers);
-  const emptyInfoClassName = getEmptyDataClassName(info);
-  const emptyEventDetailsClassName = (offers.length === 0 && info.length === 0) ? `visually-hidden` : ``;
+const createEventTypeListTemplate = (eventType) => {
+  return eventTypes.reduce((finalTemplate, currentType) => {
+    const currentTypeNameToLowerCase = currentType.toLowerCase();
+    const currentTemplate = `
+      <div class="event__type-item">
+        <input id="event-type-${currentTypeNameToLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentTypeNameToLowerCase}" ${currentType === eventType ? `checked` : ``}>
+        <label class="event__type-label  event__type-label--${currentTypeNameToLowerCase}" for="event-type-${currentTypeNameToLowerCase}-1">${currentType}</label>
+      </div>
+    `;
+    return `${currentTemplate}${finalTemplate}`;
+  }, draft);
+};
 
+const createDestinationOptionsTemplate = () => {
+  return destinations.reduce((finalTemplate, currentOption) => {
+    const currentTemplate = `<option value="${currentOption}"></option>`;
+    return `${currentTemplate}${finalTemplate}`;
+  }, draft);
+};
+
+
+const createEventOffersSectionTemplate = (offers, hasOffers) => {
+  if (!hasOffers) {
+    return ``;
+  }
   const renderOffers = () => {
     return offers.reduce((finalTemplate, currentOffer) => {
       const currentTemplate = `
@@ -27,6 +45,60 @@ const createEventEditTemplate = (event = {}) => {
       return `${currentTemplate}${finalTemplate}`;
     }, draft);
   };
+  return `
+    <section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+      ${renderOffers()}
+      </div>
+    </section>
+  `;
+};
+
+const createEventDestinationSectionTemplate = (info, photos, hasInfo, hasPhotos) => {
+  if (!hasInfo) {
+    return ``;
+  }
+  const renderPhotos = () => {
+    return photos.reduce((finalTemplate, currentPhoto) => {
+      const currentTemplate = `<img class="event__photo" src="${currentPhoto}" alt="Event photo"></img>`;
+      return `${currentTemplate}${finalTemplate}`;
+    }, draft);
+  };
+  const renderPhotosContainer = () => {
+    if (!hasPhotos) {
+      return ``;
+    }
+    return `
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+          ${renderPhotos()}
+        </div>
+      </div>
+    `;
+  };
+  return `
+    <section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${info.join()}</p>
+      ${renderPhotosContainer()}
+    </section>
+  `;
+};
+
+const createEventDetailsSectionTemplate = (offers, info, photos, hasOffers, hasInfo, hasPhotos) => {
+  return `
+    <section class="event__details">
+      ${createEventOffersSectionTemplate(offers, hasOffers)}
+      ${createEventDestinationSectionTemplate(info, photos, hasInfo, hasPhotos)}
+    </section>
+  `;
+};
+
+
+const createEventEditTemplate = (data = {}) => {
+  const {type, destination, info, price, offers, photos, eventHasOffers, eventHasInfo, eventHasPhotos} = data;
+  const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
 
   return `
     <li class="trip-events__item">
@@ -42,56 +114,7 @@ const createEventEditTemplate = (event = {}) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-
-                <div class="event__type-item">
-                  <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                  <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                  <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                  <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                  <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-                  <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                  <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-                  <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-                  <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                  <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                  <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-                </div>
+                ${createEventTypeListTemplate(type)};
               </fieldset>
             </div>
           </div>
@@ -102,9 +125,7 @@ const createEventEditTemplate = (event = {}) => {
             </label>
             <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
             <datalist id="destination-list-1">
-              <option value="Amsterdam"></option>
-              <option value="Geneva"></option>
-              <option value="Chamonix"></option>
+              ${createDestinationOptionsTemplate()}
             </datalist>
           </div>
 
@@ -130,19 +151,7 @@ const createEventEditTemplate = (event = {}) => {
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
-        <section class="event__details ${emptyEventDetailsClassName}">
-          <section class="event__section  event__section--offers ${emptyOffersClassName}">
-            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-            <div class="event__available-offers">
-            ${renderOffers()}
-            </div>
-          </section>
-
-          <section class="event__section  event__section--destination ${emptyInfoClassName}">
-            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${info.join()}</p>
-          </section>
-        </section>
+        ${createEventDetailsSectionTemplate(offers, info, photos, eventHasOffers, eventHasInfo, eventHasPhotos)}
       </form>
     </li>
   `;
@@ -151,12 +160,12 @@ const createEventEditTemplate = (event = {}) => {
 export default class EventEdit extends AbstractView {
   constructor(event) {
     super();
-    this._event = event;
+    this._data = EventEdit.parseEventToData(event);
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
   getTemplate() {
-    return createEventEditTemplate(this._event);
+    return createEventEditTemplate(this._data);
   }
   _formCloseHandler() {
     if (typeof this._callback.close === `function`) {
@@ -182,5 +191,34 @@ export default class EventEdit extends AbstractView {
   }
   removeFormSubmitHandler() {
     this.getElement().querySelector(`.event--edit`).removeEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  static parseEventToData(event) {
+    return Object.assign(
+        {},
+        event, {
+          eventHasOffers: event.offers.length !== 0,
+          eventHasInfo: event.info.length !== 0,
+          eventHasPhotos: event.photos.length !== 0,
+        });
+  }
+
+  static parseDataToEvent(data) {
+    data = Object.assign({}, data);
+
+    if (!data.eventHasOffers) {
+      data.offers = [];
+    }
+    if (!data.eventHasInfo) {
+      data.info = [];
+    }
+    if (!data.eventHasPhotos) {
+      data.photos = [];
+    }
+    delete data.eventHasOffers;
+    delete data.eventHasInfo;
+    delete data.eventHasPhotos;
+
+    return data;
   }
 }

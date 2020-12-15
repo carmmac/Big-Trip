@@ -6,7 +6,7 @@ const getRadomNum = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const getEmptyDataClassName = (dataFlag) => dataFlag ? `` : `visually-hidden`;
+const getEmptyDataClassName = (data) => data.length === 0 ? `visually-hidden` : ``;
 
 const getUpdatedList = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
