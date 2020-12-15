@@ -221,4 +221,20 @@ export default class EventEdit extends AbstractView {
 
     return data;
   }
+
+  updateElement() {
+    let prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+    const newElement = this.getElement();
+    parent.replaceChild(newElement, prevElement);
+  }
+
+  updateData(update) {
+    if (!update) {
+      return;
+    }
+    this._data = Object.assign({}, this._data, update);
+    this.updateElement();
+  }
 }
