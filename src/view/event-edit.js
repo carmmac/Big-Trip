@@ -114,7 +114,7 @@ const createEventEditTemplate = (data = {}) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${createEventTypeListTemplate(type)};
+                ${createEventTypeListTemplate(type)}
               </fieldset>
             </div>
           </div>
@@ -161,8 +161,12 @@ export default class EventEdit extends AbstractView {
   constructor(event) {
     super();
     this._data = EventEdit.parseEventToData(event);
+
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
+
+    this._setInnerHandlers();
   }
   getTemplate() {
     return createEventEditTemplate(this._data);
@@ -191,6 +195,20 @@ export default class EventEdit extends AbstractView {
   }
   removeFormSubmitHandler() {
     this.getElement().querySelector(`.event--edit`).removeEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  _eventTypeChangeHandler(evt) {
+    this.updateData({type: evt.target.value});
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._eventTypeChangeHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormCloseHandler(this._callback.close);
+    this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   static parseEventToData(event) {
@@ -228,6 +246,7 @@ export default class EventEdit extends AbstractView {
     this.removeElement();
     const newElement = this.getElement();
     parent.replaceChild(newElement, prevElement);
+    this.restoreHandlers();
   }
 
   updateData(update) {
