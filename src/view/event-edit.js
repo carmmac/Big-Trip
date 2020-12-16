@@ -165,6 +165,7 @@ export default class EventEdit extends AbstractView {
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
+    this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -201,8 +202,13 @@ export default class EventEdit extends AbstractView {
     this.updateData({type: evt.target.value});
   }
 
+  _eventDestinationChangeHandler(evt) {
+    this.updateData({destination: evt.target.value}, true);
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._eventTypeChangeHandler);
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._eventDestinationChangeHandler);
   }
 
   restoreHandlers() {
@@ -249,11 +255,14 @@ export default class EventEdit extends AbstractView {
     this.restoreHandlers();
   }
 
-  updateData(update) {
+  updateData(update, justDataUpdating) {
     if (!update) {
       return;
     }
     this._data = Object.assign({}, this._data, update);
+    if (justDataUpdating) {
+      return;
+    }
     this.updateElement();
   }
 }
