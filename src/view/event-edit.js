@@ -199,16 +199,42 @@ export default class EventEdit extends AbstractView {
     this.getElement().querySelector(`.event--edit`).removeEventListener(`submit`, this._formSubmitHandler);
   }
 
+  _checkInputValidity(evt) {
+    const InputId = {
+      DESTINATION: `event-destination-1`,
+      PRICE: `event-price-1`,
+    };
+
+    evt.target.reportValidity();
+    if (evt.target.value.length === 0) {
+      switch (evt.target.id) {
+        case InputId.DESTINATION:
+          evt.target.setCustomValidity(`Please fill in destination point!`);
+          break;
+        case InputId.PRICE:
+          evt.target.setCustomValidity(`Please fill in event price!`);
+          break;
+        default:
+          //* сообщение для даты сделаю во второй части задания
+          evt.target.setCustomValidity(``);
+      }
+    } else {
+      evt.target.setCustomValidity(``);
+    }
+  }
+
   _eventTypeChangeHandler(evt) {
     this.updateData({type: evt.target.value});
   }
 
   _eventDestinationChangeHandler(evt) {
     this.updateData({destination: evt.target.value}, true);
+    this._checkInputValidity(evt);
   }
 
   _eventPriceChangeHandler(evt) {
     this.updateData({price: evt.target.value}, true);
+    this._checkInputValidity(evt);
   }
 
   _setInnerHandlers() {
@@ -269,7 +295,6 @@ export default class EventEdit extends AbstractView {
     if (justDataUpdating) {
       return;
     }
-    console.log(this._data);
     this.updateElement();
   }
 }
