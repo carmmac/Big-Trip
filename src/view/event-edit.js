@@ -166,6 +166,7 @@ export default class EventEdit extends AbstractView {
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
     this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
+    this._eventPriceChangeHandler = this._eventPriceChangeHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -206,9 +207,14 @@ export default class EventEdit extends AbstractView {
     this.updateData({destination: evt.target.value}, true);
   }
 
+  _eventPriceChangeHandler(evt) {
+    this.updateData({price: evt.target.value}, true);
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._eventTypeChangeHandler);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._eventDestinationChangeHandler);
+    this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._eventPriceChangeHandler);
   }
 
   restoreHandlers() {
@@ -263,6 +269,7 @@ export default class EventEdit extends AbstractView {
     if (justDataUpdating) {
       return;
     }
+    console.log(this._data);
     this.updateElement();
   }
 }
