@@ -19,10 +19,22 @@ export const eventTypes = [
   `Flight`,
 ];
 export const destinations = [`Madrid`, `New-York`, `Las Vegas`, `Tokyo`, `Deli`];
-const offers = [
+export const offers = [
   {
     type: `Check-in`,
     title: `Add breakfast`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Check-in`,
+    title: `Double bed`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Check-in`,
+    title: `Parking available`,
     price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
@@ -33,8 +45,32 @@ const offers = [
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
+    type: `Restaurant`,
+    title: `Vegan menu`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Restaurant`,
+    title: `Book a table`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
     type: `Sightseeing`,
     title: `Order Uber`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Sightseeing`,
+    title: `Order tickets online`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Sightseeing`,
+    title: `Skip the line`,
     price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
@@ -45,13 +81,31 @@ const offers = [
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
-    type: `Flight`,
-    title: `Add luggage`,
+    type: `Drive`,
+    title: `Refueling`,
     price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
-    type: `Ship`,
+    type: `Drive`,
+    title: `Hitchhiking`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Train`,
+    title: `Book train tickets`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Train`,
+    title: `Switch to compartment carriage`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Flight`,
     title: `Add luggage`,
     price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
@@ -63,14 +117,44 @@ const offers = [
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
-    type: `Sightseeing`,
-    title: `Book tickets`,
+    type: `Flight`,
+    title: `Special lunch menu`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Ship`,
+    title: `Capitain's office tour`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Ship`,
+    title: `Book upper-deck cabin`,
     price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
   {
     type: `Bus`,
-    title: `Book tickets`,
+    title: `Book bus tickets`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Bus`,
+    title: `Extra-comfort seats`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Transport`,
+    title: `Option`,
+    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRadomNum(0, 1)),
+  },
+  {
+    type: `Taxi`,
+    title: `Tips for cabman`,
     price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRadomNum(0, 1)),
   },
@@ -85,10 +169,13 @@ const generateInfo = () => {
   return randomInfo;
 };
 
-const generateOffers = () => {
+const generateOffers = (eventType) => {
   const randomOffers = new Set();
   for (let i = 0; i < getRadomNum(0, OFFERS_MAX_NUM); i++) {
-    randomOffers.add(offers[getRadomNum(0, offers.length - 1)]);
+    const newOffer = offers[getRadomNum(1, offers.length - 1)];
+    if (eventType === newOffer.type) {
+      randomOffers.add(newOffer);
+    }
   }
   return randomOffers;
 };
@@ -152,7 +239,7 @@ export const generateEvent = () => {
     info,
     photos: generatePhotos(),
     price: getRadomNum(EVENT_PRICE.MIN, EVENT_PRICE.MAX),
-    offers: generateOffers(),
+    offers: generateOffers(type),
     isFavorite: Boolean(getRadomNum(0, 1)),
   };
 };
