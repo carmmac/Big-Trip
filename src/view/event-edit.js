@@ -31,15 +31,13 @@ const createEventOffersSectionTemplate = (offers, hasOffers) => {
   const renderOffers = () => {
     return Array.from(offers).reduce((finalTemplate, currentOffer) => {
       const currentTemplate = `
-        <div class="event__available-offers">
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${currentOffer.type}-1" type="checkbox" name="event-offer-${currentOffer.type}" ${currentOffer.isChecked ? `checked` : ``}>
-            <label class="event__offer-label" for="event-offer-${currentOffer.type}-1">
-              <span class="event__offer-title">${currentOffer.title}</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">${currentOffer.price}</span>
-            </label>
-          </div>
+        <div class="event__offer-selector">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${currentOffer.type}-1" type="checkbox" name="event-offer-${currentOffer.type}" ${currentOffer.isChecked ? `checked` : ``}>
+          <label class="event__offer-label" for="event-offer-${currentOffer.type}-1">
+            <span class="event__offer-title">${currentOffer.title}</span>
+            &plus;&euro;&nbsp;
+            <span class="event__offer-price">${currentOffer.price}</span>
+          </label>
         </div>
       `;
       return `${currentTemplate}${finalTemplate}`;
