@@ -1,6 +1,7 @@
 import {humanizeDate} from '../utils/utils-event.js';
 import {draft} from '../utils/utils-render.js';
 import {eventTypes, destinations} from '../mock/mock-event.js';
+import {offers as offersMock} from '../mock/mock-event.js';
 import SmartView from './smart.js';
 
 const createEventTypeListTemplate = (eventType) => {
@@ -24,16 +25,22 @@ const createDestinationOptionsTemplate = () => {
 };
 
 
-const createEventOffersSectionTemplate = (offers, hasOffers) => {
-  if (!hasOffers) {
-    return ``;
-  }
+const createEventOffersSectionTemplate = (eventType, eventOffers) => {
   const renderOffers = () => {
-    return Array.from(offers).reduce((finalTemplate, currentOffer) => {
+    return Array.from(offersMock)
+    .filter((offer) => offer.type === eventType)
+    .reduce((finalTemplate, currentOffer, currentOfferIndex) => {
+      const getCheckedOfferAttribute = () => {
+        if (eventOffers.length !== 0) {
+          return Array.from(eventOffers).some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
+        } else {
+          return ``;
+        }
+      };
       const currentTemplate = `
         <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${currentOffer.type.toLowerCase()}-1" type="checkbox" name="event-offer-${currentOffer.type.toLowerCase()}" ${currentOffer.isChecked ? `checked` : ``}>
-          <label class="event__offer-label" for="event-offer-${currentOffer.type.toLowerCase()}-1">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${eventType.toLowerCase()}-${currentOfferIndex + 1}" type="checkbox" name="event-offer-${eventType.toLowerCase()}" ${getCheckedOfferAttribute()}>
+          <label class="event__offer-label" for="event-offer-${currentOffer.type.toLowerCase()}-${currentOfferIndex + 1}">
             <span class="event__offer-title">${currentOffer.title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${currentOffer.price}</span>
@@ -84,10 +91,10 @@ const createEventDestinationSectionTemplate = (info, photos, hasInfo, hasPhotos)
   `;
 };
 
-const createEventDetailsSectionTemplate = (offers, info, photos, hasOffers, hasInfo, hasPhotos) => {
+const createEventDetailsSectionTemplate = (eventType, eventOffers, info, photos, hasInfo, hasPhotos) => {
   return `
     <section class="event__details">
-      ${createEventOffersSectionTemplate(offers, hasOffers)}
+      ${createEventOffersSectionTemplate(eventType, eventOffers)}
       ${createEventDestinationSectionTemplate(info, photos, hasInfo, hasPhotos)}
     </section>
   `;
@@ -95,7 +102,7 @@ const createEventDetailsSectionTemplate = (offers, info, photos, hasOffers, hasI
 
 
 const createEventEditTemplate = (data = {}) => {
-  const {type, destination, info, price, offers, photos, eventHasOffers, eventHasInfo, eventHasPhotos} = data;
+  const {type, destination, info, price, offers, photos, eventHasInfo, eventHasPhotos} = data;
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
 
   return `
@@ -149,7 +156,7 @@ const createEventEditTemplate = (data = {}) => {
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
-        ${createEventDetailsSectionTemplate(offers, info, photos, eventHasOffers, eventHasInfo, eventHasPhotos)}
+        ${createEventDetailsSectionTemplate(type, offers, info, photos, eventHasInfo, eventHasPhotos)}
       </form>
     </li>
   `;
@@ -251,7 +258,6 @@ export default class EventEdit extends SmartView {
     return Object.assign(
         {},
         event, {
-          eventHasOffers: event.offers.length !== 0,
           eventHasInfo: event.info.length !== 0,
           eventHasPhotos: event.photos.length !== 0,
         });
@@ -260,16 +266,12 @@ export default class EventEdit extends SmartView {
   static parseDataToEvent(data) {
     data = Object.assign({}, data);
 
-    if (!data.eventHasOffers) {
-      data.offers = [];
-    }
     if (!data.eventHasInfo) {
       data.info = [];
     }
     if (!data.eventHasPhotos) {
       data.photos = [];
     }
-    delete data.eventHasOffers;
     delete data.eventHasInfo;
     delete data.eventHasPhotos;
 

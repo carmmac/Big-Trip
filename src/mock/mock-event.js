@@ -173,7 +173,7 @@ const generateOffers = (eventType) => {
   const randomOffers = new Set();
   for (let i = 0; i < getRadomNum(0, OFFERS_MAX_NUM); i++) {
     const newOffer = offers[getRadomNum(1, offers.length - 1)];
-    if (eventType === newOffer.type) {
+    if (eventType === newOffer.type && newOffer.isChecked) {
       randomOffers.add(newOffer);
     }
   }
