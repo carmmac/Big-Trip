@@ -29,7 +29,7 @@ const createEventOffersSectionTemplate = (offers, hasOffers) => {
     return ``;
   }
   const renderOffers = () => {
-    return offers.reduce((finalTemplate, currentOffer) => {
+    return Array.from(offers).reduce((finalTemplate, currentOffer) => {
       const currentTemplate = `
         <div class="event__available-offers">
           <div class="event__offer-selector">

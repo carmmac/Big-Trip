@@ -86,9 +86,9 @@ const generateInfo = () => {
 };
 
 const generateOffers = () => {
-  const randomOffers = [];
+  const randomOffers = new Set();
   for (let i = 0; i < getRadomNum(0, OFFERS_MAX_NUM); i++) {
-    randomOffers.push(offers[getRadomNum(0, offers.length - 1)]);
+    randomOffers.add(offers[getRadomNum(0, offers.length - 1)]);
   }
   return randomOffers;
 };
