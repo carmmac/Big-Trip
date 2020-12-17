@@ -1,7 +1,7 @@
 import {humanizeDate} from '../utils/utils-event.js';
 import {draft} from '../utils/utils-render.js';
 import {eventTypes, destinations} from '../mock/mock-event.js';
-import AbstractForm from './abstract-event-form.js';
+import SmartView from './smart.js';
 
 const createEventTypeListTemplate = (eventType) => {
   return eventTypes.reduce((finalTemplate, currentType) => {
@@ -157,7 +157,7 @@ const createEventEditTemplate = (data = {}) => {
   `;
 };
 
-export default class EventEdit extends AbstractForm {
+export default class EventEdit extends SmartView {
   constructor(event) {
     super();
     this._data = EventEdit.parseEventToData(event);
@@ -181,7 +181,7 @@ export default class EventEdit extends AbstractForm {
   _formSubmitHandler(evt) {
     evt.preventDefault();
     if (typeof this._callback.formSubmit === `function`) {
-      this._callback.formSubmit(evt);
+      this._callback.formSubmit(EventEdit.parseDataToEvent(this._data));
     }
   }
   setFormCloseHandler(callback) {
@@ -276,5 +276,9 @@ export default class EventEdit extends AbstractForm {
     delete data.eventHasPhotos;
 
     return data;
+  }
+
+  reset(event) {
+    this.updateData(EventEdit.parseEventToData(event));
   }
 }
