@@ -1,6 +1,6 @@
 import {humanizeDate} from '../utils/utils-event.js';
 import {draft} from '../utils/utils-render.js';
-import {eventTypes, destinations} from '../mock/mock-event.js';
+import {eventTypes, destinations, generatedDestinations} from '../mock/mock-event.js';
 import {offers as offersMock} from '../mock/mock-event.js';
 import SmartView from './smart.js';
 
@@ -60,12 +60,14 @@ const createEventOffersSectionTemplate = (eventType, eventOffers) => {
   `;
 };
 
-const createEventDestinationSectionTemplate = (info, photos, hasInfo, hasPhotos) => {
+const createEventDestinationSectionTemplate = (destination, hasInfo, hasPhotos) => {
+  const {INFO, PHOTOS} = destination;
+
   if (!hasInfo) {
     return ``;
   }
   const renderPhotos = () => {
-    return photos.reduce((finalTemplate, currentPhoto) => {
+    return PHOTOS.reduce((finalTemplate, currentPhoto) => {
       const currentTemplate = `<img class="event__photo" src="${currentPhoto}" alt="Event photo"></img>`;
       return `${currentTemplate}${finalTemplate}`;
     }, draft);
@@ -85,24 +87,24 @@ const createEventDestinationSectionTemplate = (info, photos, hasInfo, hasPhotos)
   return `
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${info.join()}</p>
+      <p class="event__destination-description">${INFO.join()}</p>
       ${renderPhotosContainer()}
     </section>
   `;
 };
 
-const createEventDetailsSectionTemplate = (eventType, eventOffers, info, photos, hasInfo, hasPhotos) => {
+const createEventDetailsSectionTemplate = (eventType, eventOffers, destination, hasInfo, hasPhotos) => {
   return `
     <section class="event__details">
       ${createEventOffersSectionTemplate(eventType, eventOffers)}
-      ${createEventDestinationSectionTemplate(info, photos, hasInfo, hasPhotos)}
+      ${createEventDestinationSectionTemplate(destination, hasInfo, hasPhotos)}
     </section>
   `;
 };
 
 
 const createEventEditTemplate = (data = {}) => {
-  const {type, destination, info, price, offers, photos, eventHasInfo, eventHasPhotos} = data;
+  const {type, destination, price, offers, eventHasInfo, eventHasPhotos} = data;
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
 
   return `
@@ -128,7 +130,7 @@ const createEventEditTemplate = (data = {}) => {
             <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.NAME}" list="destination-list-1">
             <datalist id="destination-list-1">
               ${createDestinationOptionsTemplate()}
             </datalist>
@@ -156,7 +158,7 @@ const createEventEditTemplate = (data = {}) => {
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
-        ${createEventDetailsSectionTemplate(type, offers, info, photos, eventHasInfo, eventHasPhotos)}
+        ${createEventDetailsSectionTemplate(type, offers, destination, eventHasInfo, eventHasPhotos)}
       </form>
     </li>
   `;
@@ -229,14 +231,6 @@ export default class EventEdit extends SmartView {
     }
   }
 
-  _checkDestinationInputValidity(evt) {
-    if (!destinations.some((destination) => destination === evt.target.value)) {
-      evt.target.setCustomValidity(`Please choose specified destination from list!`);
-    } else {
-      evt.target.setCustomValidity(``);
-    }
-  }
-
   _eventTypeChangeHandler(evt) {
     this.updateData({
       type: evt.target.value,
@@ -245,8 +239,18 @@ export default class EventEdit extends SmartView {
   }
 
   _eventDestinationChangeHandler(evt) {
-    this.updateData({destination: evt.target.value}, true);
-    this._checkDestinationInputValidity(evt);
+    if (!destinations.some((destination) => destination === evt.target.value)) {
+      evt.target.setCustomValidity(`Please choose specified destination from list!`);
+      evt.target.reportValidity();
+      evt.target.focus();
+    } else {
+      evt.target.setCustomValidity(``);
+      const getNewDestination = () => {
+        const newDestination = generatedDestinations.find((destination) => destination.NAME === evt.target.value);
+        return newDestination;
+      };
+      this.updateData({destination: getNewDestination()});
+    }
   }
 
   _eventPriceChangeHandler(evt) {
@@ -255,7 +259,7 @@ export default class EventEdit extends SmartView {
   }
 
   _eventOffersToggleHandler(evt) {
-    this.updateData({offers: this._updateOffers(evt)});
+    this.updateData({offers: this._updateOffersList(evt)});
   }
 
   _clearOffersList() {
@@ -292,24 +296,17 @@ export default class EventEdit extends SmartView {
   static parseEventToData(event) {
     return Object.assign(
         {},
-        event, {
-          eventHasInfo: event.info.length !== 0,
-          eventHasPhotos: event.photos.length !== 0,
+        event,
+        {
+          eventHasInfo: event.destination.INFO.length !== 0,
+          eventHasPhotos: event.destination.PHOTOS.length !== 0,
         });
   }
 
   static parseDataToEvent(data) {
     data = Object.assign({}, data);
-
-    if (!data.eventHasInfo) {
-      data.info = [];
-    }
-    if (!data.eventHasPhotos) {
-      data.photos = [];
-    }
     delete data.eventHasInfo;
     delete data.eventHasPhotos;
-
     return data;
   }
 
