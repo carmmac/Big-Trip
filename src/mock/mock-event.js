@@ -218,12 +218,25 @@ const generateTime = () => {
 
 const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
+const generateDestinations = () => {
+  let generatedDestinations = [];
+  for (let i = 0; i < destinations.length; i++) {
+    const newDestination = {
+      NAME: destinations[i],
+      INFO: generateInfo(),
+      PHOTOS: generatePhotos(),
+    };
+    generatedDestinations.push(newDestination);
+  }
+  return generatedDestinations;
+};
+
+export const generatedDestinations = generateDestinations();
 export const generateEvent = () => {
   const type = generateRandomIndex(eventTypes);
-  const destination = generateRandomIndex(destinations);
+  const destination = generateRandomIndex(generateDestinations());
   const date = generateDate();
   const time = generateTime();
-  const info = generateInfo();
   const duration = {
     HOUR: time.END.HOUR - time.START.HOUR,
     MINUTE: time.END.MINUTE - time.START.MINUTE
@@ -236,8 +249,6 @@ export const generateEvent = () => {
     date,
     time,
     duration,
-    info,
-    photos: generatePhotos(),
     price: getRadomNum(EVENT_PRICE.MIN, EVENT_PRICE.MAX),
     offers: generateOffers(type),
     isFavorite: Boolean(getRadomNum(0, 1)),
