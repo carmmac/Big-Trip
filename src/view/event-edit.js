@@ -207,16 +207,16 @@ export default class EventEdit extends SmartView {
 
   _checkInputValidity(evt) {
     const InputId = {
-      DESTINATION: `event-destination-1`,
+      TIME: {
+        START: `event-start-time-1`,
+        END: `event-end-time-1`,
+      },
       PRICE: `event-price-1`,
     };
 
     evt.target.reportValidity();
     if (evt.target.value.length === 0) {
       switch (evt.target.id) {
-        case InputId.DESTINATION:
-          evt.target.setCustomValidity(`Please fill in destination point!`);
-          break;
         case InputId.PRICE:
           evt.target.setCustomValidity(`Please fill in event price!`);
           break;
@@ -224,6 +224,14 @@ export default class EventEdit extends SmartView {
           //* сообщение для даты сделаю во второй части задания
           evt.target.setCustomValidity(``);
       }
+    } else {
+      evt.target.setCustomValidity(``);
+    }
+  }
+
+  _checkDestinationInputValidity(evt) {
+    if (!destinations.some((destination) => destination === evt.target.value)) {
+      evt.target.setCustomValidity(`Please choose specified destination from list!`);
     } else {
       evt.target.setCustomValidity(``);
     }
@@ -238,7 +246,7 @@ export default class EventEdit extends SmartView {
 
   _eventDestinationChangeHandler(evt) {
     this.updateData({destination: evt.target.value}, true);
-    this._checkInputValidity(evt);
+    this._checkDestinationInputValidity(evt);
   }
 
   _eventPriceChangeHandler(evt) {
@@ -270,7 +278,7 @@ export default class EventEdit extends SmartView {
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._eventTypeChangeHandler);
-    this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._eventDestinationChangeHandler);
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`change`, this._eventDestinationChangeHandler);
     this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._eventPriceChangeHandler);
     this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._eventOffersToggleHandler);
   }
