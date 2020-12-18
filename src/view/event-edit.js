@@ -39,8 +39,8 @@ const createEventOffersSectionTemplate = (eventType, eventOffers) => {
       };
       const currentTemplate = `
         <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${eventType.toLowerCase()}-${currentOfferIndex + 1}" type="checkbox" name="event-offer-${eventType.toLowerCase()}" ${getCheckedOfferAttribute()}>
-          <label class="event__offer-label" for="event-offer-${currentOffer.type.toLowerCase()}-${currentOfferIndex + 1}">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${eventType.toLowerCase()}-${currentOfferIndex}" type="checkbox" name="event-offer-${eventType.toLowerCase()}" ${getCheckedOfferAttribute()}>
+          <label class="event__offer-label" for="event-offer-${eventType.toLowerCase()}-${currentOfferIndex}">
             <span class="event__offer-title">${currentOffer.title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${currentOffer.price}</span>
@@ -104,6 +104,7 @@ const createEventDetailsSectionTemplate = (eventType, eventOffers, info, photos,
 const createEventEditTemplate = (data = {}) => {
   const {type, destination, info, price, offers, photos, eventHasInfo, eventHasPhotos} = data;
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
+  // console.log(data);
 
   return `
     <li class="trip-events__item">
@@ -172,6 +173,7 @@ export default class EventEdit extends SmartView {
     this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
     this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
     this._eventPriceChangeHandler = this._eventPriceChangeHandler.bind(this);
+    this._eventOffersToggleHandler = this._eventOffersToggleHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -242,10 +244,28 @@ export default class EventEdit extends SmartView {
     this._checkInputValidity(evt);
   }
 
+  _eventOffersToggleHandler(evt) {
+    this.updateData({offers: this._updateOffers(evt)});
+  }
+
+  _updateOffers(evt) {
+    const offerIndex = Number(evt.target.id.substring(evt.target.id.length - 1));
+    const offerToAdd = Array.from(offersMock)
+    .filter((offer) => offer.type === this._data.type)
+    .find((offer, index) => index === offerIndex);
+    if (this._data.offers.has(offerToAdd)) {
+      this._data.offers.delete(offerToAdd);
+      return this._data.offers;
+    } else {
+      return this._data.offers.add(offerToAdd);
+    }
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._eventTypeChangeHandler);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._eventDestinationChangeHandler);
     this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._eventPriceChangeHandler);
+    this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._eventOffersToggleHandler);
   }
 
   restoreHandlers() {
