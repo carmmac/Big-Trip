@@ -9,7 +9,7 @@ const createEventTypeListTemplate = (eventType) => {
     const currentTypeNameToLowerCase = currentType.toLowerCase();
     const currentTemplate = `
       <div class="event__type-item">
-        <input id="event-type-${currentTypeNameToLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentTypeNameToLowerCase}" ${currentType === eventType ? `checked` : ``}>
+        <input id="event-type-${currentTypeNameToLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === eventType ? `checked` : ``}>
         <label class="event__type-label  event__type-label--${currentTypeNameToLowerCase}" for="event-type-${currentTypeNameToLowerCase}-1">${currentType}</label>
       </div>
     `;
@@ -104,7 +104,6 @@ const createEventDetailsSectionTemplate = (eventType, eventOffers, info, photos,
 const createEventEditTemplate = (data = {}) => {
   const {type, destination, info, price, offers, photos, eventHasInfo, eventHasPhotos} = data;
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
-  // console.log(data);
 
   return `
     <li class="trip-events__item">
@@ -231,7 +230,10 @@ export default class EventEdit extends SmartView {
   }
 
   _eventTypeChangeHandler(evt) {
-    this.updateData({type: evt.target.value});
+    this.updateData({
+      type: evt.target.value,
+      offers: this._clearOffersList(),
+    });
   }
 
   _eventDestinationChangeHandler(evt) {
@@ -248,7 +250,12 @@ export default class EventEdit extends SmartView {
     this.updateData({offers: this._updateOffers(evt)});
   }
 
-  _updateOffers(evt) {
+  _clearOffersList() {
+    this._data.offers.clear();
+    return this._data.offers;
+  }
+
+  _updateOffersList(evt) {
     const offerIndex = Number(evt.target.id.substring(evt.target.id.length - 1));
     const offerToAdd = Array.from(offersMock)
     .filter((offer) => offer.type === this._data.type)
