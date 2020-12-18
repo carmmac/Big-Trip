@@ -239,18 +239,7 @@ export default class EventEdit extends SmartView {
   }
 
   _eventDestinationChangeHandler(evt) {
-    if (!destinations.some((destination) => destination === evt.target.value)) {
-      evt.target.setCustomValidity(`Please choose specified destination from list!`);
-      evt.target.reportValidity();
-      evt.target.focus();
-    } else {
-      evt.target.setCustomValidity(``);
-      const getNewDestination = () => {
-        const newDestination = generatedDestinations.find((destination) => destination.NAME === evt.target.value);
-        return newDestination;
-      };
-      this.updateData({destination: getNewDestination()});
-    }
+    this._changeDestination(evt);
   }
 
   _eventPriceChangeHandler(evt) {
@@ -277,6 +266,23 @@ export default class EventEdit extends SmartView {
       return this._data.offers;
     } else {
       return this._data.offers.add(offerToAdd);
+    }
+  }
+
+  _changeDestination(evt) {
+    if (!destinations.some((destination) => destination === evt.target.value)) {
+      evt.target.setCustomValidity(`Please choose specified destination from list!`);
+      evt.target.reportValidity();
+      return;
+    } else {
+      evt.target.setCustomValidity(``);
+      const getNewDestination = () => {
+        const newDestination = generatedDestinations.find((destination) => destination.NAME === evt.target.value);
+        return newDestination;
+      };
+      this.updateData({destination: getNewDestination()}, true);
+      this._data = EventEdit.parseEventToData(this._data);
+      this.updateElement();
     }
   }
 

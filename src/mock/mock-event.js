@@ -232,9 +232,10 @@ const generateDestinations = () => {
 };
 
 export const generatedDestinations = generateDestinations();
+
 export const generateEvent = () => {
   const type = generateRandomIndex(eventTypes);
-  const destination = generateRandomIndex(generateDestinations());
+  const destination = generateRandomIndex(generatedDestinations);
   const date = generateDate();
   const time = generateTime();
   const duration = {
