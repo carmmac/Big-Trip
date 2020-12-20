@@ -4,108 +4,106 @@ import {eventTypes, destinations, generatedDestinations} from '../mock/mock-even
 import {offers as offersMock} from '../mock/mock-event.js';
 import SmartView from './smart.js';
 
-const createEventTypeListTemplate = (eventType) => {
-  return eventTypes.reduce((finalTemplate, currentType) => {
-    const currentTypeNameToLowerCase = currentType.toLowerCase();
-    const currentTemplate = `
-      <div class="event__type-item">
-        <input id="event-type-${currentTypeNameToLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === eventType ? `checked` : ``}>
-        <label class="event__type-label  event__type-label--${currentTypeNameToLowerCase}" for="event-type-${currentTypeNameToLowerCase}-1">${currentType}</label>
-      </div>
-    `;
-    return `${currentTemplate}${finalTemplate}`;
-  }, draft);
-};
+const createEventEditTemplate = (data = {}) => {
+  const {type, destination, price, offers, eventHasInfo, eventHasPhotos} = data;
+  const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
 
-const createDestinationOptionsTemplate = () => {
-  return destinations.reduce((finalTemplate, currentOption) => {
-    const currentTemplate = `<option value="${currentOption}"></option>`;
-    return `${currentTemplate}${finalTemplate}`;
-  }, draft);
-};
-
-
-const createEventOffersSectionTemplate = (eventType, eventOffers) => {
-  const renderOffers = () => {
-    return Array.from(offersMock)
-    .filter((offer) => offer.type === eventType)
-    .reduce((finalTemplate, currentOffer, currentOfferIndex) => {
-      const getCheckedOfferAttribute = () => {
-        if (eventOffers.length !== 0) {
-          return Array.from(eventOffers).some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
-        } else {
-          return ``;
-        }
-      };
+  const createEventTypeListTemplate = () => {
+    return eventTypes.reduce((finalTemplate, currentType) => {
+      const currentTypeNameToLowerCase = currentType.toLowerCase();
       const currentTemplate = `
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${eventType.toLowerCase()}-${currentOfferIndex}" type="checkbox" name="event-offer-${eventType.toLowerCase()}" ${getCheckedOfferAttribute()}>
-          <label class="event__offer-label" for="event-offer-${eventType.toLowerCase()}-${currentOfferIndex}">
-            <span class="event__offer-title">${currentOffer.title}</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">${currentOffer.price}</span>
-          </label>
+        <div class="event__type-item">
+          <input id="event-type-${currentTypeNameToLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === type ? `checked` : ``}>
+          <label class="event__type-label  event__type-label--${currentTypeNameToLowerCase}" for="event-type-${currentTypeNameToLowerCase}-1">${currentType}</label>
         </div>
       `;
       return `${currentTemplate}${finalTemplate}`;
     }, draft);
   };
-  return `
-    <section class="event__section  event__section--offers">
-      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-      <div class="event__available-offers">
-      ${renderOffers()}
-      </div>
-    </section>
-  `;
-};
 
-const createEventDestinationSectionTemplate = (destination, hasInfo, hasPhotos) => {
-  const {INFO, PHOTOS} = destination;
-
-  if (!hasInfo) {
-    return ``;
-  }
-  const renderPhotos = () => {
-    return PHOTOS.reduce((finalTemplate, currentPhoto) => {
-      const currentTemplate = `<img class="event__photo" src="${currentPhoto}" alt="Event photo"></img>`;
+  const createDestinationOptionsTemplate = () => {
+    return destinations.reduce((finalTemplate, currentOption) => {
+      const currentTemplate = `<option value="${currentOption}"></option>`;
       return `${currentTemplate}${finalTemplate}`;
     }, draft);
   };
-  const renderPhotosContainer = () => {
-    if (!hasPhotos) {
-      return ``;
-    }
+
+
+  const createEventOffersSectionTemplate = () => {
+    const renderOffers = () => {
+      return Array.from(offersMock)
+      .filter((offer) => offer.type === type)
+      .reduce((finalTemplate, currentOffer, currentOfferIndex) => {
+        const getCheckedOfferAttribute = () => {
+          if (offers.length !== 0) {
+            return Array.from(offers).some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
+          } else {
+            return ``;
+          }
+        };
+        const currentTemplate = `
+          <div class="event__offer-selector">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type.toLowerCase()}-${currentOfferIndex}" type="checkbox" name="event-offer-${type.toLowerCase()}" ${getCheckedOfferAttribute()}>
+            <label class="event__offer-label" for="event-offer-${type.toLowerCase()}-${currentOfferIndex}">
+              <span class="event__offer-title">${currentOffer.title}</span>
+              &plus;&euro;&nbsp;
+              <span class="event__offer-price">${currentOffer.price}</span>
+            </label>
+          </div>
+        `;
+        return `${currentTemplate}${finalTemplate}`;
+      }, draft);
+    };
     return `
-      <div class="event__photos-container">
-        <div class="event__photos-tape">
-          ${renderPhotos()}
+      <section class="event__section  event__section--offers">
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <div class="event__available-offers">
+        ${renderOffers()}
         </div>
-      </div>
+      </section>
     `;
   };
-  return `
-    <section class="event__section  event__section--destination">
-      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${INFO.join()}</p>
-      ${renderPhotosContainer()}
-    </section>
-  `;
-};
 
-const createEventDetailsSectionTemplate = (eventType, eventOffers, destination, hasInfo, hasPhotos) => {
-  return `
-    <section class="event__details">
-      ${createEventOffersSectionTemplate(eventType, eventOffers)}
-      ${createEventDestinationSectionTemplate(destination, hasInfo, hasPhotos)}
-    </section>
-  `;
-};
+  const createEventDestinationSectionTemplate = () => {
+    if (!eventHasInfo) {
+      return ``;
+    }
+    const renderPhotos = () => {
+      return destination.PHOTOS.reduce((finalTemplate, currentPhoto) => {
+        const currentTemplate = `<img class="event__photo" src="${currentPhoto}" alt="Event photo"></img>`;
+        return `${currentTemplate}${finalTemplate}`;
+      }, draft);
+    };
+    const renderPhotosContainer = () => {
+      if (!eventHasPhotos) {
+        return ``;
+      }
+      return `
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${renderPhotos()}
+          </div>
+        </div>
+      `;
+    };
+    return `
+      <section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${destination.INFO.join()}</p>
+        ${renderPhotosContainer()}
+      </section>
+    `;
+  };
 
+  const createEventDetailsSectionTemplate = () => {
+    return `
+      <section class="event__details">
+        ${createEventOffersSectionTemplate()}
+        ${createEventDestinationSectionTemplate()}
+      </section>
+    `;
+  };
 
-const createEventEditTemplate = (data = {}) => {
-  const {type, destination, price, offers, eventHasInfo, eventHasPhotos} = data;
-  const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
 
   return `
     <li class="trip-events__item">
