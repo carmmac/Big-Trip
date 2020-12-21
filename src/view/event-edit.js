@@ -245,7 +245,7 @@ export default class EventEdit extends SmartView {
   }
 
   _clearOffersList() {
-    this._data.offers.clear();
+    this._data.offers = [];
     return this._data.offers;
   }
 
