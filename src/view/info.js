@@ -7,7 +7,7 @@ const createInfoTemplate = (events) => {
     const totalPrice = 0;
     const offerTotalPrice = 0;
     return events.reduce((totalSum, currentEvent) => {
-      const currentEventOffers = Array.from(currentEvent.offers);
+      const currentEventOffers = currentEvent.offers;
       totalSum += currentEvent.price + currentEventOffers.reduce((sum, currentOffer) => {
         sum += currentOffer.price;
         return sum;

@@ -28,7 +28,7 @@ const createEventTemplate = (event) => {
   };
 
   const renderOffers = () => {
-    return Array.from(offers).reduce((finalTemplate, currentOffer) => {
+    return offers.reduce((finalTemplate, currentOffer) => {
       const currentTemplate = `
       <li class="event__offer">
         <span class="event__offer-title">${currentOffer.title}</span>
