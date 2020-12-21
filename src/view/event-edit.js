@@ -31,16 +31,10 @@ const createEventEditTemplate = (data = {}) => {
 
   const createEventOffersSectionTemplate = () => {
     const renderOffers = () => {
-      return Array.from(offersMock)
+      return offersMock
       .filter((offer) => offer.type === type)
       .reduce((finalTemplate, currentOffer, currentOfferIndex) => {
-        const getCheckedOfferAttribute = () => {
-          if (offers.length !== 0) {
-            return Array.from(offers).some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
-          } else {
-            return ``;
-          }
-        };
+        const getCheckedOfferAttribute = () => offers.some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
         const currentTemplate = `
           <div class="event__offer-selector">
             <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type.toLowerCase()}-${currentOfferIndex}" type="checkbox" name="event-offer-${type.toLowerCase()}" ${getCheckedOfferAttribute()}>
@@ -165,6 +159,7 @@ const createEventEditTemplate = (data = {}) => {
 export default class EventEdit extends SmartView {
   constructor(event) {
     super();
+    this._event = JSON.parse(JSON.stringify(event));
     this._data = EventEdit.parseEventToData(event);
 
     this._formCloseHandler = this._formCloseHandler.bind(this);
@@ -256,14 +251,15 @@ export default class EventEdit extends SmartView {
 
   _updateOffersList(evt) {
     const offerIndex = Number(evt.target.id.substring(evt.target.id.length - 1));
-    const offerToAdd = Array.from(offersMock)
+    const offerToAdd = offersMock
     .filter((offer) => offer.type === this._data.type)
     .find((offer, index) => index === offerIndex);
-    if (this._data.offers.has(offerToAdd)) {
-      this._data.offers.delete(offerToAdd);
+    if (this._data.offers.includes(offerToAdd)) {
+      this._data.offers.splice(this._data.offers.indexOf(offerToAdd), 1);
       return this._data.offers;
     } else {
-      return this._data.offers.add(offerToAdd);
+      this._data.offers.push(offerToAdd);
+      return this._data.offers;
     }
   }
 
@@ -314,7 +310,7 @@ export default class EventEdit extends SmartView {
     return data;
   }
 
-  reset(event) {
-    this.updateData(EventEdit.parseEventToData(event));
+  reset() {
+    this.updateData(EventEdit.parseEventToData(this._event));
   }
 }

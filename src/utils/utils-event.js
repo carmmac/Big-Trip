@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {getRadomNum} from './utils-common.js';
+import {getRandomNum} from './utils-common.js';
 
 const SortType = {
   DAY: `date`,
@@ -8,7 +8,7 @@ const SortType = {
 };
 
 const generateRandomIndex = (data) => {
-  const randomData = data[getRadomNum(0, data.length - 1)];
+  const randomData = data[getRandomNum(0, data.length - 1)];
   return randomData;
 };
 
