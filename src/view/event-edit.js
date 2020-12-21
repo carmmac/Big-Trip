@@ -3,10 +3,13 @@ import {draft} from '../utils/utils-render.js';
 import {eventTypes, destinations, generatedDestinations} from '../mock/mock-event.js';
 import {offers as offersMock} from '../mock/mock-event.js';
 import SmartView from './smart.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import dayjs from 'dayjs';
 
 const createEventEditTemplate = (data = {}) => {
-  const {type, destination, price, offers, eventHasInfo, eventHasPhotos} = data;
-  const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
+  const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
+  const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`, date)}`;
 
   const createEventTypeListTemplate = () => {
     return eventTypes.reduce((finalTemplate, currentType) => {
@@ -161,6 +164,7 @@ export default class EventEdit extends SmartView {
     super();
     this._event = JSON.parse(JSON.stringify(event));
     this._data = EventEdit.parseEventToData(event);
+    this._datepicker = null;
 
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -168,8 +172,10 @@ export default class EventEdit extends SmartView {
     this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
     this._eventPriceChangeHandler = this._eventPriceChangeHandler.bind(this);
     this._eventOffersToggleHandler = this._eventOffersToggleHandler.bind(this);
+    this._dateChangeHandler = this._dateChangeHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setDatePicker();
   }
   getTemplate() {
     return createEventEditTemplate(this._data);
@@ -198,6 +204,27 @@ export default class EventEdit extends SmartView {
   }
   removeFormSubmitHandler() {
     this.getElement().querySelector(`.event--edit`).removeEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  _setDatePicker() {
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+    this._datepicker = flatpickr(
+        this.getElement().querySelector(`.event__field-group--time`),
+        {
+          enableTime: true,
+          dateFormat: `d.m.y H:i`,
+          time_24hr: true,
+          defaultDate: `today`,
+          onChange: this._dateChangeHandler,
+        }
+    );
+  }
+
+  _dateChangeHandler([userDate]) {
+    this.updateData({date: dayjs(userDate).toDate()});
   }
 
   _checkInputValidity(evt) {
@@ -289,6 +316,7 @@ export default class EventEdit extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setDatePicker();
     this.setFormCloseHandler(this._callback.close);
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
