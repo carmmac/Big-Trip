@@ -1,32 +1,109 @@
 import {humanizeDate} from '../utils/utils-event.js';
-import {getEmptyDataClassName} from '../utils/utils-common.js';
 import {draft} from '../utils/utils-render.js';
-import AbstractView from './absract.js';
+import {eventTypes, destinations, generatedDestinations} from '../mock/mock-event.js';
+import {offers as offersMock} from '../mock/mock-event.js';
+import SmartView from './smart.js';
 
-const createEventEditTemplate = (event = {}) => {
-  const {type, destination, info, price, offers} = event;
+const createEventEditTemplate = (data = {}) => {
+  const {type, destination, price, offers, eventHasInfo, eventHasPhotos} = data;
   const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
-  const emptyOffersClassName = getEmptyDataClassName(offers);
-  const emptyInfoClassName = getEmptyDataClassName(info);
-  const emptyEventDetailsClassName = (offers.length === 0 && info.length === 0) ? `visually-hidden` : ``;
 
-  const renderOffers = () => {
-    return offers.reduce((finalTemplate, currentOffer) => {
+  const createEventTypeListTemplate = () => {
+    return eventTypes.reduce((finalTemplate, currentType) => {
+      const currentTypeNameToLowerCase = currentType.toLowerCase();
       const currentTemplate = `
-        <div class="event__available-offers">
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${currentOffer.type}-1" type="checkbox" name="event-offer-${currentOffer.type}" ${currentOffer.isChecked ? `checked` : ``}>
-            <label class="event__offer-label" for="event-offer-${currentOffer.type}-1">
-              <span class="event__offer-title">${currentOffer.title}</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">${currentOffer.price}</span>
-            </label>
-          </div>
+        <div class="event__type-item">
+          <input id="event-type-${currentTypeNameToLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === type ? `checked` : ``}>
+          <label class="event__type-label  event__type-label--${currentTypeNameToLowerCase}" for="event-type-${currentTypeNameToLowerCase}-1">${currentType}</label>
         </div>
       `;
       return `${currentTemplate}${finalTemplate}`;
     }, draft);
   };
+
+  const createDestinationOptionsTemplate = () => {
+    return destinations.reduce((finalTemplate, currentOption) => {
+      const currentTemplate = `<option value="${currentOption}"></option>`;
+      return `${currentTemplate}${finalTemplate}`;
+    }, draft);
+  };
+
+
+  const createEventOffersSectionTemplate = () => {
+    const renderOffers = () => {
+      return Array.from(offersMock)
+      .filter((offer) => offer.type === type)
+      .reduce((finalTemplate, currentOffer, currentOfferIndex) => {
+        const getCheckedOfferAttribute = () => {
+          if (offers.length !== 0) {
+            return Array.from(offers).some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
+          } else {
+            return ``;
+          }
+        };
+        const currentTemplate = `
+          <div class="event__offer-selector">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type.toLowerCase()}-${currentOfferIndex}" type="checkbox" name="event-offer-${type.toLowerCase()}" ${getCheckedOfferAttribute()}>
+            <label class="event__offer-label" for="event-offer-${type.toLowerCase()}-${currentOfferIndex}">
+              <span class="event__offer-title">${currentOffer.title}</span>
+              &plus;&euro;&nbsp;
+              <span class="event__offer-price">${currentOffer.price}</span>
+            </label>
+          </div>
+        `;
+        return `${currentTemplate}${finalTemplate}`;
+      }, draft);
+    };
+    return `
+      <section class="event__section  event__section--offers">
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <div class="event__available-offers">
+        ${renderOffers()}
+        </div>
+      </section>
+    `;
+  };
+
+  const createEventDestinationSectionTemplate = () => {
+    if (!eventHasInfo) {
+      return ``;
+    }
+    const renderPhotos = () => {
+      return destination.PHOTOS.reduce((finalTemplate, currentPhoto) => {
+        const currentTemplate = `<img class="event__photo" src="${currentPhoto}" alt="Event photo"></img>`;
+        return `${currentTemplate}${finalTemplate}`;
+      }, draft);
+    };
+    const renderPhotosContainer = () => {
+      if (!eventHasPhotos) {
+        return ``;
+      }
+      return `
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${renderPhotos()}
+          </div>
+        </div>
+      `;
+    };
+    return `
+      <section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${destination.INFO.join()}</p>
+        ${renderPhotosContainer()}
+      </section>
+    `;
+  };
+
+  const createEventDetailsSectionTemplate = () => {
+    return `
+      <section class="event__details">
+        ${createEventOffersSectionTemplate()}
+        ${createEventDestinationSectionTemplate()}
+      </section>
+    `;
+  };
+
 
   return `
     <li class="trip-events__item">
@@ -42,56 +119,7 @@ const createEventEditTemplate = (event = {}) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-
-                <div class="event__type-item">
-                  <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                  <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                  <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                  <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                  <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-                  <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                  <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-                  <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-                  <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                  <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                  <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-                </div>
+                ${createEventTypeListTemplate(type)}
               </fieldset>
             </div>
           </div>
@@ -100,11 +128,9 @@ const createEventEditTemplate = (event = {}) => {
             <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.NAME}" list="destination-list-1">
             <datalist id="destination-list-1">
-              <option value="Amsterdam"></option>
-              <option value="Geneva"></option>
-              <option value="Chamonix"></option>
+              ${createDestinationOptionsTemplate()}
             </datalist>
           </div>
 
@@ -130,33 +156,28 @@ const createEventEditTemplate = (event = {}) => {
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
-        <section class="event__details ${emptyEventDetailsClassName}">
-          <section class="event__section  event__section--offers ${emptyOffersClassName}">
-            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-            <div class="event__available-offers">
-            ${renderOffers()}
-            </div>
-          </section>
-
-          <section class="event__section  event__section--destination ${emptyInfoClassName}">
-            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${info.join()}</p>
-          </section>
-        </section>
+        ${createEventDetailsSectionTemplate(type, offers, destination, eventHasInfo, eventHasPhotos)}
       </form>
     </li>
   `;
 };
 
-export default class EventEdit extends AbstractView {
+export default class EventEdit extends SmartView {
   constructor(event) {
     super();
-    this._event = event;
+    this._data = EventEdit.parseEventToData(event);
+
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._eventTypeChangeHandler = this._eventTypeChangeHandler.bind(this);
+    this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
+    this._eventPriceChangeHandler = this._eventPriceChangeHandler.bind(this);
+    this._eventOffersToggleHandler = this._eventOffersToggleHandler.bind(this);
+
+    this._setInnerHandlers();
   }
   getTemplate() {
-    return createEventEditTemplate(this._event);
+    return createEventEditTemplate(this._data);
   }
   _formCloseHandler() {
     if (typeof this._callback.close === `function`) {
@@ -166,7 +187,7 @@ export default class EventEdit extends AbstractView {
   _formSubmitHandler(evt) {
     evt.preventDefault();
     if (typeof this._callback.formSubmit === `function`) {
-      this._callback.formSubmit(evt);
+      this._callback.formSubmit(EventEdit.parseDataToEvent(this._data));
     }
   }
   setFormCloseHandler(callback) {
@@ -182,5 +203,118 @@ export default class EventEdit extends AbstractView {
   }
   removeFormSubmitHandler() {
     this.getElement().querySelector(`.event--edit`).removeEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  _checkInputValidity(evt) {
+    const InputId = {
+      TIME: {
+        START: `event-start-time-1`,
+        END: `event-end-time-1`,
+      },
+      PRICE: `event-price-1`,
+    };
+
+    evt.target.reportValidity();
+    if (evt.target.value.length === 0) {
+      switch (evt.target.id) {
+        case InputId.PRICE:
+          evt.target.setCustomValidity(`Please fill in event price!`);
+          break;
+        default:
+          //* сообщение для даты сделаю во второй части задания
+          evt.target.setCustomValidity(``);
+      }
+    } else {
+      evt.target.setCustomValidity(``);
+    }
+  }
+
+  _eventTypeChangeHandler(evt) {
+    this.updateData({
+      type: evt.target.value,
+      offers: this._clearOffersList(),
+    });
+  }
+
+  _eventDestinationChangeHandler(evt) {
+    this._changeDestination(evt);
+  }
+
+  _eventPriceChangeHandler(evt) {
+    this.updateData({price: evt.target.value}, true);
+    this._checkInputValidity(evt);
+  }
+
+  _eventOffersToggleHandler(evt) {
+    this.updateData({offers: this._updateOffersList(evt)});
+  }
+
+  _clearOffersList() {
+    this._data.offers.clear();
+    return this._data.offers;
+  }
+
+  _updateOffersList(evt) {
+    const offerIndex = Number(evt.target.id.substring(evt.target.id.length - 1));
+    const offerToAdd = Array.from(offersMock)
+    .filter((offer) => offer.type === this._data.type)
+    .find((offer, index) => index === offerIndex);
+    if (this._data.offers.has(offerToAdd)) {
+      this._data.offers.delete(offerToAdd);
+      return this._data.offers;
+    } else {
+      return this._data.offers.add(offerToAdd);
+    }
+  }
+
+  _changeDestination(evt) {
+    if (!destinations.some((destination) => destination === evt.target.value)) {
+      evt.target.setCustomValidity(`Please choose specified destination from list!`);
+      evt.target.reportValidity();
+      return;
+    } else {
+      evt.target.setCustomValidity(``);
+      const getNewDestination = () => {
+        const newDestination = generatedDestinations.find((destination) => destination.NAME === evt.target.value);
+        return newDestination;
+      };
+      this.updateData({destination: getNewDestination()}, true);
+      this._data = EventEdit.parseEventToData(this._data);
+      this.updateElement();
+    }
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._eventTypeChangeHandler);
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`change`, this._eventDestinationChangeHandler);
+    this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._eventPriceChangeHandler);
+    this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._eventOffersToggleHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormCloseHandler(this._callback.close);
+    this.setFormSubmitHandler(this._callback.formSubmit);
+  }
+
+  static parseEventToData(event) {
+    return Object.assign(
+        {},
+        event,
+        {
+          eventHasInfo: event.destination.INFO.length !== 0,
+          eventHasPhotos: event.destination.PHOTOS.length !== 0,
+        });
+  }
+
+  static parseDataToEvent(data) {
+    data = Object.assign({}, data);
+    delete data.eventHasInfo;
+    delete data.eventHasPhotos;
+    return data;
+  }
+
+  reset(event) {
+    this.updateData(EventEdit.parseEventToData(event));
   }
 }

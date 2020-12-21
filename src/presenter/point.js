@@ -10,25 +10,27 @@ const Mode = {
 export default class Point {
   constructor(listContainer, changeData, changeMode) {
     this._listContainer = listContainer;
+    this._mode = Mode.DEFAULT;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._eventComponent = null;
     this._eventEditComponent = null;
     this._eventFormOpenHandler = this._eventFormOpenHandler.bind(this);
     this._eventFormCloseHandler = this._eventFormCloseHandler.bind(this);
+    this._eventFormSubmitHandler = this._eventFormSubmitHandler.bind(this);
     this._EscPressHandler = this._EscPressHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   init(event) {
     this._event = event;
-    this._mode = Mode.DEFAULT;
     const prevEventComponent = this._eventComponent;
     const prevEventEditComponent = this._eventEditComponent;
     this._eventComponent = new EventView(event);
     this._eventEditComponent = new EventEditView(event);
     this._eventComponent.setFormOpenHandler(this._eventFormOpenHandler);
     this._eventComponent.setFavoriteClickHandler(this._favoriteClickHandler);
+    this._eventEditComponent.setFormSubmitHandler(this._eventFormSubmitHandler);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this._listContainer, this._eventComponent, RenderPosition.BEFOREEND);
@@ -70,10 +72,19 @@ export default class Point {
     this._replaceCardToForm();
     document.addEventListener(`keydown`, this._EscPressHandler);
     this._eventEditComponent.setFormCloseHandler(this._eventFormCloseHandler);
-    this._eventEditComponent.setFormSubmitHandler(this._eventFormCloseHandler);
+    this._eventEditComponent.setFormSubmitHandler(this._eventFormSubmitHandler);
+  }
+
+  _eventFormSubmitHandler(event) {
+    this._changeData(event);
+    this._replaceFormToCard();
+    document.removeEventListener(`keydown`, this._EscPressHandler);
+    this._eventEditComponent.removeFormCloseHandler();
+    this._eventEditComponent.removeFormSubmitHandler();
   }
 
   _eventFormCloseHandler() {
+    this._eventEditComponent.reset(this._event);
     this._replaceFormToCard();
     document.removeEventListener(`keydown`, this._EscPressHandler);
     this._eventEditComponent.removeFormCloseHandler();
