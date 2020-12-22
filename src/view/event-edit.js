@@ -167,7 +167,8 @@ export default class EventEdit extends SmartView {
     super();
     this._event = JSON.parse(JSON.stringify(event));
     this._data = EventEdit.parseEventToData(event);
-    this._datepicker = null;
+    this._dateStartPicker = null;
+    this._dateEndPicker = null;
 
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -175,10 +176,12 @@ export default class EventEdit extends SmartView {
     this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
     this._eventPriceChangeHandler = this._eventPriceChangeHandler.bind(this);
     this._eventOffersToggleHandler = this._eventOffersToggleHandler.bind(this);
-    this._dateChangeHandler = this._dateChangeHandler.bind(this);
+    this._dateStartChangeHandler = this._dateStartChangeHandler.bind(this);
+    this._dateEndChangeHandler = this._dateEndChangeHandler.bind(this);
 
     this._setInnerHandlers();
-    this._setDatePicker();
+    this._setStartDatePicker();
+    this._setEndDatePicker();
   }
   getTemplate() {
     return createEventEditTemplate(this._data);
@@ -209,25 +212,59 @@ export default class EventEdit extends SmartView {
     this.getElement().querySelector(`.event--edit`).removeEventListener(`submit`, this._formSubmitHandler);
   }
 
-  _setDatePicker() {
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
+  _setStartDatePicker() {
+    if (this._dateStartPicker) {
+      this._dateStartPicker.destroy();
+      this._dateStartPicker = null;
     }
-    this._datepicker = flatpickr(
-        this.getElement().querySelector(`.event__field-group--time`),
+    this._dateStartPicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
         {
           enableTime: true,
-          dateFormat: `d.m.y H:i`,
-          time_24hr: true,
-          defaultDate: `today`,
-          onChange: this._dateChangeHandler,
+          dateFormat: `d/m/y H:i`,
+          altFormat: `d/m/y H:i`,
+          defaultDate: `${this._data.date.START}`,
+          onChange: this._dateStartChangeHandler,
         }
     );
   }
 
-  _dateChangeHandler([userDate]) {
-    this.updateData({date: dayjs(userDate).toDate()});
+  _setEndDatePicker() {
+    if (this._dateEndPicker) {
+      this._dateEndPicker.destroy();
+      this._dateEndPicker = null;
+    }
+    this._dateEndPicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          dateFormat: `d/m/y H:i`,
+          altFormat: `d/m/y H:i`,
+          defaultDate: `${this._data.date.END}`,
+          disable: [
+            (date) => date < this._data.date.START
+          ],
+          onChange: this._dateEndChangeHandler,
+        }
+    );
+  }
+
+  _dateStartChangeHandler([selectedDate]) {
+    const setNewDate = () => {
+      this._data.date.START = dayjs(selectedDate);
+      this._data.date.END = dayjs(selectedDate);
+      return this._data.date;
+    };
+    this.updateData({date: setNewDate()}, true);
+    this._setEndDatePicker();
+  }
+
+  _dateEndChangeHandler([selectedDate]) {
+    const setNewEndDate = () => {
+      this._data.date.END = dayjs(selectedDate);
+      return this._data.date;
+    };
+    this.updateData({date: setNewEndDate()}, true);
   }
 
   _checkInputValidity(evt) {
@@ -319,7 +356,8 @@ export default class EventEdit extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
-    this._setDatePicker();
+    this._setStartDatePicker();
+    this._setEndDatePicker();
     this.setFormCloseHandler(this._callback.close);
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
