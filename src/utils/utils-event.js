@@ -20,7 +20,7 @@ const sortData = (data, parameter) => {
   switch (parameter) {
     case SortType.DURATION:
       data.sort((left, right) => {
-        return (right[parameter].HOUR * 60 + right[parameter].MINUTE) - (left[parameter].HOUR * 60 + left[parameter].MINUTE);
+        return right[parameter] - left[parameter];
       });
       break;
     case SortType.PRICE:
@@ -30,7 +30,7 @@ const sortData = (data, parameter) => {
       break;
     default:
       data.sort((left, right) => {
-        return left[parameter] - right[parameter];
+        return left[parameter].START - right[parameter].START;
       });
   }
   return data;
