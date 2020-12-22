@@ -187,7 +187,7 @@ const generateDate = () => {
   const maxTimeGap = 600;
   const daysGap = getRandomNum(-maxDaysGap, maxDaysGap);
   const timeGap = getRandomNum(-maxTimeGap, maxTimeGap);
-  const dateStart = dayjs().add(daysGap, `day`).add(timeGap, `minute`).toDate();
+  const dateStart = dayjs().add(daysGap, `day`).add(timeGap, `minute`);
   const dateEnd = dayjs(dateStart).add(getRandomNum(minTimeGap, maxTimeGap), `minute`);
 
   return {
@@ -217,14 +217,14 @@ export const generateEvent = () => {
   const type = generateRandomIndex(eventTypes);
   const destination = generateRandomIndex(generatedDestinations);
   const date = generateDate();
-  const durationInMinutes = date.END.diff(date.START, `minute`);
+  const duration = date.END.diff(date.START, `minute`);
 
   return {
     id: generateId(),
     type,
     destination,
     date,
-    durationInMinutes,
+    duration,
     price: getRandomNum(EVENT_PRICE.MIN, EVENT_PRICE.MAX),
     offers: generateOffers(type),
     isFavorite: Boolean(getRandomNum(0, 1)),
