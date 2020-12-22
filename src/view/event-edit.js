@@ -9,7 +9,10 @@ import dayjs from 'dayjs';
 
 const createEventEditTemplate = (data = {}) => {
   const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
-  const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`, date)}`;
+  const eventDate = {
+    START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
+    END: humanizeDate(`DD/MM/YY HH:mm`, date.END)
+  };
 
   const createEventTypeListTemplate = () => {
     return eventTypes.reduce((finalTemplate, currentType) => {
@@ -133,10 +136,10 @@ const createEventEditTemplate = (data = {}) => {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${eventDate}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${eventDate.START}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${eventDate}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${eventDate.END}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
