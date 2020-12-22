@@ -183,29 +183,16 @@ const generatePhotos = () => {
 
 const generateDate = () => {
   const maxDaysGap = 7;
+  const minTimeGap = 30;
+  const maxTimeGap = 600;
   const daysGap = getRandomNum(-maxDaysGap, maxDaysGap);
-  return dayjs().add(daysGap, `day`).toDate();
-};
+  const timeGap = getRandomNum(-maxTimeGap, maxTimeGap);
+  const dateStart = dayjs().add(daysGap, `day`).add(timeGap, `minute`).toDate();
+  const dateEnd = dayjs(dateStart).add(getRandomNum(minTimeGap, maxTimeGap), `minute`);
 
-const generateTime = () => {
-  const eventTime = {
-    START: {
-      HOUR: getRandomNum(0, 11),
-      MINUTE: getRandomNum(0, 29)
-    },
-    END: {
-      HOUR: getRandomNum(12, 23),
-      MINUTE: getRandomNum(30, 59)
-    },
-
-  };
   return {
-    START: eventTime.START,
-    END: eventTime.END,
-    DURATION: {
-      HOUR: eventTime.END.HOUR - eventTime.START.HOUR,
-      MINUTE: eventTime.END.MINUTE - eventTime.START.MINUTE
-    }
+    START: dateStart,
+    END: dateEnd
   };
 };
 
@@ -230,19 +217,14 @@ export const generateEvent = () => {
   const type = generateRandomIndex(eventTypes);
   const destination = generateRandomIndex(generatedDestinations);
   const date = generateDate();
-  const time = generateTime();
-  const duration = {
-    HOUR: time.END.HOUR - time.START.HOUR,
-    MINUTE: time.END.MINUTE - time.START.MINUTE
-  };
+  const durationInMinutes = date.END.diff(date.START, `minute`);
 
   return {
     id: generateId(),
     type,
     destination,
     date,
-    time,
-    duration,
+    durationInMinutes,
     price: getRandomNum(EVENT_PRICE.MIN, EVENT_PRICE.MAX),
     offers: generateOffers(type),
     isFavorite: Boolean(getRandomNum(0, 1)),
