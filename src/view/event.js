@@ -1,30 +1,28 @@
 import {humanizeDate} from '../utils/utils-event.js';
-import {getEmptyDataClassName} from '../utils/utils-common.js';
+import {getEmptyDataClassName, getTimeFromMins} from '../utils/utils-common.js';
 import {draft} from '../utils/utils-render.js';
 import AbstractView from './absract.js';
 
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
+
 const createEventTemplate = (event) => {
-  const {type, destination, date, time, price, offers, isFavorite} = event;
-  const eventDate = humanizeDate(`MMM DD`, date);
-  const eventDateTime = humanizeDate(`YYYY-MM-DD`, date);
-  const eventDateTimeFull = humanizeDate(`YYYY-MM-DDTHH:mm`, date);
+  const {type, destination, date, price, offers, isFavorite} = event;
+  const eventDate = humanizeDate(`MMM DD`, date.START);
+  const eventDateTime = humanizeDate(`YYYY-MM-DD`, date.START);
+  const eventDateTimeFull = {
+    START: humanizeDate(`YYYY-MM-DDTHH:mm`, date.START),
+    END: humanizeDate(`YYYY-MM-DDTHH:mm`, date.END),
+  };
   const emptyOffersClassName = getEmptyDataClassName(offers);
   const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ``;
-  const getEventTime = ({START, END, DURATION}) => {
-    const eventTime = {
-      START: {
-        HOUR: humanizeDate(`HH`, START),
-        MINUTE: humanizeDate(`mm`, START),
-      },
-      END: {
-        HOUR: humanizeDate(`HH`, END),
-        MINUTE: humanizeDate(`mm`, END),
-      }
+  const getEventTime = () => {
+    return {
+      START: humanizeDate(`HH:mm`, date.START),
+      END: humanizeDate(`HH:mm`, date.END),
+      DURATION: humanizeDate(`HH:mm`, dayjs(getTimeFromMins(date.END.diff(date.START, `minute`)), `HH:mm`)),
     };
-    const start = `${eventTime.START.HOUR}:${eventTime.START.MINUTE}`;
-    const end = `${eventTime.END.HOUR}:${eventTime.END.MINUTE}`;
-    const duration = `${humanizeDate(`HH`, DURATION)}:${humanizeDate(`mm`, DURATION)}`;
-    return {start, end, duration};
   };
 
   const renderOffers = () => {
@@ -49,11 +47,11 @@ const createEventTemplate = (event) => {
         <h3 class="event__title">${type} ${destination.NAME}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="${eventDateTimeFull}">${getEventTime(time).start}</time>
+            <time class="event__start-time" datetime="${eventDateTimeFull.START}">${getEventTime().START}</time>
             &mdash;
-            <time class="event__end-time" datetime="${eventDateTimeFull}">${getEventTime(time).end}</time>
+            <time class="event__end-time" datetime="${eventDateTimeFull.END}">${getEventTime().END}</time>
           </p>
-          <p class="event__duration">${getEventTime(time).duration}</p>
+          <p class="event__duration">${getEventTime().DURATION}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${price}</span>
