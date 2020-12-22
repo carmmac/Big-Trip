@@ -119,7 +119,7 @@ const createEventEditTemplate = (data = {}) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${createEventTypeListTemplate(type)}
+                ${createEventTypeListTemplate()}
               </fieldset>
             </div>
           </div>
@@ -156,7 +156,7 @@ const createEventEditTemplate = (data = {}) => {
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
-        ${createEventDetailsSectionTemplate(type, offers, destination, eventHasInfo, eventHasPhotos)}
+        ${createEventDetailsSectionTemplate()}
       </form>
     </li>
   `;
