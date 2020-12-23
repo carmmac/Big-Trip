@@ -242,7 +242,10 @@ export default class EventEdit extends SmartView {
           altFormat: `d/m/y H:i`,
           defaultDate: `${this._data.date.END}`,
           disable: [
-            (date) => date < this._data.date.START
+            (date) => {
+              const dateToCheck = dayjs(this._data.date.START).hour(0).minute(0).second(0).millisecond(0);
+              return date < dateToCheck;
+            }
           ],
           onChange: this._dateEndChangeHandler,
         }
