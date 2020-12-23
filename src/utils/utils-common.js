@@ -16,15 +16,15 @@ const getUpdatedList = (items, update) => {
   return [...items.slice(0, index), update, ...items.slice(index + 1)];
 };
 
-const getTimeFromMins = (mins) => {
-  const hours = Math.trunc(mins / 60);
-  const minutes = mins % 60;
-  return `${hours}:${minutes}`;
+const getTimeFromMinutes = (minutes) => {
+  const hours = Math.trunc(minutes / 60);
+  const restMinutes = minutes % 60;
+  return `${hours}:${restMinutes}`;
 };
 
 export {
   getRandomNum,
   getEmptyDataClassName,
   getUpdatedList,
-  getTimeFromMins,
+  getTimeFromMinutes,
 };
