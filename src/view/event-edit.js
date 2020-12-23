@@ -321,7 +321,7 @@ export default class EventEdit extends SmartView {
     const offerToAdd = offersMock
     .filter((offer) => offer.type === this._data.type)
     .find((offer, index) => index === offerIndex);
-    if (this._data.offers.includes(offerToAdd)) {
+    if (this._data.offers.some((offer) => offer.id === offerToAdd.id)) {
       this._data.offers.splice(this._data.offers.indexOf(offerToAdd), 1);
       return this._data.offers;
     } else {
