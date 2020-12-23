@@ -63,28 +63,34 @@ export default class Point {
 
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._replaceFormToCard();
+      this._eventFormCloseHandler();
     }
   }
 
   _eventFormOpenHandler() {
     this._replaceCardToForm();
-    document.addEventListener(`keydown`, this._EscPressHandler);
-    this._eventEditComponent.setFormCloseHandler(this._eventFormCloseHandler);
-    this._eventEditComponent.setFormSubmitHandler(this._eventFormSubmitHandler);
+    this._addHandlers();
   }
 
   _eventFormSubmitHandler(event) {
     this._changeData(event);
     this._replaceFormToCard();
-    document.removeEventListener(`keydown`, this._EscPressHandler);
-    this._eventEditComponent.removeFormCloseHandler();
-    this._eventEditComponent.removeFormSubmitHandler();
+    this._removeHandlers();
   }
 
   _eventFormCloseHandler() {
-    this._eventEditComponent.reset(this._event);
+    this._eventEditComponent.reset();
     this._replaceFormToCard();
+    this._removeHandlers();
+  }
+
+  _addHandlers() {
+    document.addEventListener(`keydown`, this._EscPressHandler);
+    this._eventEditComponent.setFormCloseHandler(this._eventFormCloseHandler);
+    this._eventEditComponent.setFormSubmitHandler(this._eventFormSubmitHandler);
+  }
+
+  _removeHandlers() {
     document.removeEventListener(`keydown`, this._EscPressHandler);
     this._eventEditComponent.removeFormCloseHandler();
     this._eventEditComponent.removeFormSubmitHandler();
