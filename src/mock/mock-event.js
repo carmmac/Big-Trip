@@ -182,13 +182,13 @@ const generatePhotos = () => {
 };
 
 const generateDate = () => {
-  const maxDaysGap = 7;
-  const minTimeGap = 30;
-  const maxTimeGap = 600;
-  const daysGap = getRandomNum(-maxDaysGap, maxDaysGap);
-  const timeGap = getRandomNum(-maxTimeGap, maxTimeGap);
+  const MAX_DAYS_GAP = 7;
+  const MIN_TIME_GAP = 30;
+  const MAX_TIME_GAP = 600;
+  const daysGap = getRandomNum(-MAX_DAYS_GAP, MAX_DAYS_GAP);
+  const timeGap = getRandomNum(-MAX_TIME_GAP, MAX_TIME_GAP);
   const dateStart = dayjs().add(daysGap, `day`).add(timeGap, `minute`);
-  const dateEnd = dayjs(dateStart).add(getRandomNum(minTimeGap, maxTimeGap), `minute`);
+  const dateEnd = dayjs(dateStart).add(getRandomNum(MIN_TIME_GAP, MAX_TIME_GAP), `minute`);
 
   return {
     START: dateStart,
