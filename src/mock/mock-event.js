@@ -1,9 +1,11 @@
 import {INFO_SENTENCE_MAX_NUM, OFFERS_MAX_NUM, PHOTOS_MAX_NUM, OFFER_PRICE, EVENT_PRICE} from '../const.js';
-import {getRadomNum} from '../utils/utils-common.js';
+import {getRandomNum} from '../utils/utils-common.js';
 import {generateRandomIndex} from '../utils/utils-event.js';
 import dayjs from 'dayjs';
 import objectSupport from 'dayjs/plugin/objectSupport';
 dayjs.extend(objectSupport);
+
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const infoTest = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 export const eventTypes = [
@@ -23,200 +25,201 @@ export const offers = [
   {
     type: `Check-in`,
     title: `Add breakfast`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Check-in`,
     title: `Double bed`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Check-in`,
     title: `Parking available`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Restaurant`,
     title: `Lunch in city`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Restaurant`,
     title: `Vegan menu`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Restaurant`,
     title: `Book a table`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Sightseeing`,
     title: `Order Uber`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Sightseeing`,
     title: `Order tickets online`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Sightseeing`,
     title: `Skip the line`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Drive`,
     title: `Rent a car`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Drive`,
     title: `Refueling`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Drive`,
     title: `Hitchhiking`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Train`,
     title: `Book train tickets`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Train`,
     title: `Switch to compartment carriage`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Flight`,
     title: `Add luggage`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Flight`,
     title: `Switch to comfort`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Flight`,
     title: `Special lunch menu`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Ship`,
     title: `Capitain's office tour`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Ship`,
     title: `Book upper-deck cabin`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Bus`,
     title: `Book bus tickets`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Bus`,
     title: `Extra-comfort seats`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Transport`,
     title: `Option`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Taxi`,
     title: `Tips for cabman`,
-    price: getRadomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: Boolean(getRadomNum(0, 1)),
+    price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
 ];
 
 const generateInfo = () => {
   const infoArray = infoTest.split(`. `);
   const randomInfo = [];
-  for (let i = 0; i < getRadomNum(0, INFO_SENTENCE_MAX_NUM); i++) {
-    randomInfo.push(infoArray[getRadomNum(0, infoArray.length - 1)]);
+  for (let i = 0; i < getRandomNum(0, INFO_SENTENCE_MAX_NUM); i++) {
+    randomInfo.push(infoArray[getRandomNum(0, infoArray.length - 1)]);
   }
   return randomInfo;
 };
 
 const generateOffers = (eventType) => {
-  const randomOffers = new Set();
-  for (let i = 0; i < getRadomNum(0, OFFERS_MAX_NUM); i++) {
-    const newOffer = offers[getRadomNum(1, offers.length - 1)];
-    if (eventType === newOffer.type && newOffer.isChecked) {
-      randomOffers.add(newOffer);
-    }
-  }
-  return randomOffers;
+  return offers.slice().filter((offer) => offer.type === eventType && offer.isChecked).slice(getRandomNum(0, OFFERS_MAX_NUM));
 };
 
 const generatePhotos = () => {
   const randomPhotos = [];
-  for (let i = 0; i < getRadomNum(0, PHOTOS_MAX_NUM); i++) {
+  for (let i = 0; i < getRandomNum(0, PHOTOS_MAX_NUM); i++) {
     randomPhotos.push(`http://picsum.photos/248/152?r=${Math.random()}`);
   }
   return randomPhotos;
 };
 
 const generateDate = () => {
-  const maxDaysGap = 7;
-  const daysGap = getRadomNum(-maxDaysGap, maxDaysGap);
-  return dayjs().add(daysGap, `day`).toDate();
-};
+  const MAX_DAYS_GAP = 7;
+  const MIN_TIME_GAP = 30;
+  const MAX_TIME_GAP = 600;
+  const daysGap = getRandomNum(-MAX_DAYS_GAP, MAX_DAYS_GAP);
+  const timeGap = getRandomNum(-MAX_TIME_GAP, MAX_TIME_GAP);
+  const dateStart = dayjs().add(daysGap, `day`).add(timeGap, `minute`);
+  const dateEnd = dayjs(dateStart).add(getRandomNum(MIN_TIME_GAP, MAX_TIME_GAP), `minute`);
 
-const generateTime = () => {
-  const eventTime = {
-    START: {
-      HOUR: getRadomNum(0, 11),
-      MINUTE: getRadomNum(0, 29)
-    },
-    END: {
-      HOUR: getRadomNum(12, 23),
-      MINUTE: getRadomNum(30, 59)
-    },
-
-  };
   return {
-    START: eventTime.START,
-    END: eventTime.END,
-    DURATION: {
-      HOUR: eventTime.END.HOUR - eventTime.START.HOUR,
-      MINUTE: eventTime.END.MINUTE - eventTime.START.MINUTE
-    }
+    START: dateStart,
+    END: dateEnd
   };
 };
-
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generateDestinations = () => {
   let generatedDestinations = [];
@@ -237,21 +240,16 @@ export const generateEvent = () => {
   const type = generateRandomIndex(eventTypes);
   const destination = generateRandomIndex(generatedDestinations);
   const date = generateDate();
-  const time = generateTime();
-  const duration = {
-    HOUR: time.END.HOUR - time.START.HOUR,
-    MINUTE: time.END.MINUTE - time.START.MINUTE
-  };
+  const duration = date.END.diff(date.START, `minute`);
 
   return {
     id: generateId(),
     type,
     destination,
     date,
-    time,
     duration,
-    price: getRadomNum(EVENT_PRICE.MIN, EVENT_PRICE.MAX),
+    price: getRandomNum(EVENT_PRICE.MIN, EVENT_PRICE.MAX),
     offers: generateOffers(type),
-    isFavorite: Boolean(getRadomNum(0, 1)),
+    isFavorite: Boolean(getRandomNum(0, 1)),
   };
 };

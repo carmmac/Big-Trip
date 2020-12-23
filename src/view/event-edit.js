@@ -3,10 +3,16 @@ import {draft} from '../utils/utils-render.js';
 import {eventTypes, destinations, generatedDestinations} from '../mock/mock-event.js';
 import {offers as offersMock} from '../mock/mock-event.js';
 import SmartView from './smart.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import dayjs from 'dayjs';
 
 const createEventEditTemplate = (data = {}) => {
-  const {type, destination, price, offers, eventHasInfo, eventHasPhotos} = data;
-  const eventDate = `${humanizeDate(`DD/MM/YY HH:mm`)}`;
+  const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
+  const eventDate = {
+    START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
+    END: humanizeDate(`DD/MM/YY HH:mm`, date.END)
+  };
 
   const createEventTypeListTemplate = () => {
     return eventTypes.reduce((finalTemplate, currentType) => {
@@ -31,16 +37,10 @@ const createEventEditTemplate = (data = {}) => {
 
   const createEventOffersSectionTemplate = () => {
     const renderOffers = () => {
-      return Array.from(offersMock)
+      return offersMock
       .filter((offer) => offer.type === type)
       .reduce((finalTemplate, currentOffer, currentOfferIndex) => {
-        const getCheckedOfferAttribute = () => {
-          if (offers.length !== 0) {
-            return Array.from(offers).some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
-          } else {
-            return ``;
-          }
-        };
+        const getCheckedOfferAttribute = () => offers.some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
         const currentTemplate = `
           <div class="event__offer-selector">
             <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type.toLowerCase()}-${currentOfferIndex}" type="checkbox" name="event-offer-${type.toLowerCase()}" ${getCheckedOfferAttribute()}>
@@ -119,7 +119,7 @@ const createEventEditTemplate = (data = {}) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${createEventTypeListTemplate(type)}
+                ${createEventTypeListTemplate()}
               </fieldset>
             </div>
           </div>
@@ -136,10 +136,10 @@ const createEventEditTemplate = (data = {}) => {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${eventDate}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${eventDate.START}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${eventDate}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${eventDate.END}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -156,7 +156,7 @@ const createEventEditTemplate = (data = {}) => {
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
-        ${createEventDetailsSectionTemplate(type, offers, destination, eventHasInfo, eventHasPhotos)}
+        ${createEventDetailsSectionTemplate()}
       </form>
     </li>
   `;
@@ -165,7 +165,10 @@ const createEventEditTemplate = (data = {}) => {
 export default class EventEdit extends SmartView {
   constructor(event) {
     super();
+    this._event = JSON.parse(JSON.stringify(event));
     this._data = EventEdit.parseEventToData(event);
+    this._dateStartPicker = null;
+    this._dateEndPicker = null;
 
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -173,8 +176,12 @@ export default class EventEdit extends SmartView {
     this._eventDestinationChangeHandler = this._eventDestinationChangeHandler.bind(this);
     this._eventPriceChangeHandler = this._eventPriceChangeHandler.bind(this);
     this._eventOffersToggleHandler = this._eventOffersToggleHandler.bind(this);
+    this._dateStartChangeHandler = this._dateStartChangeHandler.bind(this);
+    this._dateEndChangeHandler = this._dateEndChangeHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setStartDatePicker();
+    this._setEndDatePicker();
   }
   getTemplate() {
     return createEventEditTemplate(this._data);
@@ -203,6 +210,64 @@ export default class EventEdit extends SmartView {
   }
   removeFormSubmitHandler() {
     this.getElement().querySelector(`.event--edit`).removeEventListener(`submit`, this._formSubmitHandler);
+  }
+
+  _setStartDatePicker() {
+    if (this._dateStartPicker) {
+      this._dateStartPicker.destroy();
+      this._dateStartPicker = null;
+    }
+    this._dateStartPicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          enableTime: true,
+          dateFormat: `d/m/y H:i`,
+          altFormat: `d/m/y H:i`,
+          defaultDate: `${this._data.date.START}`,
+          onChange: this._dateStartChangeHandler,
+        }
+    );
+  }
+
+  _setEndDatePicker() {
+    if (this._dateEndPicker) {
+      this._dateEndPicker.destroy();
+      this._dateEndPicker = null;
+    }
+    this._dateEndPicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          dateFormat: `d/m/y H:i`,
+          altFormat: `d/m/y H:i`,
+          defaultDate: `${this._data.date.END}`,
+          disable: [
+            (date) => {
+              const dateToCheck = dayjs(this._data.date.START).hour(0).minute(0).second(0).millisecond(0);
+              return date < dateToCheck;
+            }
+          ],
+          onChange: this._dateEndChangeHandler,
+        }
+    );
+  }
+
+  _dateStartChangeHandler([selectedDate]) {
+    const setNewDate = () => {
+      this._data.date.START = dayjs(selectedDate);
+      this._data.date.END = dayjs(selectedDate);
+      return this._data.date;
+    };
+    this.updateData({date: setNewDate()}, true);
+    this._setEndDatePicker();
+  }
+
+  _dateEndChangeHandler([selectedDate]) {
+    const setNewEndDate = () => {
+      this._data.date.END = dayjs(selectedDate);
+      return this._data.date;
+    };
+    this.updateData({date: setNewEndDate()}, true);
   }
 
   _checkInputValidity(evt) {
@@ -250,20 +315,21 @@ export default class EventEdit extends SmartView {
   }
 
   _clearOffersList() {
-    this._data.offers.clear();
+    this._data.offers = [];
     return this._data.offers;
   }
 
   _updateOffersList(evt) {
     const offerIndex = Number(evt.target.id.substring(evt.target.id.length - 1));
-    const offerToAdd = Array.from(offersMock)
+    const offerToAdd = offersMock
     .filter((offer) => offer.type === this._data.type)
     .find((offer, index) => index === offerIndex);
-    if (this._data.offers.has(offerToAdd)) {
-      this._data.offers.delete(offerToAdd);
+    if (this._data.offers.some((offer) => offer.id === offerToAdd.id)) {
+      this._data.offers.splice(this._data.offers.indexOf(offerToAdd), 1);
       return this._data.offers;
     } else {
-      return this._data.offers.add(offerToAdd);
+      this._data.offers.push(offerToAdd);
+      return this._data.offers;
     }
   }
 
@@ -293,6 +359,8 @@ export default class EventEdit extends SmartView {
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setStartDatePicker();
+    this._setEndDatePicker();
     this.setFormCloseHandler(this._callback.close);
     this.setFormSubmitHandler(this._callback.formSubmit);
   }
@@ -314,7 +382,7 @@ export default class EventEdit extends SmartView {
     return data;
   }
 
-  reset(event) {
-    this.updateData(EventEdit.parseEventToData(event));
+  reset() {
+    this.updateData(EventEdit.parseEventToData(this._event));
   }
 }

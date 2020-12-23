@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {getRadomNum} from './utils-common.js';
+import {getRandomNum} from './utils-common.js';
 
 const SortType = {
   DAY: `date`,
@@ -8,7 +8,7 @@ const SortType = {
 };
 
 const generateRandomIndex = (data) => {
-  const randomData = data[getRadomNum(0, data.length - 1)];
+  const randomData = data[getRandomNum(0, data.length - 1)];
   return randomData;
 };
 
@@ -20,7 +20,7 @@ const sortData = (data, parameter) => {
   switch (parameter) {
     case SortType.DURATION:
       data.sort((left, right) => {
-        return (right[parameter].HOUR * 60 + right[parameter].MINUTE) - (left[parameter].HOUR * 60 + left[parameter].MINUTE);
+        return right[parameter] - left[parameter];
       });
       break;
     case SortType.PRICE:
@@ -30,7 +30,7 @@ const sortData = (data, parameter) => {
       break;
     default:
       data.sort((left, right) => {
-        return left[parameter] - right[parameter];
+        return left[parameter].START - right[parameter].START;
       });
   }
   return data;
