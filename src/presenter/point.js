@@ -30,7 +30,6 @@ export default class Point {
     this._eventEditComponent = new EventEditView(event);
     this._eventComponent.setFormOpenHandler(this._eventFormOpenHandler);
     this._eventComponent.setFavoriteClickHandler(this._favoriteClickHandler);
-    this._eventEditComponent.setFormSubmitHandler(this._eventFormSubmitHandler);
 
     if (prevEventComponent === null || prevEventEditComponent === null) {
       render(this._listContainer, this._eventComponent, RenderPosition.BEFOREEND);
