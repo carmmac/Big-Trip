@@ -5,6 +5,8 @@ import dayjs from 'dayjs';
 import objectSupport from 'dayjs/plugin/objectSupport';
 dayjs.extend(objectSupport);
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 const infoTest = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 export const eventTypes = [
   `Check-in`,
@@ -25,138 +27,161 @@ export const offers = [
     title: `Add breakfast`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Check-in`,
     title: `Double bed`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Check-in`,
     title: `Parking available`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Restaurant`,
     title: `Lunch in city`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Restaurant`,
     title: `Vegan menu`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Restaurant`,
     title: `Book a table`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Sightseeing`,
     title: `Order Uber`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Sightseeing`,
     title: `Order tickets online`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Sightseeing`,
     title: `Skip the line`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Drive`,
     title: `Rent a car`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: true,
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Drive`,
     title: `Refueling`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: true,
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Drive`,
     title: `Hitchhiking`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
-    isChecked: true,
+    isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Train`,
     title: `Book train tickets`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Train`,
     title: `Switch to compartment carriage`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Flight`,
     title: `Add luggage`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Flight`,
     title: `Switch to comfort`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Flight`,
     title: `Special lunch menu`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Ship`,
     title: `Capitain's office tour`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Ship`,
     title: `Book upper-deck cabin`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Bus`,
     title: `Book bus tickets`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Bus`,
     title: `Extra-comfort seats`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Transport`,
     title: `Option`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
   {
     type: `Taxi`,
     title: `Tips for cabman`,
     price: getRandomNum(OFFER_PRICE.MIN, OFFER_PRICE.MAX),
     isChecked: Boolean(getRandomNum(0, 1)),
+    id: generateId(),
   },
 ];
 
@@ -195,8 +220,6 @@ const generateDate = () => {
     END: dateEnd
   };
 };
-
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 const generateDestinations = () => {
   let generatedDestinations = [];
