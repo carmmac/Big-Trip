@@ -24,6 +24,17 @@ const UpdateType = {
   MAJOR: `MAJOR`
 };
 
+const Mode = {
+  DEFAULT: `default`,
+  EDITING: `editing`,
+};
+
+const SortType = {
+  DAY: `date`,
+  DURATION: `duration`,
+  PRICE: `price`,
+};
+
 export {
   EVENTS_NUM,
   INFO_SENTENCE_MAX_NUM,
@@ -33,4 +44,6 @@ export {
   EVENT_PRICE,
   UserAction,
   UpdateType,
+  Mode,
+  SortType,
 };

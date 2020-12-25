@@ -1,12 +1,7 @@
 import EventView from '../view/event.js';
 import EventEditView from '../view/event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/utils-render.js';
-import {UserAction, UpdateType} from '../const.js';
-
-const Mode = {
-  DEFAULT: `default`,
-  EDITING: `editing`,
-};
+import {UserAction, UpdateType, Mode} from '../const.js';
 
 export default class Point {
   constructor(listContainer, changeData, changeMode) {

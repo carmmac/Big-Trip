@@ -1,11 +1,12 @@
 import dayjs from 'dayjs';
 import {getRandomNum} from './utils-common.js';
+import {SortType} from '../const.js';
 
-const SortType = {
-  DAY: `date`,
-  DURATION: `duration`,
-  PRICE: `price`,
-};
+// const SortType = {
+//   DAY: `date`,
+//   DURATION: `duration`,
+//   PRICE: `price`,
+// };
 
 const generateRandomIndex = (data) => {
   const randomData = data[getRandomNum(0, data.length - 1)];

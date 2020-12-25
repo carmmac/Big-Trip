@@ -1,5 +1,5 @@
 import AbstractView from './absract.js';
-import {SortType} from '../utils/utils-event.js';
+import {SortType} from '../const.js';
 
 const createListSortTemplate = () => {
   return `

@@ -5,9 +5,8 @@ import EmptyListView from '../view/list-empty.js';
 import HeadingView from '../view/heading.js';
 import EventPresenter from './point.js';
 import {remove, render, RenderPosition} from '../utils/utils-render.js';
-import {getUpdatedList} from '../utils/utils-common.js';
-import {sortData, SortType} from '../utils/utils-event.js';
-import {UserAction, UpdateType} from '../const.js';
+import {sortData} from '../utils/utils-event.js';
+import {UserAction, UpdateType, SortType} from '../const.js';
 
 export default class Trip {
   constructor(tripContainer, eventsModel) {
