@@ -16,7 +16,7 @@ export default class EventsModel extends Observer {
   }
 
   updateEvent(updateType, update) {
-    getUpdatedList(this._events, update);
+    this._events = getUpdatedList(this._events, update);
     this.notify(updateType, update);
   }
 
