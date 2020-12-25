@@ -178,6 +178,7 @@ export default class EventEdit extends SmartView {
     this._eventOffersToggleHandler = this._eventOffersToggleHandler.bind(this);
     this._dateStartChangeHandler = this._dateStartChangeHandler.bind(this);
     this._dateEndChangeHandler = this._dateEndChangeHandler.bind(this);
+    this._formDeleteHandler = this._formDeleteHandler.bind(this);
 
     this._setInnerHandlers();
     this._setStartDatePicker();
@@ -197,6 +198,12 @@ export default class EventEdit extends SmartView {
       this._callback.formSubmit(EventEdit.parseDataToEvent(this._data));
     }
   }
+  _formDeleteHandler() {
+    if (typeof this._callback.formDelete === `function`) {
+      this._callback.formDelete(EventEdit.parseDataToEvent(this._data));
+    }
+  }
+
   setFormCloseHandler(callback) {
     this._callback.close = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._formCloseHandler);
@@ -210,6 +217,13 @@ export default class EventEdit extends SmartView {
   }
   removeFormSubmitHandler() {
     this.getElement().querySelector(`.event--edit`).removeEventListener(`submit`, this._formSubmitHandler);
+  }
+  setFormDeleteHandler(callback) {
+    this._callback.formDelete = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteHandler);
+  }
+  removeFormDeleteHandler() {
+    this.getElement().querySelector(`.event__reset-btn`).removeEventListener(`click`, this._formDeleteHandler);
   }
 
   _setStartDatePicker() {
@@ -363,6 +377,7 @@ export default class EventEdit extends SmartView {
     this._setEndDatePicker();
     this.setFormCloseHandler(this._callback.close);
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setFormDeleteHandler(this._callback.formDelete);
   }
 
   static parseEventToData(event) {

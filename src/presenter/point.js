@@ -16,6 +16,7 @@ export default class Point {
     this._eventFormSubmitHandler = this._eventFormSubmitHandler.bind(this);
     this._EscPressHandler = this._EscPressHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._eventFormDeleteHandler = this._eventFormDeleteHandler.bind(this);
   }
 
   init(event) {
@@ -84,10 +85,19 @@ export default class Point {
     this._removeHandlers();
   }
 
+  _eventFormDeleteHandler(event) {
+    this._changeData(
+        UserAction.DELETE_EVENT,
+        UpdateType.MINOR,
+        event
+    );
+  }
+
   _addHandlers() {
     document.addEventListener(`keydown`, this._EscPressHandler);
     this._eventEditComponent.setFormCloseHandler(this._eventFormCloseHandler);
     this._eventEditComponent.setFormSubmitHandler(this._eventFormSubmitHandler);
+    this._eventEditComponent.setFormDeleteHandler(this._eventFormDeleteHandler);
   }
 
   _removeHandlers() {
@@ -102,6 +112,7 @@ export default class Point {
       this._eventFormCloseHandler();
     }
   }
+
   _favoriteClickHandler() {
     this._changeData(
         UserAction.UPDATE_EVENT,
