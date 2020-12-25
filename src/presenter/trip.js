@@ -9,8 +9,9 @@ import {getUpdatedList} from '../utils/utils-common.js';
 import {sortData, SortType} from '../utils/utils-event.js';
 
 export default class Trip {
-  constructor(tripContainer) {
+  constructor(tripContainer, eventsModel) {
     this._tripContainer = tripContainer;
+    this._eventsModel = eventsModel;
     this._eventPresenter = {};
     this._tripBoardComponent = new TripBoardView();
     this._sortComponent = new SortView();
@@ -93,5 +94,9 @@ export default class Trip {
     this._sortEvents(sortType);
     this._clearList();
     this._renderEvents();
+  }
+
+  _getEvents() {
+    return this._eventsModel.getEvents();
   }
 }
