@@ -7,6 +7,7 @@ import EventPresenter from './point.js';
 import {render, RenderPosition} from '../utils/utils-render.js';
 import {getUpdatedList} from '../utils/utils-common.js';
 import {sortData, SortType} from '../utils/utils-event.js';
+import {UserAction, UpdateType} from '../const.js';
 
 export default class Trip {
   constructor(tripContainer, eventsModel) {
@@ -20,9 +21,12 @@ export default class Trip {
     this._headingComponent = new HeadingView();
     this._currentSortType = SortType.DAY;
 
-    this._eventChangeHandler = this._eventChangeHandler.bind(this);
+    this._userActionHandler = this._userActionHandler.bind(this);
+    this._modelUpdateHandler = this._modelUpdateHandler.bind(this);
     this._eventModeChangeHandler = this._eventModeChangeHandler.bind(this);
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
+
+    this._eventsModel.addObserver(this._modelUpdateHandler);
   }
 
   init() {
@@ -55,7 +59,7 @@ export default class Trip {
   }
 
   _renderEvent(event) {
-    const eventPresenter = new EventPresenter(this._listComponent, this._eventChangeHandler, this._eventModeChangeHandler);
+    const eventPresenter = new EventPresenter(this._listComponent, this._userActionHandler, this._eventModeChangeHandler);
     eventPresenter.init(event);
     this._eventPresenter[event.id] = eventPresenter;
   }
@@ -73,9 +77,34 @@ export default class Trip {
     Object.values(this._eventPresenter).forEach((presenter) => presenter.resetView());
   }
 
-  _eventChangeHandler(updatedEvent) {
-    this._tripEvents = getUpdatedList(this._tripEvents, updatedEvent);
-    this._eventPresenter[updatedEvent.id].init(updatedEvent);
+  _userActionHandler(actionType, updateType, update) {
+    switch (actionType) {
+      case UserAction.UPDATE_EVENT:
+        this._eventsModel.updateEvent(updateType, update);
+        break;
+      case UserAction.ADD_EVENT:
+        this._eventsModel.addEvent(updateType, update);
+        break;
+      case UserAction.DELETE_EVENT:
+        this._eventsModel.deleteEvent(updateType, update);
+        break;
+    }
+  }
+
+  _modelUpdateHandler(updateType, data) {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this._eventPresenter.init(data);
+        break;
+      case UpdateType.MINOR:
+        this._clearList();
+        this._renderEvents();
+        break;
+      case UpdateType.MAJOR:
+        this._clearTripBoard();
+        //* метод отрисовки статистики
+        break;
+    }
   }
   _sortTypeChangeHandler(sortType) {
     if (this._currentSortType === sortType) {
