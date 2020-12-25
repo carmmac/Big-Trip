@@ -11,7 +11,7 @@ const getEmptyDataClassName = (data) => data.length === 0 ? `visually-hidden` : 
 const getUpdatedList = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
   if (index === -1) {
-    return items;
+    throw new Error(`Can't update unexisting item`);
   }
   return [...items.slice(0, index), update, ...items.slice(index + 1)];
 };
