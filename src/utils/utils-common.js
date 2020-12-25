@@ -22,9 +22,14 @@ const getTimeFromMinutes = (minutes) => {
   return `${hours}:${restMinutes}`;
 };
 
+const getEventDuration = (endDate, startDate) => {
+  return endDate.diff(startDate, `minute`);
+};
+
 export {
   getRandomNum,
   getEmptyDataClassName,
   getUpdatedList,
   getTimeFromMinutes,
+  getEventDuration
 };
