@@ -4,7 +4,7 @@ import ListView from '../view/list.js';
 import EmptyListView from '../view/list-empty.js';
 import HeadingView from '../view/heading.js';
 import EventPresenter from './point.js';
-import {render, RenderPosition} from '../utils/utils-render.js';
+import {remove, render, RenderPosition} from '../utils/utils-render.js';
 import {getUpdatedList} from '../utils/utils-common.js';
 import {sortData, SortType} from '../utils/utils-event.js';
 import {UserAction, UpdateType} from '../const.js';
@@ -15,8 +15,8 @@ export default class Trip {
     this._eventsModel = eventsModel;
     this._eventPresenter = {};
     this._tripBoardComponent = new TripBoardView();
-    this._sortComponent = new SortView();
-    this._listComponent = new ListView();
+    this._sortComponent = null;
+    this._listComponent = null;
     this._emptyListComponent = new EmptyListView();
     this._headingComponent = new HeadingView();
     this._currentSortType = SortType.DAY;
@@ -45,11 +45,19 @@ export default class Trip {
   }
 
   _renderSort() {
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
+    this._sortComponent = new SortView();
     render(this._tripBoardComponent, this._sortComponent, RenderPosition.BEFOREEND);
     this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
   }
 
   _renderList() {
+    if (this._listComponent !== null) {
+      this._listComponent = null;
+    }
+    this._listComponent = new ListView();
     render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
   }
 
@@ -71,6 +79,13 @@ export default class Trip {
   _clearList() {
     Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
     this._eventPresenter = {};
+  }
+
+  _clearTripBoard() {
+    this._clearList();
+    remove(this._sortComponent);
+    remove(this._listComponent);
+    remove(this._emptyListComponent);
   }
 
   _eventModeChangeHandler() {
@@ -106,6 +121,7 @@ export default class Trip {
         break;
     }
   }
+
   _sortTypeChangeHandler(sortType) {
     if (this._currentSortType === sortType) {
       return;
