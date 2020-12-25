@@ -12,6 +12,18 @@ const EVENT_PRICE = {
   MAX: 500,
 };
 
+const UserAction = {
+  UPDATE_EVENT: `UPDATE_EVENT`,
+  ADD_EVENT: `ADD_EVENT`,
+  DELETE_EVENT: `DELETE_EVENT`
+};
+
+const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
 export {
   EVENTS_NUM,
   INFO_SENTENCE_MAX_NUM,
@@ -19,4 +31,6 @@ export {
   PHOTOS_MAX_NUM,
   OFFER_PRICE,
   EVENT_PRICE,
+  UserAction,
+  UpdateType,
 };
