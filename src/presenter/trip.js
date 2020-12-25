@@ -37,7 +37,7 @@ export default class Trip {
     }
     this._renderSort();
     this._renderList();
-    this._renderEvents(this._getEvents());
+    this._renderEvents();
   }
 
   _renderSort() {
@@ -49,7 +49,8 @@ export default class Trip {
     render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderEvents(events) {
+  _renderEvents() {
+    const events = this._getEvents();
     events.forEach((event) => this._renderEvent(event));
   }
 
@@ -82,7 +83,7 @@ export default class Trip {
     }
     this._currentSortType = sortType;
     this._clearList();
-    this._renderEvents(this._getEvents());
+    this._renderEvents();
   }
 
   _getEvents() {
