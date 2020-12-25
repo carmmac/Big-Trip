@@ -188,7 +188,8 @@ export const offers = [
 const generateInfo = () => {
   const infoArray = infoTest.split(`. `);
   const randomInfo = [];
-  for (let i = 0; i < getRandomNum(0, INFO_SENTENCE_MAX_NUM); i++) {
+  const sentenceNumber = getRandomNum(0, INFO_SENTENCE_MAX_NUM);
+  for (let i = 0; i < sentenceNumber; i++) {
     randomInfo.push(infoArray[getRandomNum(0, infoArray.length - 1)]);
   }
   return randomInfo;
