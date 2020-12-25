@@ -1,5 +1,5 @@
 import {humanizeDate} from '../utils/utils-event.js';
-import {getEmptyDataClassName, getTimeFromMinutes} from '../utils/utils-common.js';
+import {getEmptyDataClassName, getTimeFromMinutes, getEventDuration} from '../utils/utils-common.js';
 import {draft} from '../utils/utils-render.js';
 import AbstractView from './absract.js';
 
@@ -21,7 +21,7 @@ const createEventTemplate = (event) => {
     return {
       START: humanizeDate(`HH:mm`, date.START),
       END: humanizeDate(`HH:mm`, date.END),
-      DURATION: humanizeDate(`HH:mm`, dayjs(getTimeFromMinutes(date.END.diff(date.START, `minute`)), `HH:mm`)),
+      DURATION: humanizeDate(`HH:mm`, dayjs(getTimeFromMinutes(getEventDuration(date.END, date.START)), `HH:mm`)),
     };
   };
 

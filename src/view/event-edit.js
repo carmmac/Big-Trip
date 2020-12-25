@@ -7,6 +7,9 @@ import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
 
+import {getEventDuration} from '../utils/utils-common.js';
+
+
 const createEventEditTemplate = (data = {}) => {
   const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
   const eventDate = {
@@ -272,7 +275,13 @@ export default class EventEdit extends SmartView {
       this._data.date.END = dayjs(selectedDate);
       return this._data.date;
     };
-    this.updateData({date: setNewDate()}, true);
+    this.updateData(
+        {
+          date: setNewDate(),
+          duration: getEventDuration(this._data.date.END, this._data.date.START)
+        },
+        true
+    );
     this._setEndDatePicker();
   }
 
@@ -281,7 +290,13 @@ export default class EventEdit extends SmartView {
       this._data.date.END = dayjs(selectedDate);
       return this._data.date;
     };
-    this.updateData({date: setNewEndDate()}, true);
+    this.updateData(
+        {
+          date: setNewEndDate(),
+          duration: getEventDuration(this._data.date.END, this._data.date.START)
+        },
+        true
+    );
   }
 
   _checkInputValidity(evt) {

@@ -104,6 +104,7 @@ export default class Point {
     document.removeEventListener(`keydown`, this._EscPressHandler);
     this._eventEditComponent.removeFormCloseHandler();
     this._eventEditComponent.removeFormSubmitHandler();
+    this._eventEditComponent.removeFormDeleteHandler();
   }
 
   _EscPressHandler(evt) {
