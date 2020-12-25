@@ -25,21 +25,19 @@ export default class Trip {
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
-  init(tripEvents) {
-    this._tripEvents = sortData(tripEvents, this._currentSortType);
-    this._originalEvents = tripEvents.slice();
+  init() {
     this._renderTrip();
     render(this._tripContainer, this._tripBoardComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderTrip() {
-    if (this._tripEvents.length === 0) {
+    if (this._getEvents().length === 0) {
       this._renderEmptyList();
       return;
     }
     this._renderSort();
     this._renderList();
-    this._renderEvents();
+    this._renderEvents(this._getEvents());
   }
 
   _renderSort() {
@@ -51,8 +49,8 @@ export default class Trip {
     render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderEvents() {
-    this._tripEvents.forEach((event) => this._renderEvent(event));
+  _renderEvents(events) {
+    events.forEach((event) => this._renderEvent(event));
   }
 
   _renderEvent(event) {
@@ -63,15 +61,6 @@ export default class Trip {
 
   _renderEmptyList() {
     render(this._tripBoardComponent, this._emptyListComponent, RenderPosition.BEFOREEND);
-  }
-
-  _sortEvents(sortType) {
-    if (sortType === SortType.DAY) {
-      this._tripEvents = this._originalEvents.slice();
-    } else {
-      this._tripEvents = sortData(this._tripEvents, sortType);
-    }
-    this._currentSortType = sortType;
   }
 
   _clearList() {
@@ -91,12 +80,16 @@ export default class Trip {
     if (this._currentSortType === sortType) {
       return;
     }
-    this._sortEvents(sortType);
+    this._currentSortType = sortType;
     this._clearList();
-    this._renderEvents();
+    this._renderEvents(this._getEvents());
   }
 
   _getEvents() {
-    return this._eventsModel.getEvents();
+    if (this._currentSortType === SortType.DAY) {
+      return sortData(this._eventsModel.getEvents(), SortType.DAY);
+    } else {
+      return sortData(this._eventsModel.getEvents(), this._currentSortType);
+    }
   }
 }

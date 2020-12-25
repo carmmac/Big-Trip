@@ -26,4 +26,4 @@ render(siteMenuElement, new HeadingView(HeadingTitle.FILTER), RenderPosition.BEF
 render(siteMenuElement, new FiltersView(), RenderPosition.BEFOREEND);
 
 const tripPresenter = new TripPresenter(siteMainElement, eventsModel);
-tripPresenter.init(events);
+tripPresenter.init();
