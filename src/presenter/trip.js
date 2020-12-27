@@ -7,11 +7,13 @@ import EventPresenter from './point.js';
 import {remove, render, RenderPosition} from '../utils/utils-render.js';
 import {sortData} from '../utils/utils-event.js';
 import {UserAction, UpdateType, SortType} from '../const.js';
+import {filtration} from '../utils/utils-filter.js';
 
 export default class Trip {
-  constructor(tripContainer, eventsModel) {
+  constructor(tripContainer, filterModel, eventsModel) {
     this._tripContainer = tripContainer;
     this._eventsModel = eventsModel;
+    this._filterModel = filterModel;
     this._eventPresenter = {};
     this._tripBoardComponent = new TripBoardView();
     this._sortComponent = null;
@@ -25,10 +27,11 @@ export default class Trip {
     this._eventModeChangeHandler = this._eventModeChangeHandler.bind(this);
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
 
-    this._eventsModel.addObserver(this._modelUpdateHandler);
   }
 
   init() {
+    this._eventsModel.addObserver(this._modelUpdateHandler);
+    this._filterModel.addObserver(this._modelUpdateHandler);
     this._renderTrip();
     render(this._tripContainer, this._tripBoardComponent, RenderPosition.AFTERBEGIN);
   }
@@ -131,10 +134,14 @@ export default class Trip {
   }
 
   _getEvents() {
+    const filterType = this._filterModel.getFilter();
+    const events = this._eventsModel.getEvents();
+    const filteredEvents = filtration[filterType](events);
+
     if (this._currentSortType === SortType.DAY) {
-      return sortData(this._eventsModel.getEvents(), SortType.DAY);
+      return sortData(filteredEvents, SortType.DAY);
     } else {
-      return sortData(this._eventsModel.getEvents(), this._currentSortType);
+      return sortData(filteredEvents, this._currentSortType);
     }
   }
 }
