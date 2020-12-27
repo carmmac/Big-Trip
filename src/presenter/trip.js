@@ -4,7 +4,7 @@ import ListView from '../view/list.js';
 import EmptyListView from '../view/list-empty.js';
 import HeadingView from '../view/heading.js';
 import EventPresenter from './point.js';
-import {remove, render, RenderPosition} from '../utils/utils-render.js';
+import {remove, render, RenderPosition, replace} from '../utils/utils-render.js';
 import {sortData} from '../utils/utils-event.js';
 import {UserAction, UpdateType, SortType} from '../const.js';
 import {filtration} from '../utils/utils-filter.js';
@@ -47,12 +47,16 @@ export default class Trip {
   }
 
   _renderSort() {
-    if (this._sortComponent !== null) {
-      this._sortComponent = null;
-    }
-    this._sortComponent = new SortView();
-    render(this._tripBoardComponent, this._sortComponent, RenderPosition.BEFOREEND);
+    this._sortTypes = Object.keys(SortType);
+    const prevSortComponent = this._sortComponent;
+    this._sortComponent = new SortView(this._sortTypes, this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
+    if (prevSortComponent === null) {
+      render(this._tripBoardComponent, this._sortComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+    replace(this._sortComponent, prevSortComponent);
+    remove(prevSortComponent);
   }
 
   _renderList() {
@@ -129,6 +133,7 @@ export default class Trip {
       return;
     }
     this._currentSortType = sortType;
+    this._renderSort();
     this._clearList();
     this._renderEvents();
   }
@@ -138,10 +143,6 @@ export default class Trip {
     const events = this._eventsModel.getEvents();
     const filteredEvents = filtration[filterType](events);
 
-    if (this._currentSortType === SortType.DAY) {
-      return sortData(filteredEvents, SortType.DAY);
-    } else {
-      return sortData(filteredEvents, this._currentSortType);
-    }
+    return sortData(filteredEvents, this._currentSortType);
   }
 }

@@ -30,9 +30,11 @@ const Mode = {
 };
 
 const SortType = {
-  DAY: `date`,
-  DURATION: `duration`,
+  OFFER: `offers`,
   PRICE: `price`,
+  TIME: `duration`,
+  EVENT: `event`,
+  DAY: `date`,
 };
 
 const FilterType = {

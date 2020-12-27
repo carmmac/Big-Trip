@@ -13,7 +13,7 @@ const humanizeDate = (format, date) => {
 
 const sortData = (data, parameter) => {
   switch (parameter) {
-    case SortType.DURATION:
+    case SortType.TIME:
       data.sort((left, right) => {
         return right[parameter] - left[parameter];
       });
