@@ -27,7 +27,6 @@ export default class Filter {
     const prevFilterComponent = this._filterComponent;
     this._filterComponent = new FiltersView(this._filters, this._currentFilter);
     this._filterComponent.setFilterTypeChangeHandler(this._filterChangeHandler);
-    render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
