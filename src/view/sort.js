@@ -11,7 +11,7 @@ const createListSortTemplate = (sortTypeNames, currentSortType) => {
       const getDataSetSortAttribute = isSortItemDisabled() ? `` : `data-sort-type="${SortType[currentSortTypeItem]}"`;
       const currentTemplate = `
       <div class="trip-sort__item  trip-sort__item--${currentSortTypeItem.toLowerCase()}">
-        <input id="sort-${currentSortTypeItem.toLowerCase()}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${currentSortTypeItem.toLowerCase()}" ${getCheckedSortItemAttribute} ${getDisabledSortItemAttribute}>
+        <input id="sort-${currentSortTypeItem.toLowerCase()}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${currentSortTypeItem.toLowerCase()}" ${getCheckedSortItemAttribute} ${getDisabledSortItemAttribute}>
         <label class="trip-sort__btn" for="sort-${currentSortTypeItem.toLowerCase()}" ${getDataSetSortAttribute}>${currentSortTypeItem}</label>
       </div>`;
       return `${currentTemplate}${finalTemplate}`;
