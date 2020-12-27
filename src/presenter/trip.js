@@ -118,7 +118,9 @@ export default class Trip {
         this._eventPresenter.init(data);
         break;
       case UpdateType.MINOR:
+        this._currentSortType = SortType.DAY;
         this._clearList();
+        this._renderSort();
         this._renderEvents();
         break;
       case UpdateType.MAJOR:
