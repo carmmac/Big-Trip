@@ -37,9 +37,14 @@ const sortData = (data, parameter) => {
   return data;
 };
 
+const isPastEvent = (event) => {
+  return event.date.START < dayjs();
+};
+
 export {
   generateRandomIndex,
   humanizeDate,
   sortData,
   SortType,
+  isPastEvent,
 };
