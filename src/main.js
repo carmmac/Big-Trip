@@ -8,11 +8,14 @@ import {generateEvent} from './mock/mock-event.js';
 import {render, RenderPosition} from './utils/utils-render.js';
 import {HeadingTitle} from './utils/utils-render.js';
 import EventsModel from './model/events-model.js';
+import FilterModel from './model/filter-model.js';
 
 const events = new Array(EVENTS_NUM).fill().map(generateEvent);
 
 const eventsModel = new EventsModel();
 eventsModel.setEvents(events);
+
+const filterModel = new FilterModel();
 
 const siteHeaderElement = document.querySelector(`.trip-main`);
 render(siteHeaderElement, new InfoView(events), RenderPosition.AFTERBEGIN);

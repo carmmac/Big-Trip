@@ -35,6 +35,12 @@ const SortType = {
   PRICE: `price`,
 };
 
+const FilterType = {
+  PAST: `Past`,
+  FUTURE: `Future`,
+  EVERYTHING: `Everything`,
+};
+
 export {
   EVENTS_NUM,
   INFO_SENTENCE_MAX_NUM,
@@ -46,4 +52,5 @@ export {
   UpdateType,
   Mode,
   SortType,
+  FilterType,
 };
