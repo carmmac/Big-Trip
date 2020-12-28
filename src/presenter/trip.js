@@ -4,9 +4,10 @@ import ListView from '../view/list.js';
 import EmptyListView from '../view/list-empty.js';
 import HeadingView from '../view/heading.js';
 import EventPresenter from './point.js';
+import NewEventPresenter from './new-point.js';
 import {remove, render, RenderPosition, replace} from '../utils/utils-render.js';
 import {sortData} from '../utils/utils-event.js';
-import {UserAction, UpdateType, SortType} from '../const.js';
+import {UserAction, UpdateType, SortType, FilterType} from '../const.js';
 import {filtration} from '../utils/utils-filter.js';
 
 export default class Trip {
@@ -17,7 +18,7 @@ export default class Trip {
     this._eventPresenter = {};
     this._tripBoardComponent = new TripBoardView();
     this._sortComponent = null;
-    this._listComponent = null;
+    this._newEventPresenter = new NewEventPresenter(this._listComponent, this._userActionHandler);
     this._emptyListComponent = new EmptyListView();
     this._headingComponent = new HeadingView();
     this._currentSortType = SortType.DAY;
@@ -34,6 +35,11 @@ export default class Trip {
     this._filterModel.addObserver(this._modelUpdateHandler);
     this._renderTrip();
     render(this._tripContainer, this._tripBoardComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  createEvent() {
+    this._filterModel.setFilter(UpdateType.MINOR, FilterType.EVERYTHING);
+    this._newEventPresenter.init();
   }
 
   _renderTrip() {
@@ -86,6 +92,7 @@ export default class Trip {
   }
 
   _clearList() {
+    this._newEventPresenter.destroy();
     Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
     this._eventPresenter = {};
   }
@@ -98,6 +105,7 @@ export default class Trip {
   }
 
   _eventModeChangeHandler() {
+    this._newEventPresenter.destroy();
     Object.values(this._eventPresenter).forEach((presenter) => presenter.resetView());
   }
 

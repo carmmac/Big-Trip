@@ -9,8 +9,20 @@ import dayjs from 'dayjs';
 
 import {getEventDuration} from '../utils/utils-common.js';
 
+const BLANK_EVENT = {
+  type: eventTypes[0],
+  destination: generatedDestinations[0],
+  date: {
+    START: dayjs(),
+    END: dayjs(),
+  },
+  price: 0,
+  offers: [],
+  isFavorite: false,
+};
 
-const createEventEditTemplate = (data = {}) => {
+
+const createEventEditTemplate = (data) => {
   const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
   const eventDate = {
     START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
@@ -166,7 +178,7 @@ const createEventEditTemplate = (data = {}) => {
 };
 
 export default class EventEdit extends SmartView {
-  constructor(event) {
+  constructor(event = BLANK_EVENT) {
     super();
     this._event = JSON.parse(JSON.stringify(event));
     this._data = EventEdit.parseEventToData(event);

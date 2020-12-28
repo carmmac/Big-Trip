@@ -30,3 +30,7 @@ const tripPresenter = new TripPresenter(siteMainElement, filterModel, eventsMode
 const filterPresenter = new FilterPresenter(siteMenuElement, filterModel, eventsModel);
 tripPresenter.init();
 filterPresenter.init();
+
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, () => {
+  tripPresenter.createEvent();
+});
