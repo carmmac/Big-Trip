@@ -18,9 +18,6 @@ export default class Trip {
     this._tripBoardComponent = new TripBoardView();
     this._sortComponent = null;
     this._listComponent = new ListView();
-    this._newEventPresenter = new NewEventPresenter(this._listComponent, this._userActionHandler);
-
-
     this._emptyListComponent = new EmptyListView();
     this._currentSortType = SortType.DAY;
 
@@ -29,6 +26,7 @@ export default class Trip {
     this._eventModeChangeHandler = this._eventModeChangeHandler.bind(this);
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
 
+    this._newEventPresenter = new NewEventPresenter(this._listComponent, this._userActionHandler);
   }
 
   init() {
