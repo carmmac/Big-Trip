@@ -2,7 +2,6 @@ import TripBoardView from '../view/board.js';
 import SortView from '../view/sort.js';
 import ListView from '../view/list.js';
 import EmptyListView from '../view/list-empty.js';
-import HeadingView from '../view/heading.js';
 import EventPresenter from './point.js';
 import NewEventPresenter from './new-point.js';
 import {remove, render, RenderPosition, replace} from '../utils/utils-render.js';
@@ -18,9 +17,11 @@ export default class Trip {
     this._eventPresenter = {};
     this._tripBoardComponent = new TripBoardView();
     this._sortComponent = null;
+    this._listComponent = new ListView();
     this._newEventPresenter = new NewEventPresenter(this._listComponent, this._userActionHandler);
+
+
     this._emptyListComponent = new EmptyListView();
-    this._headingComponent = new HeadingView();
     this._currentSortType = SortType.DAY;
 
     this._userActionHandler = this._userActionHandler.bind(this);
@@ -35,6 +36,7 @@ export default class Trip {
     this._filterModel.addObserver(this._modelUpdateHandler);
     this._renderTrip();
     render(this._tripContainer, this._tripBoardComponent, RenderPosition.AFTERBEGIN);
+    render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
   }
 
   createEvent() {
@@ -49,7 +51,6 @@ export default class Trip {
       return;
     }
     this._renderSort();
-    this._renderList();
     this._renderEvents(events);
   }
 
@@ -64,17 +65,6 @@ export default class Trip {
     }
     replace(this._sortComponent, prevSortComponent);
     remove(prevSortComponent);
-  }
-
-  _renderList() {
-    const prevListComponent = this._listComponent;
-    this._listComponent = new ListView();
-    if (prevListComponent === null) {
-      render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
-      return;
-    }
-    replace(this._listComponent, prevListComponent);
-    remove(prevListComponent);
   }
 
   _renderEvents(events) {
