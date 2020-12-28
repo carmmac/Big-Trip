@@ -61,11 +61,14 @@ export default class Trip {
   }
 
   _renderList() {
-    if (this._listComponent !== null) {
-      this._listComponent = null;
-    }
+    const prevListComponent = this._listComponent;
     this._listComponent = new ListView();
-    render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
+    if (prevListComponent === null) {
+      render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+    replace(this._listComponent, prevListComponent);
+    remove(prevListComponent);
   }
 
   _renderEvents(events) {
