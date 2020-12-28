@@ -37,13 +37,14 @@ export default class Trip {
   }
 
   _renderTrip() {
-    if (this._getEvents().length === 0) {
+    const events = this._getEvents();
+    if (events.length === 0) {
       this._renderEmptyList();
       return;
     }
     this._renderSort();
     this._renderList();
-    this._renderEvents();
+    this._renderEvents(events);
   }
 
   _renderSort() {
@@ -67,8 +68,7 @@ export default class Trip {
     render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderEvents() {
-    const events = this._getEvents();
+  _renderEvents(events) {
     events.forEach((event) => this._renderEvent(event));
   }
 
@@ -120,8 +120,7 @@ export default class Trip {
       case UpdateType.MINOR:
         this._currentSortType = SortType.DAY;
         this._clearList();
-        this._renderSort();
-        this._renderEvents();
+        this._renderTrip();
         break;
       case UpdateType.MAJOR:
         this._clearTripBoard();
@@ -135,9 +134,8 @@ export default class Trip {
       return;
     }
     this._currentSortType = sortType;
-    this._renderSort();
     this._clearList();
-    this._renderEvents();
+    this._renderTrip();
   }
 
   _getEvents() {
