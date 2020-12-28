@@ -114,7 +114,7 @@ export default class Trip {
   _modelUpdateHandler(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        this._eventPresenter.init(data);
+        this._eventPresenter[data.id].init(data);
         break;
       case UpdateType.MINOR:
         this._currentSortType = SortType.DAY;
