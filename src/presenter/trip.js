@@ -125,6 +125,7 @@ export default class Trip {
         this._renderTrip();
         break;
       case UpdateType.MAJOR:
+        this._currentSortType = SortType.DAY;
         this._clearTripBoard();
         //* метод отрисовки статистики
         break;
