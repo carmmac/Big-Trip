@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 
 
 const getRandomNum = (min, max) => {
@@ -16,20 +17,26 @@ const getUpdatedList = (items, update) => {
   return [...items.slice(0, index), update, ...items.slice(index + 1)];
 };
 
-const getTimeFromMinutes = (minutes) => {
-  const hours = Math.trunc(minutes / 60);
-  const restMinutes = minutes % 60;
-  return `${hours}:${restMinutes}`;
-};
-
 const getEventDuration = (endDate, startDate) => {
-  return endDate.diff(startDate, `minute`);
+  const EventDuration = {
+    DAY: Math.trunc(endDate.diff(startDate, `day`)),
+    HOUR: Math.trunc(endDate.diff(startDate, `hour`)),
+    MINUTE: Math.trunc(endDate.diff(startDate, `minute`) % 60)
+  };
+  const duration = dayjs().hour(EventDuration.HOUR).minute(EventDuration.MINUTE + 1);
+
+  if (EventDuration.DAY > 0) {
+    return `${EventDuration.DAY}D ${duration.$H}H ${duration.$m}M`;
+  }
+  if (EventDuration.HOUR > 0) {
+    return `${duration.$H}H ${duration.$m}M`;
+  }
+  return `${duration.$m}M`;
 };
 
 export {
   getRandomNum,
   getEmptyDataClassName,
   getUpdatedList,
-  getTimeFromMinutes,
   getEventDuration
 };
