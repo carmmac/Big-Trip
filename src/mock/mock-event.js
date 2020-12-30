@@ -210,7 +210,7 @@ const generatePhotos = () => {
 const generateDate = () => {
   const MAX_DAYS_GAP = 7;
   const MIN_TIME_GAP = 30;
-  const MAX_TIME_GAP = 600;
+  const MAX_TIME_GAP = 3000;
   const daysGap = getRandomNum(-MAX_DAYS_GAP, MAX_DAYS_GAP);
   const timeGap = getRandomNum(-MAX_TIME_GAP, MAX_TIME_GAP);
   const dateStart = dayjs().add(daysGap, `day`).add(timeGap, `minute`);
