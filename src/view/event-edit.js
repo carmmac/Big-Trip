@@ -311,25 +311,13 @@ export default class EventEdit extends SmartView {
     );
   }
 
-  _checkInputValidity(evt) {
-    const InputId = {
-      TIME: {
-        START: `event-start-time-1`,
-        END: `event-end-time-1`,
-      },
-      PRICE: `event-price-1`,
-    };
-
+  _checkPriceInputValidity(evt) {
+    const priceInputRegExp = /^\d+$/;
     evt.target.reportValidity();
     if (evt.target.value.length === 0) {
-      switch (evt.target.id) {
-        case InputId.PRICE:
-          evt.target.setCustomValidity(`Please fill in event price!`);
-          break;
-        default:
-          //* сообщение для даты сделаю во второй части задания
-          evt.target.setCustomValidity(``);
-      }
+      evt.target.setCustomValidity(`Please fill in event price!`);
+    } else if (!priceInputRegExp.test(evt.target.value)) {
+      evt.target.setCustomValidity(`Digits only!`);
     } else {
       evt.target.setCustomValidity(``);
     }
@@ -348,7 +336,7 @@ export default class EventEdit extends SmartView {
 
   _eventPriceChangeHandler(evt) {
     this.updateData({price: evt.target.value}, true);
-    this._checkInputValidity(evt);
+    this._checkPriceInputValidity(evt);
   }
 
   _eventOffersToggleHandler(evt) {
