@@ -34,7 +34,6 @@ export default class Trip {
     this._filterModel.addObserver(this._modelUpdateHandler);
     this._renderTrip();
     render(this._tripContainer, this._tripBoardComponent, RenderPosition.AFTERBEGIN);
-    render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
   }
 
   createEvent() {
@@ -49,6 +48,7 @@ export default class Trip {
       return;
     }
     this._renderSort();
+    this._renderList();
     this._renderEvents(events);
   }
 
@@ -73,6 +73,10 @@ export default class Trip {
     const eventPresenter = new EventPresenter(this._listComponent, this._userActionHandler, this._eventModeChangeHandler);
     eventPresenter.init(event);
     this._eventPresenter[event.id] = eventPresenter;
+  }
+
+  _renderList() {
+    render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
   }
 
   _renderEmptyList() {
