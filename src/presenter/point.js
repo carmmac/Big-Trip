@@ -43,6 +43,7 @@ export default class Point {
   }
 
   destroy() {
+    this._eventEditComponent.deleteDatePickers();
     remove(this._eventComponent);
     remove(this._eventEditComponent);
   }

@@ -32,6 +32,7 @@ export default class NewPoint {
     if (this._eventEditComponent === null) {
       return;
     }
+    this._eventEditComponent.deleteDatePickers();
     remove(this._eventEditComponent);
     this._eventEditComponent = null;
 

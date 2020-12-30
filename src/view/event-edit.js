@@ -427,4 +427,9 @@ export default class EventEdit extends SmartView {
   reset() {
     this.updateData(EventEdit.parseEventToData(this._event));
   }
+
+  deleteDatePickers() {
+    this._dateStartPicker.destroy();
+    this._dateEndPicker.destroy();
+  }
 }
