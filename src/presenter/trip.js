@@ -91,7 +91,6 @@ export default class Trip {
 
   _clearTripBoard() {
     this._clearList();
-    remove(this._sortComponent);
     remove(this._listComponent);
     remove(this._emptyListComponent);
   }
@@ -122,7 +121,7 @@ export default class Trip {
         break;
       case UpdateType.MINOR:
         this._currentSortType = SortType.DAY;
-        this._clearList();
+        this._clearTripBoard();
         this._renderTrip();
         break;
       case UpdateType.MAJOR:
