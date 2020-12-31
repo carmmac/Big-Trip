@@ -6,7 +6,7 @@ import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
-
+import he from 'he';
 import {getEventDuration} from '../utils/utils-common.js';
 
 const BLANK_EVENT = {
@@ -143,7 +143,7 @@ const createEventEditTemplate = (data) => {
             <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.NAME}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destination.NAME)}" list="destination-list-1">
             <datalist id="destination-list-1">
               ${createDestinationOptionsTemplate()}
             </datalist>
@@ -151,10 +151,10 @@ const createEventEditTemplate = (data) => {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${eventDate.START}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${he.encode(eventDate.START)}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${eventDate.END}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${he.encode(eventDate.END)}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
