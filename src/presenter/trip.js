@@ -54,15 +54,12 @@ export default class Trip {
 
   _renderSort() {
     this._sortTypes = Object.keys(SortType);
-    const prevSortComponent = this._sortComponent;
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
     this._sortComponent = new SortView(this._sortTypes, this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
-    if (prevSortComponent === null) {
-      render(this._tripBoardComponent, this._sortComponent, RenderPosition.BEFOREEND);
-      return;
-    }
-    replace(this._sortComponent, prevSortComponent);
-    remove(prevSortComponent);
+    render(this._tripBoardComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderEvents(events) {
