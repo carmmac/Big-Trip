@@ -1,5 +1,5 @@
 import {humanizeDate} from '../utils/utils-event.js';
-import {getEmptyDataClassName, getEventDuration} from '../utils/utils-common.js';
+import {getEmptyDataClassName, formatEventDuration} from '../utils/utils-common.js';
 import {draft} from '../utils/utils-render.js';
 import AbstractView from './absract.js';
 import he from 'he';
@@ -22,7 +22,7 @@ const createEventTemplate = (event) => {
     return {
       START: humanizeDate(`HH:mm`, date.START),
       END: humanizeDate(`HH:mm`, date.END),
-      DURATION: getEventDuration(date.END, date.START),
+      DURATION: formatEventDuration(date.END, date.START),
     };
   };
 

@@ -290,7 +290,7 @@ export default class EventEdit extends SmartView {
     this.updateData(
         {
           date: setNewDate(),
-          duration: getEventDuration(this._data.date.END, this._data.date.START)
+          duration: getEventDuration(this._data.date.END, this._data.date.START, `minute`)
         },
         true
     );
@@ -305,7 +305,7 @@ export default class EventEdit extends SmartView {
     this.updateData(
         {
           date: setNewEndDate(),
-          duration: getEventDuration(this._data.date.END, this._data.date.START)
+          duration: getEventDuration(this._data.date.END, this._data.date.START, `minute`)
         },
         true
     );

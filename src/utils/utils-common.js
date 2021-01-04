@@ -17,13 +17,13 @@ const getUpdatedList = (items, update) => {
   return [...items.slice(0, index), update, ...items.slice(index + 1)];
 };
 
-const getEventDuration = (endDate, startDate) => {
+const formatEventDuration = (endDate, startDate) => {
   const EventDuration = {
-    DAY: Math.trunc(endDate.diff(startDate, `day`)),
-    HOUR: Math.trunc(endDate.diff(startDate, `hour`)),
-    MINUTE: Math.trunc(endDate.diff(startDate, `minute`) % 60)
+    DAY: Math.trunc(getEventDuration(endDate, startDate, `day`)),
+    HOUR: Math.trunc(getEventDuration(endDate, startDate, `hour`)),
+    MINUTE: Math.trunc(getEventDuration(endDate, startDate, `minute`) % 60)
   };
-  const duration = dayjs().hour(EventDuration.HOUR).minute(EventDuration.MINUTE + 1);
+  const duration = dayjs().hour(EventDuration.HOUR).minute(EventDuration.MINUTE);
 
   if (EventDuration.DAY > 0) {
     return `${EventDuration.DAY}D ${duration.$H}H ${duration.$m}M`;
@@ -34,9 +34,14 @@ const getEventDuration = (endDate, startDate) => {
   return `${duration.$m}M`;
 };
 
+const getEventDuration = (endDate, startDate, format) => {
+  return endDate.diff(startDate, format);
+};
+
 export {
   getRandomNum,
   getEmptyDataClassName,
   getUpdatedList,
-  getEventDuration
+  formatEventDuration,
+  getEventDuration,
 };
