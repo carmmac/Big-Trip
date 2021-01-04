@@ -4,9 +4,9 @@ import ListView from '../view/list.js';
 import EmptyListView from '../view/list-empty.js';
 import EventPresenter from './point.js';
 import NewEventPresenter from './new-point.js';
-import {remove, render, RenderPosition, replace} from '../utils/utils-render.js';
+import {remove, render, RenderPosition} from '../utils/utils-render.js';
 import {sortData} from '../utils/utils-event.js';
-import {UserAction, UpdateType, SortType, FilterType} from '../const.js';
+import {UserAction, UpdateType, SortType} from '../const.js';
 import {filtration} from '../utils/utils-filter.js';
 
 export default class Trip {
@@ -37,8 +37,16 @@ export default class Trip {
     render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
   }
 
+  destroy() {
+    this._clearTripBoard({resetSortType: true});
+    remove(this._listComponent);
+    remove(this._emptyListComponent);
+    remove(this._tripBoardComponent);
+    this._eventsModel.removeObserver(this._modelUpdateHandler);
+    this._filterModel.removeObserver(this._modelUpdateHandler);
+  }
+
   createEvent() {
-    this._filterModel.setFilter(UpdateType.MINOR, FilterType.EVERYTHING);
     this._newEventPresenter.init();
   }
 
@@ -82,9 +90,14 @@ export default class Trip {
     this._eventPresenter = {};
   }
 
-  _clearTripBoard() {
+  _clearTripBoard({resetSortType = false} = {}) {
     this._clearList();
     remove(this._emptyListComponent);
+    remove(this._sortComponent);
+
+    if (resetSortType) {
+      this._currentSortType = SortType.DAY;
+    }
   }
 
   _eventModeChangeHandler() {
@@ -112,14 +125,12 @@ export default class Trip {
         this._eventPresenter[data.id].init(data);
         break;
       case UpdateType.MINOR:
-        this._currentSortType = SortType.DAY;
-        this._clearTripBoard();
+        this._clearTripBoard({resetSortType: true});
         this._renderTrip();
         break;
       case UpdateType.MAJOR:
-        this._currentSortType = SortType.DAY;
-        this._clearTripBoard();
-        //* метод отрисовки статистики
+        this._clearTripBoard({resetSortType: true});
+        this._renderTrip();
         break;
     }
   }
@@ -129,7 +140,7 @@ export default class Trip {
       return;
     }
     this._currentSortType = sortType;
-    this._clearList();
+    this._clearTripBoard();
     this._renderTrip();
   }
 
