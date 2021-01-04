@@ -43,6 +43,11 @@ const FilterType = {
   EVERYTHING: `Everything`,
 };
 
+const MenuItem = {
+  STATS: `Stats`,
+  TABLE: `Table`,
+};
+
 export {
   EVENTS_NUM,
   INFO_SENTENCE_MAX_NUM,
@@ -55,4 +60,5 @@ export {
   Mode,
   SortType,
   FilterType,
+  MenuItem,
 };
