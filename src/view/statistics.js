@@ -9,8 +9,8 @@ const createStatisticsTemplate = () => {
         <canvas class="statistics__chart  statistics__chart--money" width="900"></canvas>
       </div>
 
-      <div class="statistics__item statistics__item--transport">
-        <canvas class="statistics__chart  statistics__chart--transport" width="900"></canvas>
+      <div class="statistics__item statistics__item--type">
+        <canvas class="statistics__chart  statistics__chart--type" width="900"></canvas>
       </div>
 
       <div class="statistics__item statistics__item--time-spend">
