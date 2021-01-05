@@ -416,8 +416,14 @@ export default class EventEdit extends SmartView {
     this.updateData(EventEdit.parseEventToData(this._event));
   }
 
-  deleteDatePickers() {
-    this._dateStartPicker.destroy();
-    this._dateEndPicker.destroy();
+  removeElement() {
+    super.removeElement();
+
+    if (this._dateStartPicker || this._dateEndPicker) {
+      this._dateStartPicker.destroy();
+      this._dateStartPicker = null;
+      this._dateEndPicker.destroy();
+      this._dateEndPicker = null;
+    }
   }
 }
