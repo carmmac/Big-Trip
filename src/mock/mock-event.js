@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import objectSupport from 'dayjs/plugin/objectSupport';
 dayjs.extend(objectSupport);
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+export const generateId = () => Date.now() + Math.floor(Math.random() * 10000);
 
 const infoTest = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 export const eventTypes = [
@@ -188,7 +188,8 @@ export const offers = [
 const generateInfo = () => {
   const infoArray = infoTest.split(`. `);
   const randomInfo = [];
-  for (let i = 0; i < getRandomNum(0, INFO_SENTENCE_MAX_NUM); i++) {
+  const sentenceNumber = getRandomNum(0, INFO_SENTENCE_MAX_NUM);
+  for (let i = 0; i < sentenceNumber; i++) {
     randomInfo.push(infoArray[getRandomNum(0, infoArray.length - 1)]);
   }
   return randomInfo;
@@ -209,7 +210,7 @@ const generatePhotos = () => {
 const generateDate = () => {
   const MAX_DAYS_GAP = 7;
   const MIN_TIME_GAP = 30;
-  const MAX_TIME_GAP = 600;
+  const MAX_TIME_GAP = 3000;
   const daysGap = getRandomNum(-MAX_DAYS_GAP, MAX_DAYS_GAP);
   const timeGap = getRandomNum(-MAX_TIME_GAP, MAX_TIME_GAP);
   const dateStart = dayjs().add(daysGap, `day`).add(timeGap, `minute`);

@@ -1,11 +1,6 @@
 import dayjs from 'dayjs';
 import {getRandomNum} from './utils-common.js';
-
-const SortType = {
-  DAY: `date`,
-  DURATION: `duration`,
-  PRICE: `price`,
-};
+import {SortType} from '../const.js';
 
 const generateRandomIndex = (data) => {
   const randomData = data[getRandomNum(0, data.length - 1)];
@@ -18,7 +13,7 @@ const humanizeDate = (format, date) => {
 
 const sortData = (data, parameter) => {
   switch (parameter) {
-    case SortType.DURATION:
+    case SortType.TIME:
       data.sort((left, right) => {
         return right[parameter] - left[parameter];
       });
@@ -36,9 +31,14 @@ const sortData = (data, parameter) => {
   return data;
 };
 
+const isPastEvent = (event) => {
+  return event.date.START < dayjs();
+};
+
 export {
   generateRandomIndex,
   humanizeDate,
   sortData,
   SortType,
+  isPastEvent,
 };
