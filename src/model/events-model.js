@@ -21,7 +21,7 @@ export default class EventsModel extends Observer {
   }
 
   addEvent(updateType, newEvent) {
-    this._events.unshift(newEvent);
+    this._events.push(newEvent);
     this.notify(updateType, newEvent);
   }
 
