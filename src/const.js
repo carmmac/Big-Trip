@@ -1,4 +1,5 @@
 const EVENTS_NUM = 17;
+const CANVAS_BAR_HEIGHT = 55;
 
 const INFO_SENTENCE_MAX_NUM = 5;
 const OFFERS_MAX_NUM = 5;
@@ -48,6 +49,11 @@ const MenuItem = {
   TABLE: `Table`,
 };
 
+const StatsParameter = {
+  PRICE: `price`,
+  DURATION: `duration`,
+};
+
 export {
   EVENTS_NUM,
   INFO_SENTENCE_MAX_NUM,
@@ -61,4 +67,6 @@ export {
   SortType,
   FilterType,
   MenuItem,
+  CANVAS_BAR_HEIGHT,
+  StatsParameter,
 };

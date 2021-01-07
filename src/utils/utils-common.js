@@ -1,6 +1,3 @@
-import dayjs from "dayjs";
-
-
 const getRandomNum = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -34,10 +31,13 @@ const getEventDuration = (endDate, startDate) => {
   return endDate.diff(startDate, `minute`);
 };
 
+const getUniqueArray = (items) => [...new Set(items)];
+
 export {
   getRandomNum,
   getEmptyDataClassName,
   getUpdatedList,
   formatEventDuration,
   getEventDuration,
+  getUniqueArray,
 };

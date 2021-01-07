@@ -5,7 +5,7 @@ import {remove, render, RenderPosition, replace} from '../utils/utils-render.js'
 import TripPresenter from './trip.js';
 import FilterPresenter from './filter.js';
 import {UpdateType, FilterType} from '../const.js';
-
+import StatsView from '../view/statistics.js';
 
 export default class MainPresenter {
   constructor(headerContainer, menuContainer, filterModel, eventsModel) {
@@ -14,12 +14,12 @@ export default class MainPresenter {
     this._filterModel = filterModel;
     this._eventsModel = eventsModel;
     this._menuComponent = null;
+    this._statsComponent = null;
     this._menuItemActive = MenuItem.TABLE;
 
     this._tripBoardContainer = document.querySelector(`.page-main .page-body__container`);
     this._tripPresenter = new TripPresenter(this._tripBoardContainer, filterModel, eventsModel);
     this._filterPresenter = new FilterPresenter(this._menuContainer, filterModel, eventsModel);
-
 
     this._menuClickHandler = this._menuClickHandler.bind(this);
     this._newEventClickHandler = this._newEventClickHandler.bind(this);
@@ -72,13 +72,14 @@ export default class MainPresenter {
     this._setActiveMenuItem(menuItem);
     switch (menuItem) {
       case MenuItem.TABLE:
-        // hide stats
+        remove(this._statsComponent);
         this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
         this._tripPresenter.init();
         break;
       case MenuItem.STATS:
         this._tripPresenter.destroy();
-        // show stats
+        this._statsComponent = new StatsView(this._eventsModel.getEvents());
+        render(this._tripBoardContainer, this._statsComponent, RenderPosition.BEFOREEND);
         break;
     }
   }
@@ -92,7 +93,9 @@ export default class MainPresenter {
   }
 
   _newEventClickHandler() {
-    // hide stats
+    if (this._statsComponent !== null) {
+      remove(this._statsComponent);
+    }
     this._tripPresenter.destroy();
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._tripPresenter.init();
