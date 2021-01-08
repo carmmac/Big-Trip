@@ -32,9 +32,9 @@ export default class Trip {
   init() {
     this._eventsModel.addObserver(this._modelUpdateHandler);
     this._filterModel.addObserver(this._modelUpdateHandler);
+    render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
     this._renderTrip();
     render(this._tripContainer, this._tripBoardComponent, RenderPosition.AFTERBEGIN);
-    render(this._tripBoardComponent, this._listComponent, RenderPosition.BEFOREEND);
   }
 
   destroy() {
