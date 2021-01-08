@@ -41,7 +41,7 @@ export default class NewPoint {
   _newEventFormSubmitHandler(event) {
     this._changeData(
         UserAction.ADD_EVENT,
-        UpdateType.MINOR,
+        UpdateType.MAJOR,
         Object.assign({id: generateId()}, event)
     );
     this.destroy();

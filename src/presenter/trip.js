@@ -125,7 +125,7 @@ export default class Trip {
         this._eventPresenter[data.id].init(data);
         break;
       case UpdateType.MINOR:
-        this._clearTripBoard({resetSortType: true});
+        this._clearTripBoard();
         this._renderTrip();
         break;
       case UpdateType.MAJOR:
