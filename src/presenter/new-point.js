@@ -32,7 +32,6 @@ export default class NewPoint {
     if (this._eventEditComponent === null) {
       return;
     }
-    this._eventEditComponent.deleteDatePickers();
     remove(this._eventEditComponent);
     this._eventEditComponent = null;
 
@@ -42,7 +41,7 @@ export default class NewPoint {
   _newEventFormSubmitHandler(event) {
     this._changeData(
         UserAction.ADD_EVENT,
-        UpdateType.MINOR,
+        UpdateType.MAJOR,
         Object.assign({id: generateId()}, event)
     );
     this.destroy();

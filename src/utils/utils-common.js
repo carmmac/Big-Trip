@@ -1,6 +1,3 @@
-import dayjs from "dayjs";
-
-
 const getRandomNum = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -17,26 +14,24 @@ const getUpdatedList = (items, update) => {
   return [...items.slice(0, index), update, ...items.slice(index + 1)];
 };
 
-const formatEventDuration = (endDate, startDate) => {
-  const EventDuration = {
-    DAY: Math.trunc(getEventDuration(endDate, startDate, `day`)),
-    HOUR: Math.trunc(getEventDuration(endDate, startDate, `hour`)),
-    MINUTE: Math.trunc(getEventDuration(endDate, startDate, `minute`) % 60)
-  };
-  const duration = dayjs().hour(EventDuration.HOUR).minute(EventDuration.MINUTE);
-
-  if (EventDuration.DAY > 0) {
-    return `${EventDuration.DAY}D ${duration.$H}H ${duration.$m}M`;
+const formatEventDuration = (duration) => {
+  const hours = Math.trunc(duration / 60);
+  const days = Math.trunc(hours / 24);
+  const minutes = duration % 60;
+  if (days > 0) {
+    return `${days}D ${hours - (days * 24)}H ${minutes}M`;
   }
-  if (EventDuration.HOUR > 0) {
-    return `${duration.$H}H ${duration.$m}M`;
+  if (hours > 0) {
+    return `${hours}H ${minutes}M`;
   }
-  return `${duration.$m}M`;
+  return `${minutes}M`;
 };
 
-const getEventDuration = (endDate, startDate, format) => {
-  return endDate.diff(startDate, format);
+const getEventDuration = (endDate, startDate) => {
+  return endDate.diff(startDate, `minute`);
 };
+
+const getUniqueArray = (items) => [...new Set(items)];
 
 export {
   getRandomNum,
@@ -44,4 +39,5 @@ export {
   getUpdatedList,
   formatEventDuration,
   getEventDuration,
+  getUniqueArray,
 };

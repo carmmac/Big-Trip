@@ -38,13 +38,11 @@ export default class Point {
     if (this._mode === Mode.EDITING) {
       replace(this._eventEditComponent, prevEventEditComponent);
     }
-    prevEventEditComponent.deleteDatePickers();
     remove(prevEventComponent);
     remove(prevEventEditComponent);
   }
 
   destroy() {
-    this._eventEditComponent.deleteDatePickers();
     remove(this._eventComponent);
     remove(this._eventEditComponent);
   }

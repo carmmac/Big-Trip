@@ -45,6 +45,6 @@ export default class Filter {
     if (this._currentFilter === filterType) {
       return;
     }
-    this._filterModel.setFilter(UpdateType.MINOR, filterType);
+    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 }

@@ -290,7 +290,7 @@ export default class EventEdit extends SmartView {
     this.updateData(
         {
           date: setNewDate(),
-          duration: getEventDuration(this._data.date.END, this._data.date.START, `minute`)
+          duration: getEventDuration(this._data.date.END, this._data.date.START)
         },
         true
     );
@@ -305,7 +305,7 @@ export default class EventEdit extends SmartView {
     this.updateData(
         {
           date: setNewEndDate(),
-          duration: getEventDuration(this._data.date.END, this._data.date.START, `minute`)
+          duration: getEventDuration(this._data.date.END, this._data.date.START)
         },
         true
     );
@@ -335,7 +335,7 @@ export default class EventEdit extends SmartView {
   }
 
   _eventPriceChangeHandler(evt) {
-    this.updateData({price: evt.target.value}, true);
+    this.updateData({price: Number(evt.target.value)}, true);
     this._checkPriceInputValidity(evt);
   }
 
@@ -406,7 +406,12 @@ export default class EventEdit extends SmartView {
   }
 
   static parseDataToEvent(data) {
-    data = Object.assign({}, data);
+    data = Object.assign(
+        {
+          duration: getEventDuration(data.date.END, data.date.START)
+        },
+        data
+    );
     delete data.eventHasInfo;
     delete data.eventHasPhotos;
     return data;
@@ -416,8 +421,14 @@ export default class EventEdit extends SmartView {
     this.updateData(EventEdit.parseEventToData(this._event));
   }
 
-  deleteDatePickers() {
-    this._dateStartPicker.destroy();
-    this._dateEndPicker.destroy();
+  removeElement() {
+    super.removeElement();
+
+    if (this._dateStartPicker || this._dateEndPicker) {
+      this._dateStartPicker.destroy();
+      this._dateStartPicker = null;
+      this._dateEndPicker.destroy();
+      this._dateEndPicker = null;
+    }
   }
 }

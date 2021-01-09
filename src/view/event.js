@@ -9,7 +9,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 
 const createEventTemplate = (event) => {
-  const {type, destination, date, price, offers, isFavorite} = event;
+  const {type, destination, date, duration, price, offers, isFavorite} = event;
   const eventDate = humanizeDate(`MMM DD`, date.START);
   const eventDateTime = humanizeDate(`YYYY-MM-DD`, date.START);
   const eventDateTimeFull = {
@@ -22,7 +22,7 @@ const createEventTemplate = (event) => {
     return {
       START: humanizeDate(`HH:mm`, date.START),
       END: humanizeDate(`HH:mm`, date.END),
-      DURATION: formatEventDuration(date.END, date.START),
+      DURATION: formatEventDuration(duration),
     };
   };
 
