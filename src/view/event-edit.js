@@ -335,7 +335,7 @@ export default class EventEdit extends SmartView {
   }
 
   _eventPriceChangeHandler(evt) {
-    this.updateData({price: Number(evt.target.value)}, true);
+    this.updateData({price: parseInt(evt.target.value, 10)}, true);
     this._checkPriceInputValidity(evt);
   }
 
