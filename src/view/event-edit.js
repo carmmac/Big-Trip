@@ -22,7 +22,7 @@ const BLANK_EVENT = {
 };
 
 
-const createEventEditTemplate = (data) => {
+const createEventEditTemplate = (data, offersFromServer) => {
   const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
   const eventDate = {
     START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
@@ -52,9 +52,8 @@ const createEventEditTemplate = (data) => {
 
   const createEventOffersSectionTemplate = () => {
     const renderOffers = () => {
-      return offersMock
-      .filter((offer) => offer.type === type)
-      .reduce((finalTemplate, currentOffer, currentOfferIndex) => {
+      const currentOffersItem = offersFromServer.find((offerItem) => offerItem.type === type);
+      return currentOffersItem.offers.reduce((finalTemplate, currentOffer, currentOfferIndex) => {
         const getCheckedOfferAttribute = () => offers.some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
         const currentTemplate = `
           <div class="event__offer-selector">
@@ -85,7 +84,7 @@ const createEventEditTemplate = (data) => {
     }
     const renderPhotos = () => {
       return destination.PHOTOS.reduce((finalTemplate, currentPhoto) => {
-        const currentTemplate = `<img class="event__photo" src="${currentPhoto}" alt="Event photo"></img>`;
+        const currentTemplate = `<img class="event__photo" src="${currentPhoto.src}" alt="${currentPhoto.description}"></img>`;
         return `${currentTemplate}${finalTemplate}`;
       }, draft);
     };
@@ -104,7 +103,7 @@ const createEventEditTemplate = (data) => {
     return `
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destination.INFO.join()}</p>
+        <p class="event__destination-description">${destination.INFO}</p>
         ${renderPhotosContainer()}
       </section>
     `;
@@ -178,12 +177,14 @@ const createEventEditTemplate = (data) => {
 };
 
 export default class EventEdit extends SmartView {
-  constructor(event = BLANK_EVENT) {
+  constructor(event = BLANK_EVENT, offers) {
     super();
     this._event = JSON.parse(JSON.stringify(event));
     this._data = EventEdit.parseEventToData(event);
     this._dateStartPicker = null;
     this._dateEndPicker = null;
+
+    this._offers = offers;
 
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -200,7 +201,7 @@ export default class EventEdit extends SmartView {
     this._setEndDatePicker();
   }
   getTemplate() {
-    return createEventEditTemplate(this._data);
+    return createEventEditTemplate(this._data, this._offers);
   }
   _formCloseHandler() {
     if (typeof this._callback.close === `function`) {
