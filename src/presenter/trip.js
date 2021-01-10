@@ -132,6 +132,9 @@ export default class Trip {
         this._clearTripBoard({resetSortType: true});
         this._renderTrip();
         break;
+      case UpdateType.INIT:
+        this._renderTrip();
+        break;
     }
   }
 

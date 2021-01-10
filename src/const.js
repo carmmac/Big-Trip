@@ -1,4 +1,3 @@
-const EVENTS_NUM = 17;
 const CANVAS_BAR_HEIGHT = 55;
 
 const INFO_SENTENCE_MAX_NUM = 5;
@@ -22,7 +21,8 @@ const UserAction = {
 const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`,
 };
 
 const Mode = {
@@ -54,8 +54,26 @@ const StatsParameter = {
   DURATION: `duration`,
 };
 
+const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
+const AUTHORIZATION = `Basic tum3498sdl64df0qx`;
+
+const RequestMethod = {
+  GET: `GET`,
+  PUT: `PUT`
+};
+
+const SuccessHTTPStatusRange = {
+  MIN: 200,
+  MAX: 299
+};
+
+const RequestAddress = {
+  POINTS: `points`,
+  DESTINATIONS: `destinations`,
+  OFFERS: `offers`,
+};
+
 export {
-  EVENTS_NUM,
   INFO_SENTENCE_MAX_NUM,
   OFFERS_MAX_NUM,
   PHOTOS_MAX_NUM,
@@ -69,4 +87,9 @@ export {
   MenuItem,
   CANVAS_BAR_HEIGHT,
   StatsParameter,
+  END_POINT,
+  AUTHORIZATION,
+  RequestMethod,
+  SuccessHTTPStatusRange,
+  RequestAddress,
 };
