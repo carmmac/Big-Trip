@@ -25,6 +25,7 @@ const BLANK_EVENT = {
 
 
 const createEventEditTemplate = (data, offersFromServer, destinationsFromServer) => {
+  const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos, eventHasOffers} = data;
   const destinationsNames = destinationsFromServer.map((item) => item.NAME);
   const eventDate = {
     START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
@@ -53,8 +54,11 @@ const createEventEditTemplate = (data, offersFromServer, destinationsFromServer)
 
 
   const createEventOffersSectionTemplate = () => {
+    if (!eventHasOffers) {
+      return ``;
+    }
+    const currentOffersItem = offersFromServer.find((offerItem) => offerItem.type === type);
     const renderOffers = () => {
-      const currentOffersItem = offersFromServer.find((offerItem) => offerItem.type === type);
       return currentOffersItem.offers.reduce((finalTemplate, currentOffer, currentOfferIndex) => {
         const getCheckedOfferAttribute = () => offers.some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
         const currentTemplate = `
@@ -344,7 +348,7 @@ export default class EventEdit extends SmartView {
   }
 
   _eventOffersToggleHandler(evt) {
-    this.updateData({offers: this._updateOffersList(evt)});
+    this.updateData({offers: this._updateOffersList(evt)}, true);
   }
 
   _clearOffersList() {
@@ -354,10 +358,9 @@ export default class EventEdit extends SmartView {
 
   _updateOffersList(evt) {
     const offerIndex = Number(evt.target.id.substring(evt.target.id.length - 1));
-    const offerToAdd = offersMock
-    .filter((offer) => offer.type === this._data.type)
-    .find((offer, index) => index === offerIndex);
-    if (this._data.offers.some((offer) => offer.id === offerToAdd.id)) {
+    const offersItemForCurrentEventType = this._offers.find((offer) => offer.type === this._data.type);
+    const offerToAdd = offersItemForCurrentEventType.offers.find((offer, index) => index === offerIndex);
+    if (this._data.offers.some((offer) => offer.title === offerToAdd.title)) {
       this._data.offers.splice(this._data.offers.indexOf(offerToAdd), 1);
       return this._data.offers;
     } else {
@@ -387,7 +390,9 @@ export default class EventEdit extends SmartView {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._eventTypeChangeHandler);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`change`, this._eventDestinationChangeHandler);
     this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._eventPriceChangeHandler);
-    this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._eventOffersToggleHandler);
+    if (this._data.eventHasOffers) {
+      this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._eventOffersToggleHandler);
+    }
   }
 
   restoreHandlers() {
@@ -406,6 +411,7 @@ export default class EventEdit extends SmartView {
         {
           eventHasInfo: event.destination.INFO.length !== 0,
           eventHasPhotos: event.destination.PHOTOS.length !== 0,
+          eventHasOffers: event.offers.length !== 0,
         });
   }
 
@@ -418,6 +424,7 @@ export default class EventEdit extends SmartView {
     );
     delete data.eventHasInfo;
     delete data.eventHasPhotos;
+    delete data.event.eventHasOffers;
     return data;
   }
 
