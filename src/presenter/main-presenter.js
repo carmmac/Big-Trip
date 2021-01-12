@@ -31,33 +31,30 @@ export default class MainPresenter {
   }
 
   init() {
-    const requestedEvents = this._requestEvents();
-    const requestedOffers = this._requestOffers();
-    Promise.all([
-      requestedEvents,
-      requestedOffers
-    ])
-      .then(() => this._renderTripBoard());
+    this._renderTripBoard();
+    this._requestData();
   }
 
-  _requestEvents() {
-    this._api.getEvents()
-      .then((events) => {
-        this._eventsModel.setEvents(UpdateType.INIT, events);
+  _requestData() {
+    const requestedEvents = this._api.getEvents();
+    const requestedOffers = this._api.getOffers();
+    const requestedDestinations = this._api.getDestinations();
+
+    Promise.all([
+      requestedEvents,
+      requestedOffers,
+      requestedDestinations
+    ])
+      .then((response) => {
+        this._eventsModel.setData(UpdateType.INIT, response[0], response[1], response[2]);
         this._renderInfo();
         this._renderTripControls();
       })
       .catch(() => {
-        this._eventsModel.setEvents(UpdateType.INIT, []);
+        this._eventsModel.setData(UpdateType.INIT, [], [], destinations);
         this._renderInfo();
         this._renderTripControls();
       });
-  }
-
-  _requestOffers() {
-    this._api.getOffers()
-      .then((offers) => this._eventsModel.setOffers(offers))
-      .catch(this._eventsModel.setOffers([]));
   }
 
   _renderTripControls() {

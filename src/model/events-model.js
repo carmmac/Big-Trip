@@ -11,6 +11,13 @@ export default class EventsModel extends Observer {
     this._destinations = [];
   }
 
+  setData(updateType, events, offers, destinations) {
+    this.setEvents(events);
+    this.setOffers(offers);
+    this.setDestinations(destinations);
+    this.notify(updateType);
+  }
+
   getEvents() {
     return this._events;
   }
