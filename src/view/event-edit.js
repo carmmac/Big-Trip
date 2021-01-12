@@ -7,6 +7,8 @@ import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
 import he from 'he';
+import {capitalizeString, getEventDuration} from '../utils/utils-common.js';
+import {eventTypes} from '../const.js';
 import {destinations as destinationsOffline} from '../const.js';
 
 const BLANK_EVENT = {
@@ -31,11 +33,11 @@ const createEventEditTemplate = (data, offersFromServer, destinationsFromServer)
 
   const createEventTypeListTemplate = () => {
     return eventTypes.reduce((finalTemplate, currentType) => {
-      const currentTypeNameToLowerCase = currentType.toLowerCase();
+      const currentTypeNameCapitalized = capitalizeString(currentType);
       const currentTemplate = `
         <div class="event__type-item">
-          <input id="event-type-${currentTypeNameToLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === type ? `checked` : ``}>
-          <label class="event__type-label  event__type-label--${currentTypeNameToLowerCase}" for="event-type-${currentTypeNameToLowerCase}-1">${currentType}</label>
+          <input id="event-type-${currentType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === type ? `checked` : ``}>
+          <label class="event__type-label  event__type-label--${currentType}" for="event-type-${currentType}-1">${currentTypeNameCapitalized}</label>
         </div>
       `;
       return `${currentTemplate}${finalTemplate}`;
@@ -57,8 +59,8 @@ const createEventEditTemplate = (data, offersFromServer, destinationsFromServer)
         const getCheckedOfferAttribute = () => offers.some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
         const currentTemplate = `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type.toLowerCase()}-${currentOfferIndex}" type="checkbox" name="event-offer-${type.toLowerCase()}" ${getCheckedOfferAttribute()}>
-            <label class="event__offer-label" for="event-offer-${type.toLowerCase()}-${currentOfferIndex}">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${currentOfferIndex}" type="checkbox" name="event-offer-${type}" ${getCheckedOfferAttribute()}>
+            <label class="event__offer-label" for="event-offer-${type}-${currentOfferIndex}">
               <span class="event__offer-title">${currentOffer.title}</span>
               &plus;&euro;&nbsp;
               <span class="event__offer-price">${currentOffer.price}</span>
@@ -126,7 +128,7 @@ const createEventEditTemplate = (data, offersFromServer, destinationsFromServer)
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
             </label>
             <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
