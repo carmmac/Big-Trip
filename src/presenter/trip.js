@@ -72,11 +72,12 @@ export default class Trip {
 
   _renderEvents(events) {
     const offers = this._eventsModel.getOffers();
-    events.forEach((event) => this._renderEvent(event, offers));
+    const destinations = this._eventsModel.getDestinations();
+    events.forEach((event) => this._renderEvent(event, offers, destinations));
   }
 
-  _renderEvent(event, offers) {
-    const eventPresenter = new EventPresenter(this._listComponent, this._userActionHandler, this._eventModeChangeHandler, offers);
+  _renderEvent(event, offers, destinations) {
+    const eventPresenter = new EventPresenter(this._listComponent, this._userActionHandler, this._eventModeChangeHandler, offers, destinations);
     eventPresenter.init(event);
     this._eventPresenter[event.id] = eventPresenter;
   }

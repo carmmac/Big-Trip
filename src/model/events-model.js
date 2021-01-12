@@ -8,15 +8,15 @@ export default class EventsModel extends Observer {
     super();
     this._events = [];
     this._offers = [];
+    this._destinations = [];
   }
 
   getEvents() {
     return this._events;
   }
 
-  setEvents(updateType, events) {
+  setEvents(events) {
     this._events = events.slice();
-    this.notify(updateType);
   }
 
   getOffers() {
@@ -25,6 +25,14 @@ export default class EventsModel extends Observer {
 
   setOffers(offers) {
     this._offers = offers.slice();
+  }
+
+  getDestinations() {
+    return this._destinations;
+  }
+
+  setDestinations(destinations) {
+    this._destinations = destinations.slice();
   }
 
   updateEvent(updateType, update) {
@@ -104,5 +112,13 @@ export default class EventsModel extends Observer {
     delete adaptedEvent.isFavorite;
 
     return adaptedEvent;
+  }
+
+  static adaptDestinationsToClient(destination) {
+    return {
+      NAME: destination.name,
+      INFO: destination.description,
+      PHOTOS: destination.pictures,
+    };
   }
 }

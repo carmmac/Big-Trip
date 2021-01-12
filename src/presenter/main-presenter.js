@@ -4,7 +4,7 @@ import {MenuItem} from '../const.js';
 import {remove, render, RenderPosition, replace} from '../utils/utils-render.js';
 import TripPresenter from './trip.js';
 import FilterPresenter from './filter.js';
-import {UpdateType, FilterType, END_POINT, AUTHORIZATION} from '../const.js';
+import {UpdateType, FilterType, END_POINT, AUTHORIZATION, destinations} from '../const.js';
 import StatsView from '../view/statistics.js';
 import Api from '../api.js';
 

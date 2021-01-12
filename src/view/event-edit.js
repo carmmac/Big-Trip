@@ -7,11 +7,11 @@ import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
 import he from 'he';
-import {getEventDuration} from '../utils/utils-common.js';
+import {destinations as destinationsOffline} from '../const.js';
 
 const BLANK_EVENT = {
   type: eventTypes[0],
-  destination: generatedDestinations[0],
+  destination: destinationsOffline[0],
   date: {
     START: dayjs(),
     END: dayjs(),
@@ -22,8 +22,8 @@ const BLANK_EVENT = {
 };
 
 
-const createEventEditTemplate = (data, offersFromServer) => {
-  const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
+const createEventEditTemplate = (data, offersFromServer, destinationsFromServer) => {
+  const destinationsNames = destinationsFromServer.map((item) => item.NAME);
   const eventDate = {
     START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
     END: humanizeDate(`DD/MM/YY HH:mm`, date.END)
@@ -43,7 +43,7 @@ const createEventEditTemplate = (data, offersFromServer) => {
   };
 
   const createDestinationOptionsTemplate = () => {
-    return destinations.reduce((finalTemplate, currentOption) => {
+    return destinationsNames.reduce((finalTemplate, currentOption) => {
       const currentTemplate = `<option value="${currentOption}"></option>`;
       return `${currentTemplate}${finalTemplate}`;
     }, draft);
@@ -177,7 +177,7 @@ const createEventEditTemplate = (data, offersFromServer) => {
 };
 
 export default class EventEdit extends SmartView {
-  constructor(event = BLANK_EVENT, offers) {
+  constructor(event = BLANK_EVENT, offers, destinations) {
     super();
     this._event = JSON.parse(JSON.stringify(event));
     this._data = EventEdit.parseEventToData(event);
@@ -185,6 +185,7 @@ export default class EventEdit extends SmartView {
     this._dateEndPicker = null;
 
     this._offers = offers;
+    this._destinations = destinations;
 
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -201,7 +202,7 @@ export default class EventEdit extends SmartView {
     this._setEndDatePicker();
   }
   getTemplate() {
-    return createEventEditTemplate(this._data, this._offers);
+    return createEventEditTemplate(this._data, this._offers, this._destinations);
   }
   _formCloseHandler() {
     if (typeof this._callback.close === `function`) {
@@ -364,14 +365,14 @@ export default class EventEdit extends SmartView {
   }
 
   _changeDestination(evt) {
-    if (!destinations.some((destination) => destination === evt.target.value)) {
+    if (!this._destinations.some((destination) => destination.NAME === evt.target.value)) {
       evt.target.setCustomValidity(`Please choose specified destination from list!`);
       evt.target.reportValidity();
       return;
     } else {
       evt.target.setCustomValidity(``);
       const getNewDestination = () => {
-        const newDestination = generatedDestinations.find((destination) => destination.NAME === evt.target.value);
+        const newDestination = this._destinations.find((destination) => destination.NAME === evt.target.value);
         return newDestination;
       };
       this.updateData({destination: getNewDestination()}, true);

@@ -18,6 +18,12 @@ export default class Api {
       .then(Api.toJSON);
   }
 
+  getDestinations() {
+    return this._load({url: RequestAddress.DESTINATIONS})
+      .then(Api.toJSON)
+      .then((destinations) => destinations.map(EventsModel.adaptDestinationsToClient));
+  }
+
   updateEvent(event) {
     return this._load({
       url: `${RequestAddress.POINTS}/${event.id}`,
@@ -49,7 +55,6 @@ export default class Api {
     ) {
       throw new Error(`${response.status}: ${response.statusText}`);
     }
-
     return response;
   }
 
