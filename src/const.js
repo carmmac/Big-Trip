@@ -1,5 +1,49 @@
 const CANVAS_BAR_HEIGHT = 55;
 
+const eventTypes = [
+  `check-in`,
+  `sightseeing`,
+  `restaurant`,
+  `taxi`,
+  `bus`,
+  `train`,
+  `ship`,
+  `transport`,
+  `drive`,
+  `flight`,
+];
+
+const destinations = [
+  `Chamonix`,
+  `Geneva`,
+  `Amsterdam`,
+  `Helsinki`,
+  `Oslo`,
+  `Kopenhagen`,
+  `Den Haag`,
+  `Rotterdam`,
+  `Saint Petersburg`,
+  `Moscow`,
+  `Sochi`,
+  `Tokio`,
+  `Kioto`,
+  `Nagasaki`,
+  `Hiroshima`,
+  `Berlin`,
+  `Munich`,
+  `Frankfurt`,
+  `Vien`,
+  `Rome`,
+  `Naples`,
+  `Venice`,
+  `Milan`,
+  `Monaco`,
+  `Paris`,
+  `Barcelona`,
+  `Valencia`,
+  `Madrid`,
+];
+
 const INFO_SENTENCE_MAX_NUM = 5;
 const OFFERS_MAX_NUM = 5;
 const PHOTOS_MAX_NUM = 4;
@@ -92,4 +136,6 @@ export {
   RequestMethod,
   SuccessHTTPStatusRange,
   RequestAddress,
+  eventTypes,
+  destinations
 };
