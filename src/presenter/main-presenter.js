@@ -74,7 +74,7 @@ export default class MainPresenter {
     this._menuComponent = new MenuView(this._menuItems, this._menuItemActive);
     this._menuComponent.setMenuClickHandler(this._menuClickHandler);
     if (prevMenuComponent === null) {
-      render(this._menuContainer, this._menuComponent, RenderPosition.BEFOREEND);
+      render(this._menuContainer, this._menuComponent, RenderPosition.AFTERBEGIN);
       return;
     }
     replace(this._menuComponent, prevMenuComponent);
