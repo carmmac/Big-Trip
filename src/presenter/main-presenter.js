@@ -21,7 +21,7 @@ export default class MainPresenter {
     this._api = new Api(END_POINT, AUTHORIZATION);
 
     this._tripBoardContainer = document.querySelector(`.page-main .page-body__container`);
-    this._tripPresenter = new TripPresenter(this._tripBoardContainer, filterModel, eventsModel);
+    this._tripPresenter = new TripPresenter(this._tripBoardContainer, filterModel, eventsModel, this._api);
     this._filterPresenter = new FilterPresenter(this._menuContainer, filterModel, eventsModel);
 
     this._menuClickHandler = this._menuClickHandler.bind(this);

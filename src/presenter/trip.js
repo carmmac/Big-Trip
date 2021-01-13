@@ -11,10 +11,11 @@ import {filtration} from '../utils/utils-filter.js';
 import LoadingView from '../view/loading.js';
 
 export default class Trip {
-  constructor(tripContainer, filterModel, eventsModel) {
+  constructor(tripContainer, filterModel, eventsModel, api) {
     this._tripContainer = tripContainer;
     this._eventsModel = eventsModel;
     this._filterModel = filterModel;
+    this._api = api;
     this._eventPresenter = {};
     this._tripBoardComponent = new TripBoardView();
     this._sortComponent = null;
@@ -122,7 +123,9 @@ export default class Trip {
   _userActionHandler(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
-        this._eventsModel.updateEvent(updateType, update);
+        this._api.updateEvent(update)
+          .then((response) => this._eventsModel.updateEvent(updateType, response))
+          .catch(() => this._eventPresenter[update.id].resetView());
         break;
       case UserAction.ADD_EVENT:
         this._eventsModel.addEvent(updateType, update);

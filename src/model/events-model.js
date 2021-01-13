@@ -100,6 +100,11 @@ export default class EventsModel extends Observer {
           "date_from": event.date.START.toISOString(),
           "date_to": event.date.END.toISOString(),
           "is_favorite": event.isFavorite,
+          "destination": {
+            name: event.destination.NAME,
+            description: event.destination.INFO,
+            pictures: event.destination.PHOTOS,
+          },
         }
     );
 
@@ -111,7 +116,7 @@ export default class EventsModel extends Observer {
     return adaptedEvent;
   }
 
-  static adaptDestinationsToClient(destination) {
+  static adaptDestinationToClient(destination) {
     return {
       NAME: destination.name,
       INFO: destination.description,

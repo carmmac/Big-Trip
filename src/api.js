@@ -21,14 +21,14 @@ export default class Api {
   getDestinations() {
     return this._load({url: RequestAddress.DESTINATIONS})
       .then(Api.toJSON)
-      .then((destinations) => destinations.map(EventsModel.adaptDestinationsToClient));
+      .then((destinations) => destinations.map(EventsModel.adaptDestinationToClient));
   }
 
   updateEvent(event) {
     return this._load({
       url: `${RequestAddress.POINTS}/${event.id}`,
       method: RequestMethod.PUT,
-      body: JSON.stringify(event),
+      body: JSON.stringify(EventsModel.adaptEventToServer(event)),
       headers: new Headers({"Content-Type": `application/json`}),
     })
     .then(Api.toJSON)
