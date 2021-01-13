@@ -22,8 +22,8 @@ const BLANK_EVENT = {
 };
 
 
-const createEventEditTemplate = (data, offersFromServer, destinationsFromServer) => {
-  const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos, eventHasOffers} = data;
+const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
+  const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
   const destinationsNames = destinationsFromServer.map((item) => item.NAME);
   const eventDate = {
     START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
@@ -52,16 +52,15 @@ const createEventEditTemplate = (data, offersFromServer, destinationsFromServer)
 
 
   const createEventOffersSectionTemplate = () => {
-    if (!eventHasOffers) {
+    if (offerItem.offers.length === 0) {
       return ``;
     }
-    const currentOffersItem = offersFromServer.find((offerItem) => offerItem.type === type);
     const renderOffers = () => {
-      return currentOffersItem.offers.reduce((finalTemplate, currentOffer, currentOfferIndex) => {
+      return offerItem.offers.reduce((finalTemplate, currentOffer, currentOfferIndex) => {
         const getCheckedOfferAttribute = () => offers.some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
         const currentTemplate = `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${currentOfferIndex}" type="checkbox" name="event-offer-${type}" ${getCheckedOfferAttribute()}>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${currentOfferIndex}" type="checkbox" name="event-offer-${type}" data-offer-title="${currentOffer.title}" ${getCheckedOfferAttribute()}>
             <label class="event__offer-label" for="event-offer-${type}-${currentOfferIndex}">
               <span class="event__offer-title">${currentOffer.title}</span>
               &plus;&euro;&nbsp;
@@ -188,7 +187,7 @@ export default class EventEdit extends SmartView {
     this._dateStartPicker = null;
     this._dateEndPicker = null;
 
-    this._offers = offers;
+    this._offersItem = offers.find((offer) => offer.type === this._data.type);
     this._destinations = destinations;
 
     this._formCloseHandler = this._formCloseHandler.bind(this);
@@ -206,7 +205,7 @@ export default class EventEdit extends SmartView {
     this._setEndDatePicker();
   }
   getTemplate() {
-    return createEventEditTemplate(this._data, this._offers, this._destinations);
+    return createEventEditTemplate(this._data, this._offersItem, this._destinations);
   }
   _formCloseHandler() {
     if (typeof this._callback.close === `function`) {
@@ -355,11 +354,10 @@ export default class EventEdit extends SmartView {
   }
 
   _updateOffersList(evt) {
-    const offerIndex = Number(evt.target.id.substring(evt.target.id.length - 1));
-    const offersItemForCurrentEventType = this._offers.find((offer) => offer.type === this._data.type);
-    const offerToAdd = offersItemForCurrentEventType.offers.find((offer, index) => index === offerIndex);
+    const offerToAdd = this._offersItem.offers.find((offer) => offer.title === evt.target.dataset.offerTitle);
     if (this._data.offers.some((offer) => offer.title === offerToAdd.title)) {
-      this._data.offers.splice(this._data.offers.indexOf(offerToAdd), 1);
+      const offerIndex = this._data.offers.findIndex((offer) => offer.title === offerToAdd.title);
+      this._data.offers.splice(offerIndex, 1);
       return this._data.offers;
     } else {
       this._data.offers.push(offerToAdd);
@@ -388,7 +386,7 @@ export default class EventEdit extends SmartView {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._eventTypeChangeHandler);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`change`, this._eventDestinationChangeHandler);
     this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._eventPriceChangeHandler);
-    if (this._data.eventHasOffers) {
+    if (this._offersItem.offers.length !== 0) {
       this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._eventOffersToggleHandler);
     }
   }
@@ -409,7 +407,6 @@ export default class EventEdit extends SmartView {
         {
           eventHasInfo: event.destination.INFO.length !== 0,
           eventHasPhotos: event.destination.PHOTOS.length !== 0,
-          eventHasOffers: event.offers.length !== 0,
         });
   }
 
@@ -422,7 +419,7 @@ export default class EventEdit extends SmartView {
     );
     delete data.eventHasInfo;
     delete data.eventHasPhotos;
-    delete data.event.eventHasOffers;
+
     return data;
   }
 

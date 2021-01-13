@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import {generateId} from '../mock/mock-event.js';
 import Observer from '../utils/observer.js';
 import {getEventDuration, getUpdatedList} from '../utils/utils-common.js';
 
@@ -80,15 +79,6 @@ export default class EventsModel extends Observer {
             INFO: event.destination.description,
             PHOTOS: event.destination.pictures,
           },
-          offers: event.offers.map((offer) => {
-            return {
-              type: event.type,
-              title: offer.title,
-              price: offer.price,
-              isChecked: true,
-              id: generateId(),
-            };
-          }),
           isFavorite: event.is_favorite,
         }
     );
