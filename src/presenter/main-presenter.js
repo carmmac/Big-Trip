@@ -14,6 +14,7 @@ export default class MainPresenter {
     this._menuContainer = menuContainer;
     this._filterModel = filterModel;
     this._eventsModel = eventsModel;
+    this._infoComponent = null;
     this._menuComponent = null;
     this._statsComponent = null;
     this._menuItemActive = MenuItem.TABLE;
@@ -26,11 +27,13 @@ export default class MainPresenter {
 
     this._menuClickHandler = this._menuClickHandler.bind(this);
     this._newEventClickHandler = this._newEventClickHandler.bind(this);
+    this._modelUpdateHandler = this._modelUpdateHandler.bind(this);
 
     this._setNewEventClickHandler();
   }
 
   init() {
+    this._eventsModel.addObserver(this._modelUpdateHandler);
     this._renderTripBoard();
     this._requestData();
   }
@@ -64,8 +67,14 @@ export default class MainPresenter {
 
   _renderInfo() {
     const events = this._eventsModel.getEvents();
+    const prevInfoComponent = this._infoComponent;
     this._infoComponent = new InfoView(events);
-    render(this._headerContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
+    if (prevInfoComponent === null) {
+      render(this._headerContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
+      return;
+    }
+    replace(this._infoComponent, prevInfoComponent);
+    remove(prevInfoComponent);
   }
 
   _renderMenu() {
@@ -129,5 +138,11 @@ export default class MainPresenter {
 
   _setNewEventClickHandler() {
     document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, this._newEventClickHandler);
+  }
+
+  _modelUpdateHandler(updateType) {
+    if (updateType === UpdateType.MINOR) {
+      this._renderInfo();
+    }
   }
 }
