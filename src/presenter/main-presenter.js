@@ -46,7 +46,7 @@ export default class MainPresenter {
       requestedDestinations
     ])
       .then((response) => {
-        this._eventsModel.setData(UpdateType.INIT, response[0], response[1], response[2]);
+        this._eventsModel.setData(UpdateType.INIT, [...response]);
         this._renderInfo();
         this._renderTripControls();
       })
