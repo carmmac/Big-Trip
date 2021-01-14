@@ -13,7 +13,7 @@ const eventTypes = [
   `flight`,
 ];
 
-const destinations = [
+const destinationsOffline = [
   `Chamonix`,
   `Geneva`,
   `Amsterdam`,
@@ -139,5 +139,5 @@ export {
   SuccessHTTPStatusRange,
   RequestAddress,
   eventTypes,
-  destinations
+  destinationsOffline
 };

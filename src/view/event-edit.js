@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import he from 'he';
 import {capitalizeString, getEventDuration} from '../utils/utils-common.js';
 import {eventTypes} from '../const.js';
-import {destinations as destinationsOffline} from '../const.js';
+import {destinationsOffline} from '../const.js';
 
 const BLANK_EVENT = {
   type: eventTypes[0],
@@ -24,7 +24,8 @@ const BLANK_EVENT = {
 
 const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
   const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
-  const destinationsNames = destinationsFromServer.map((item) => item.NAME);
+  const destinationsNames = destinationsFromServer.length !== 0 ?
+    destinationsFromServer.map((item) => item.NAME) : destinationsOffline;
   const eventDate = {
     START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
     END: humanizeDate(`DD/MM/YY HH:mm`, date.END)

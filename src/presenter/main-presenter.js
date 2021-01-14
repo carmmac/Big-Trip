@@ -4,7 +4,7 @@ import {MenuItem} from '../const.js';
 import {remove, render, RenderPosition, replace} from '../utils/utils-render.js';
 import TripPresenter from './trip.js';
 import FilterPresenter from './filter.js';
-import {UpdateType, FilterType, ENDPOINT, AUTHORIZATION, destinations} from '../const.js';
+import {UpdateType, FilterType, ENDPOINT, AUTHORIZATION} from '../const.js';
 import StatsView from '../view/statistics.js';
 import Api from '../api.js';
 
@@ -54,7 +54,7 @@ export default class MainPresenter {
         this._renderTripControls();
       })
       .catch(() => {
-        this._eventsModel.setData(UpdateType.INIT, [], [], destinations);
+        this._eventsModel.setData(UpdateType.INIT, [], [], []);
         this._renderInfo();
         this._renderTripControls();
       });
