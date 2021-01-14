@@ -4,13 +4,15 @@ import {render, RenderPosition, replace, remove} from '../utils/utils-render.js'
 import {UserAction, UpdateType, Mode} from '../const.js';
 
 export default class Point {
-  constructor(listContainer, changeData, changeMode) {
+  constructor(listContainer, changeData, changeMode, offers, destinations) {
     this._listContainer = listContainer;
     this._mode = Mode.DEFAULT;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._eventComponent = null;
     this._eventEditComponent = null;
+    this._offers = offers;
+    this._destinations = destinations;
     this._eventFormOpenHandler = this._eventFormOpenHandler.bind(this);
     this._eventFormCloseHandler = this._eventFormCloseHandler.bind(this);
     this._eventFormSubmitHandler = this._eventFormSubmitHandler.bind(this);
@@ -24,7 +26,7 @@ export default class Point {
     const prevEventComponent = this._eventComponent;
     const prevEventEditComponent = this._eventEditComponent;
     this._eventComponent = new EventView(event);
-    this._eventEditComponent = new EventEditView(event);
+    this._eventEditComponent = new EventEditView(event, this._offers, this._destinations);
     this._eventComponent.setFormOpenHandler(this._eventFormOpenHandler);
     this._eventComponent.setFavoriteClickHandler(this._favoriteClickHandler);
 

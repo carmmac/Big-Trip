@@ -1,10 +1,20 @@
+import dayjs from 'dayjs';
 import Observer from '../utils/observer.js';
-import {getUpdatedList} from '../utils/utils-common.js';
+import {getEventDuration, getUpdatedList} from '../utils/utils-common.js';
 
 export default class EventsModel extends Observer {
   constructor() {
     super();
     this._events = [];
+    this._offers = [];
+    this._destinations = [];
+  }
+
+  setData(updateType, [events, offers, destinations]) {
+    this.setEvents(events);
+    this.setOffers(offers);
+    this.setDestinations(destinations);
+    this.notify(updateType);
   }
 
   getEvents() {
@@ -13,6 +23,22 @@ export default class EventsModel extends Observer {
 
   setEvents(events) {
     this._events = events.slice();
+  }
+
+  getOffers() {
+    return this._offers;
+  }
+
+  setOffers(offers) {
+    this._offers = offers.slice();
+  }
+
+  getDestinations() {
+    return this._destinations;
+  }
+
+  setDestinations(destinations) {
+    this._destinations = destinations.slice();
   }
 
   updateEvent(updateType, update) {
@@ -35,5 +61,66 @@ export default class EventsModel extends Observer {
       ...this._events.slice(index + 1)
     ];
     this.notify(updateType);
+  }
+
+  static adaptEventToClient(event) {
+    const adaptedEvent = Object.assign(
+        {},
+        event,
+        {
+          price: event.base_price,
+          date: {
+            START: dayjs(event.date_from),
+            END: dayjs(event.date_to),
+          },
+          duration: getEventDuration(dayjs(event.date_to), dayjs(event.date_from)),
+          destination: {
+            NAME: event.destination.name,
+            INFO: event.destination.description,
+            PHOTOS: event.destination.pictures,
+          },
+          isFavorite: event.is_favorite,
+        }
+    );
+
+    delete adaptedEvent.base_price;
+    delete adaptedEvent.date_from;
+    delete adaptedEvent.date_to;
+    delete adaptedEvent.is_favorite;
+
+    return adaptedEvent;
+  }
+
+  static adaptEventToServer(event) {
+    const adaptedEvent = Object.assign(
+        {},
+        event,
+        {
+          "base_price": event.price,
+          "date_from": event.date.START.toISOString(),
+          "date_to": event.date.END.toISOString(),
+          "is_favorite": event.isFavorite,
+          "destination": {
+            name: event.destination.NAME,
+            description: event.destination.INFO,
+            pictures: event.destination.PHOTOS,
+          },
+        }
+    );
+
+    delete adaptedEvent.price;
+    delete adaptedEvent.date;
+    delete adaptedEvent.duration;
+    delete adaptedEvent.isFavorite;
+
+    return adaptedEvent;
+  }
+
+  static adaptDestinationToClient(destination) {
+    return {
+      NAME: destination.name,
+      INFO: destination.description,
+      PHOTOS: destination.pictures,
+    };
   }
 }

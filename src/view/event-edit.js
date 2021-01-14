@@ -1,17 +1,17 @@
 import {humanizeDate} from '../utils/utils-event.js';
 import {draft} from '../utils/utils-render.js';
-import {eventTypes, destinations, generatedDestinations} from '../mock/mock-event.js';
-import {offers as offersMock} from '../mock/mock-event.js';
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
 import he from 'he';
-import {getEventDuration} from '../utils/utils-common.js';
+import {capitalizeString, getEventDuration} from '../utils/utils-common.js';
+import {eventTypes} from '../const.js';
+import {destinations as destinationsOffline} from '../const.js';
 
 const BLANK_EVENT = {
   type: eventTypes[0],
-  destination: generatedDestinations[0],
+  destination: destinationsOffline[0],
   date: {
     START: dayjs(),
     END: dayjs(),
@@ -22,8 +22,9 @@ const BLANK_EVENT = {
 };
 
 
-const createEventEditTemplate = (data) => {
+const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
   const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
+  const destinationsNames = destinationsFromServer.map((item) => item.NAME);
   const eventDate = {
     START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
     END: humanizeDate(`DD/MM/YY HH:mm`, date.END)
@@ -31,11 +32,11 @@ const createEventEditTemplate = (data) => {
 
   const createEventTypeListTemplate = () => {
     return eventTypes.reduce((finalTemplate, currentType) => {
-      const currentTypeNameToLowerCase = currentType.toLowerCase();
+      const currentTypeNameCapitalized = capitalizeString(currentType);
       const currentTemplate = `
         <div class="event__type-item">
-          <input id="event-type-${currentTypeNameToLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === type ? `checked` : ``}>
-          <label class="event__type-label  event__type-label--${currentTypeNameToLowerCase}" for="event-type-${currentTypeNameToLowerCase}-1">${currentType}</label>
+          <input id="event-type-${currentType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === type ? `checked` : ``}>
+          <label class="event__type-label  event__type-label--${currentType}" for="event-type-${currentType}-1">${currentTypeNameCapitalized}</label>
         </div>
       `;
       return `${currentTemplate}${finalTemplate}`;
@@ -43,7 +44,7 @@ const createEventEditTemplate = (data) => {
   };
 
   const createDestinationOptionsTemplate = () => {
-    return destinations.reduce((finalTemplate, currentOption) => {
+    return destinationsNames.reduce((finalTemplate, currentOption) => {
       const currentTemplate = `<option value="${currentOption}"></option>`;
       return `${currentTemplate}${finalTemplate}`;
     }, draft);
@@ -51,15 +52,16 @@ const createEventEditTemplate = (data) => {
 
 
   const createEventOffersSectionTemplate = () => {
+    if (offerItem.offers.length === 0) {
+      return ``;
+    }
     const renderOffers = () => {
-      return offersMock
-      .filter((offer) => offer.type === type)
-      .reduce((finalTemplate, currentOffer, currentOfferIndex) => {
+      return offerItem.offers.reduce((finalTemplate, currentOffer, currentOfferIndex) => {
         const getCheckedOfferAttribute = () => offers.some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
         const currentTemplate = `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type.toLowerCase()}-${currentOfferIndex}" type="checkbox" name="event-offer-${type.toLowerCase()}" ${getCheckedOfferAttribute()}>
-            <label class="event__offer-label" for="event-offer-${type.toLowerCase()}-${currentOfferIndex}">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${currentOfferIndex}" type="checkbox" name="event-offer-${type}" data-offer-title="${currentOffer.title}" ${getCheckedOfferAttribute()}>
+            <label class="event__offer-label" for="event-offer-${type}-${currentOfferIndex}">
               <span class="event__offer-title">${currentOffer.title}</span>
               &plus;&euro;&nbsp;
               <span class="event__offer-price">${currentOffer.price}</span>
@@ -85,7 +87,7 @@ const createEventEditTemplate = (data) => {
     }
     const renderPhotos = () => {
       return destination.PHOTOS.reduce((finalTemplate, currentPhoto) => {
-        const currentTemplate = `<img class="event__photo" src="${currentPhoto}" alt="Event photo"></img>`;
+        const currentTemplate = `<img class="event__photo" src="${currentPhoto.src}" alt="${currentPhoto.description}"></img>`;
         return `${currentTemplate}${finalTemplate}`;
       }, draft);
     };
@@ -104,7 +106,7 @@ const createEventEditTemplate = (data) => {
     return `
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destination.INFO.join()}</p>
+        <p class="event__destination-description">${destination.INFO}</p>
         ${renderPhotosContainer()}
       </section>
     `;
@@ -127,7 +129,7 @@ const createEventEditTemplate = (data) => {
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
             </label>
             <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -178,12 +180,15 @@ const createEventEditTemplate = (data) => {
 };
 
 export default class EventEdit extends SmartView {
-  constructor(event = BLANK_EVENT) {
+  constructor(event = BLANK_EVENT, offers, destinations) {
     super();
     this._event = JSON.parse(JSON.stringify(event));
     this._data = EventEdit.parseEventToData(event);
     this._dateStartPicker = null;
     this._dateEndPicker = null;
+
+    this._offersItem = offers.find((offer) => offer.type === this._data.type);
+    this._destinations = destinations;
 
     this._formCloseHandler = this._formCloseHandler.bind(this);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -200,7 +205,7 @@ export default class EventEdit extends SmartView {
     this._setEndDatePicker();
   }
   getTemplate() {
-    return createEventEditTemplate(this._data);
+    return createEventEditTemplate(this._data, this._offersItem, this._destinations);
   }
   _formCloseHandler() {
     if (typeof this._callback.close === `function`) {
@@ -335,12 +340,12 @@ export default class EventEdit extends SmartView {
   }
 
   _eventPriceChangeHandler(evt) {
-    this.updateData({price: Number(evt.target.value)}, true);
+    this.updateData({price: parseInt(evt.target.value, 10)}, true);
     this._checkPriceInputValidity(evt);
   }
 
   _eventOffersToggleHandler(evt) {
-    this.updateData({offers: this._updateOffersList(evt)});
+    this.updateData({offers: this._updateOffersList(evt)}, true);
   }
 
   _clearOffersList() {
@@ -349,12 +354,10 @@ export default class EventEdit extends SmartView {
   }
 
   _updateOffersList(evt) {
-    const offerIndex = Number(evt.target.id.substring(evt.target.id.length - 1));
-    const offerToAdd = offersMock
-    .filter((offer) => offer.type === this._data.type)
-    .find((offer, index) => index === offerIndex);
-    if (this._data.offers.some((offer) => offer.id === offerToAdd.id)) {
-      this._data.offers.splice(this._data.offers.indexOf(offerToAdd), 1);
+    const offerToAdd = this._offersItem.offers.find((offer) => offer.title === evt.target.dataset.offerTitle);
+    if (this._data.offers.some((offer) => offer.title === offerToAdd.title)) {
+      const offerIndex = this._data.offers.findIndex((offer) => offer.title === offerToAdd.title);
+      this._data.offers.splice(offerIndex, 1);
       return this._data.offers;
     } else {
       this._data.offers.push(offerToAdd);
@@ -363,14 +366,14 @@ export default class EventEdit extends SmartView {
   }
 
   _changeDestination(evt) {
-    if (!destinations.some((destination) => destination === evt.target.value)) {
+    if (!this._destinations.some((destination) => destination.NAME === evt.target.value)) {
       evt.target.setCustomValidity(`Please choose specified destination from list!`);
       evt.target.reportValidity();
       return;
     } else {
       evt.target.setCustomValidity(``);
       const getNewDestination = () => {
-        const newDestination = generatedDestinations.find((destination) => destination.NAME === evt.target.value);
+        const newDestination = this._destinations.find((destination) => destination.NAME === evt.target.value);
         return newDestination;
       };
       this.updateData({destination: getNewDestination()}, true);
@@ -383,7 +386,9 @@ export default class EventEdit extends SmartView {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._eventTypeChangeHandler);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`change`, this._eventDestinationChangeHandler);
     this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._eventPriceChangeHandler);
-    this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._eventOffersToggleHandler);
+    if (this._offersItem.offers.length !== 0) {
+      this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._eventOffersToggleHandler);
+    }
   }
 
   restoreHandlers() {
@@ -414,6 +419,7 @@ export default class EventEdit extends SmartView {
     );
     delete data.eventHasInfo;
     delete data.eventHasPhotos;
+
     return data;
   }
 
