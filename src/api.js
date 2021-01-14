@@ -3,7 +3,7 @@ import EventsModel from './model/events-model.js';
 
 export default class Api {
   constructor(endPoint, authorization) {
-    this._endPoint = endPoint;
+    this._endpoint = endPoint;
     this._authorization = authorization;
   }
 
@@ -35,6 +35,24 @@ export default class Api {
     .then(EventsModel.adaptEventToClient);
   }
 
+  addEvent(event) {
+    return this._load({
+      url: `${RequestAddress.POINTS}`,
+      method: RequestMethod.POST,
+      body: JSON.stringify(EventsModel.adaptEventToServer(event)),
+      headers: new Headers({"Content-Type": `application/json`}),
+    })
+    .then(Api.toJSON)
+    .then(EventsModel.adaptEventToClient);
+  }
+
+  deleteEvent(event) {
+    return this._load({
+      url: `${RequestAddress.POINTS}/${event.id}`,
+      method: RequestMethod.DELETE,
+    });
+  }
+
   _load({
     url,
     method = RequestMethod.GET,
@@ -43,7 +61,7 @@ export default class Api {
   }) {
     headers.append(`Authorization`, this._authorization);
 
-    return fetch(`${this._endPoint}/${url}`, {method, body, headers})
+    return fetch(`${this._endpoint}/${url}`, {method, body, headers})
       .then(Api.checkStatus)
       .catch(Api.catchError);
   }

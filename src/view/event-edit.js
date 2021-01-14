@@ -7,24 +7,12 @@ import dayjs from 'dayjs';
 import he from 'he';
 import {capitalizeString, getEventDuration} from '../utils/utils-common.js';
 import {eventTypes} from '../const.js';
-import {destinations as destinationsOffline} from '../const.js';
-
-const BLANK_EVENT = {
-  type: eventTypes[0],
-  destination: destinationsOffline[0],
-  date: {
-    START: dayjs(),
-    END: dayjs(),
-  },
-  price: 0,
-  offers: [],
-  isFavorite: false,
-};
-
+import {destinationsOffline} from '../const.js';
 
 const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
   const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
-  const destinationsNames = destinationsFromServer.map((item) => item.NAME);
+  const destinationsNames = destinationsFromServer.length !== 0 ?
+    destinationsFromServer.map((item) => item.NAME) : destinationsOffline;
   const eventDate = {
     START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
     END: humanizeDate(`DD/MM/YY HH:mm`, date.END)
@@ -180,14 +168,14 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
 };
 
 export default class EventEdit extends SmartView {
-  constructor(event = BLANK_EVENT, offers, destinations) {
+  constructor(event, offers, destinations) {
     super();
     this._event = JSON.parse(JSON.stringify(event));
     this._data = EventEdit.parseEventToData(event);
     this._dateStartPicker = null;
     this._dateEndPicker = null;
 
-    this._offersItem = offers.find((offer) => offer.type === this._data.type);
+    this._offers = offers;
     this._destinations = destinations;
 
     this._formCloseHandler = this._formCloseHandler.bind(this);
@@ -200,6 +188,7 @@ export default class EventEdit extends SmartView {
     this._dateEndChangeHandler = this._dateEndChangeHandler.bind(this);
     this._formDeleteHandler = this._formDeleteHandler.bind(this);
 
+    this._getEventOffersItem();
     this._setInnerHandlers();
     this._setStartDatePicker();
     this._setEndDatePicker();
@@ -244,6 +233,11 @@ export default class EventEdit extends SmartView {
   }
   removeFormDeleteHandler() {
     this.getElement().querySelector(`.event__reset-btn`).removeEventListener(`click`, this._formDeleteHandler);
+  }
+
+  _getEventOffersItem() {
+    this._offersItem = this._offers.find((offer) => offer.type === this._data.type);
+    return this._offersItem;
   }
 
   _setStartDatePicker() {
@@ -332,7 +326,9 @@ export default class EventEdit extends SmartView {
     this.updateData({
       type: evt.target.value,
       offers: this._clearOffersList(),
-    });
+    }, true);
+    this._getEventOffersItem();
+    this.updateElement();
   }
 
   _eventDestinationChangeHandler(evt) {
