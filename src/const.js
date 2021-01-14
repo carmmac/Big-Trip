@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 const CANVAS_BAR_HEIGHT = 55;
+const MAX_INFO_TITLES = 3;
 
 const eventTypes = [
   `check-in`,
@@ -139,6 +140,7 @@ const BLANK_EVENT = {
 
 export {
   INFO_SENTENCE_MAX_NUM,
+  MAX_INFO_TITLES,
   OFFERS_MAX_NUM,
   PHOTOS_MAX_NUM,
   OFFER_PRICE,
