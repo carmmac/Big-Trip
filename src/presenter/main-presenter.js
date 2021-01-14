@@ -141,7 +141,7 @@ export default class MainPresenter {
   }
 
   _modelUpdateHandler(updateType) {
-    if (updateType === UpdateType.MINOR) {
+    if (updateType === UpdateType.MINOR || updateType === UpdateType.MAJOR) {
       this._renderInfo();
     }
   }
