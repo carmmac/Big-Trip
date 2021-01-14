@@ -3,7 +3,7 @@ import EventsModel from './model/events-model.js';
 
 export default class Api {
   constructor(endPoint, authorization) {
-    this._endPoint = endPoint;
+    this._endpoint = endPoint;
     this._authorization = authorization;
   }
 
@@ -43,7 +43,7 @@ export default class Api {
   }) {
     headers.append(`Authorization`, this._authorization);
 
-    return fetch(`${this._endPoint}/${url}`, {method, body, headers})
+    return fetch(`${this._endpoint}/${url}`, {method, body, headers})
       .then(Api.checkStatus)
       .catch(Api.catchError);
   }

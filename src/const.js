@@ -98,7 +98,7 @@ const StatsParameter = {
   DURATION: `duration`,
 };
 
-const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
+const ENDPOINT = `https://13.ecmascript.pages.academy/big-trip`;
 const AUTHORIZATION = `Basic tum3498sdl64df0qx`;
 
 const RequestMethod = {
@@ -131,7 +131,7 @@ export {
   MenuItem,
   CANVAS_BAR_HEIGHT,
   StatsParameter,
-  END_POINT,
+  ENDPOINT,
   AUTHORIZATION,
   RequestMethod,
   SuccessHTTPStatusRange,
