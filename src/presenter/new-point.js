@@ -1,7 +1,6 @@
 import EventEditView from '../view/event-edit.js';
 import {render, RenderPosition, remove} from '../utils/utils-render.js';
 import {UserAction, UpdateType} from '../const.js';
-import {generateId} from '../mock/mock-event.js';
 
 export default class NewPoint {
   constructor(listContainer, changeData) {
@@ -42,7 +41,7 @@ export default class NewPoint {
     this._changeData(
         UserAction.ADD_EVENT,
         UpdateType.MAJOR,
-        Object.assign({id: generateId()}, event)
+        event
     );
     this.destroy();
   }

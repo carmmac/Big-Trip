@@ -103,7 +103,9 @@ const AUTHORIZATION = `Basic tum3498sdl64df0qx`;
 
 const RequestMethod = {
   GET: `GET`,
-  PUT: `PUT`
+  PUT: `PUT`,
+  POST: `POST`,
+  DELETE: `DELETE`,
 };
 
 const SuccessHTTPStatusRange = {

@@ -35,6 +35,24 @@ export default class Api {
     .then(EventsModel.adaptEventToClient);
   }
 
+  addEvent(event) {
+    return this._load({
+      url: `${RequestAddress.POINTS}`,
+      method: RequestMethod.POST,
+      body: JSON.stringify(EventsModel.adaptEventToServer(event)),
+      headers: new Headers({"Content-Type": `application/json`}),
+    })
+    .then(Api.toJSON)
+    .then(EventsModel.adaptEventToClient);
+  }
+
+  deleteEvent(event) {
+    return this._load({
+      url: `${RequestAddress.POINTS}/${event.id}`,
+      method: RequestMethod.DELETE,
+    });
+  }
+
   _load({
     url,
     method = RequestMethod.GET,
