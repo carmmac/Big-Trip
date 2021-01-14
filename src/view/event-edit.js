@@ -9,19 +9,6 @@ import {capitalizeString, getEventDuration} from '../utils/utils-common.js';
 import {eventTypes} from '../const.js';
 import {destinationsOffline} from '../const.js';
 
-const BLANK_EVENT = {
-  type: eventTypes[0],
-  destination: destinationsOffline[0],
-  date: {
-    START: dayjs(),
-    END: dayjs(),
-  },
-  price: 0,
-  offers: [],
-  isFavorite: false,
-};
-
-
 const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
   const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
   const destinationsNames = destinationsFromServer.length !== 0 ?
@@ -181,7 +168,7 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
 };
 
 export default class EventEdit extends SmartView {
-  constructor(event = BLANK_EVENT, offers, destinations) {
+  constructor(event, offers, destinations) {
     super();
     this._event = JSON.parse(JSON.stringify(event));
     this._data = EventEdit.parseEventToData(event);

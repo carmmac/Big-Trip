@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const CANVAS_BAR_HEIGHT = 55;
 
 const eventTypes = [
@@ -119,6 +121,22 @@ const RequestAddress = {
   OFFERS: `offers`,
 };
 
+const BLANK_EVENT = {
+  type: eventTypes[0],
+  destination: {
+    NAME: destinationsOffline[0],
+    INFO: ``,
+    PHOTOS: [],
+  },
+  date: {
+    START: dayjs(),
+    END: dayjs(),
+  },
+  price: 0,
+  offers: [],
+  isFavorite: false,
+};
+
 export {
   INFO_SENTENCE_MAX_NUM,
   OFFERS_MAX_NUM,
@@ -139,5 +157,6 @@ export {
   SuccessHTTPStatusRange,
   RequestAddress,
   eventTypes,
-  destinationsOffline
+  destinationsOffline,
+  BLANK_EVENT,
 };

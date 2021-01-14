@@ -30,7 +30,7 @@ export default class Trip {
     this._eventModeChangeHandler = this._eventModeChangeHandler.bind(this);
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
 
-    this._newEventPresenter = new NewEventPresenter(this._listComponent, this._userActionHandler);
+    this._newEventPresenter = null;
   }
 
   init() {
@@ -51,6 +51,7 @@ export default class Trip {
   }
 
   createEvent() {
+    this._newEventPresenter = new NewEventPresenter(this._listComponent, this._userActionHandler, this._offers, this._destinations);
     this._newEventPresenter.init();
   }
 
@@ -59,6 +60,7 @@ export default class Trip {
       this._renderLoading();
       return;
     }
+    this._getData();
     const events = this._getEvents();
     if (events.length === 0) {
       this._renderEmptyList();
@@ -79,13 +81,11 @@ export default class Trip {
   }
 
   _renderEvents(events) {
-    const offers = this._eventsModel.getOffers();
-    const destinations = this._eventsModel.getDestinations();
-    events.forEach((event) => this._renderEvent(event, offers, destinations));
+    events.forEach((event) => this._renderEvent(event));
   }
 
-  _renderEvent(event, offers, destinations) {
-    const eventPresenter = new EventPresenter(this._listComponent, this._userActionHandler, this._eventModeChangeHandler, offers, destinations);
+  _renderEvent(event) {
+    const eventPresenter = new EventPresenter(this._listComponent, this._userActionHandler, this._eventModeChangeHandler, this._offers, this._destinations);
     eventPresenter.init(event);
     this._eventPresenter[event.id] = eventPresenter;
   }
@@ -99,7 +99,9 @@ export default class Trip {
   }
 
   _clearList() {
-    this._newEventPresenter.destroy();
+    if (this._newEventPresenter !== null) {
+      this._newEventPresenter.destroy();
+    }
     Object.values(this._eventPresenter).forEach((presenter) => presenter.destroy());
     this._eventPresenter = {};
   }
@@ -116,7 +118,9 @@ export default class Trip {
   }
 
   _eventModeChangeHandler() {
-    this._newEventPresenter.destroy();
+    if (this._newEventPresenter !== null) {
+      this._newEventPresenter.destroy();
+    }
     Object.values(this._eventPresenter).forEach((presenter) => presenter.resetView());
   }
 
@@ -172,5 +176,10 @@ export default class Trip {
     const filteredEvents = filtration[filterType](events);
 
     return sortData(filteredEvents, this._currentSortType);
+  }
+
+  _getData() {
+    this._offers = this._eventsModel.getOffers();
+    this._destinations = this._eventsModel.getDestinations();
   }
 }
