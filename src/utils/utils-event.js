@@ -35,10 +35,19 @@ const isPastEvent = (event) => {
   return event.date.START < dayjs();
 };
 
+const resetFormState = (formComponent) => {
+  formComponent.updateData({
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false,
+  });
+};
+
 export {
   generateRandomIndex,
   humanizeDate,
   sortData,
   SortType,
   isPastEvent,
+  resetFormState,
 };

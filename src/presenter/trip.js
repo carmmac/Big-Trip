@@ -6,7 +6,7 @@ import EventPresenter from './point.js';
 import NewEventPresenter from './new-point.js';
 import {remove, render, RenderPosition} from '../utils/utils-render.js';
 import {sortData} from '../utils/utils-event.js';
-import {UserAction, UpdateType, SortType} from '../const.js';
+import {UserAction, UpdateType, SortType, FormState} from '../const.js';
 import {filtration} from '../utils/utils-filter.js';
 import LoadingView from '../view/loading.js';
 
@@ -127,17 +127,22 @@ export default class Trip {
   _userActionHandler(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
+        this._eventPresenter[update.id].setViewState(FormState.SAVING);
         this._api.updateEvent(update)
           .then((response) => this._eventsModel.updateEvent(updateType, response))
-          .catch(() => this._eventPresenter[update.id].resetView());
+          .catch(() => this._eventPresenter[update.id].setViewState(FormState.ABORTING));
         break;
       case UserAction.ADD_EVENT:
+        this._newEventPresenter.setSavingState();
         this._api.addEvent(update)
-          .then((response) => this._eventsModel.addEvent(updateType, response));
+          .then((response) => this._eventsModel.addEvent(updateType, response))
+          .catch(() => this._newEventPresenter.setAborting());
         break;
       case UserAction.DELETE_EVENT:
+        this._eventPresenter[update.id].setViewState(FormState.DELETING);
         this._api.deleteEvent(update)
-          .then(() => this._eventsModel.deleteEvent(updateType, update));
+          .then(() => this._eventsModel.deleteEvent(updateType, update))
+          .catch(() => this._eventPresenter[update.id].setViewState(FormState.ABORTING));
         break;
     }
   }

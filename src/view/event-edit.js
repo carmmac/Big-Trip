@@ -10,20 +10,35 @@ import {eventTypes} from '../const.js';
 import {destinationsOffline} from '../const.js';
 
 const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
-  const {type, destination, price, date, offers, eventHasInfo, eventHasPhotos} = data;
+  const {
+    type,
+    destination,
+    price,
+    date,
+    offers,
+    eventHasInfo,
+    eventHasPhotos,
+    isDeleting,
+    isDisabled,
+    isSaving
+  } = data;
   const destinationsNames = destinationsFromServer.length !== 0 ?
     destinationsFromServer.map((item) => item.NAME) : destinationsOffline;
   const eventDate = {
     START: humanizeDate(`DD/MM/YY HH:mm`, date.START),
     END: humanizeDate(`DD/MM/YY HH:mm`, date.END)
   };
+  const disabledAttribute = isDisabled ? `disabled` : ``;
+  const SaveBtnLabelName = isSaving ? `Saving...` : `Save`;
+  const deleteBtnLabelName = isDeleting ? `Deleting...` : `Delete`;
 
   const createEventTypeListTemplate = () => {
     return eventTypes.reduce((finalTemplate, currentType) => {
       const currentTypeNameCapitalized = capitalizeString(currentType);
+      const checkedAttribute = currentType === type ? `checked` : ``;
       const currentTemplate = `
         <div class="event__type-item">
-          <input id="event-type-${currentType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${currentType === type ? `checked` : ``}>
+          <input id="event-type-${currentType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${currentType}" ${checkedAttribute} ${disabledAttribute}>
           <label class="event__type-label  event__type-label--${currentType}" for="event-type-${currentType}-1">${currentTypeNameCapitalized}</label>
         </div>
       `;
@@ -48,7 +63,7 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
         const getCheckedOfferAttribute = () => offers.some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
         const currentTemplate = `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${currentOfferIndex}" type="checkbox" name="event-offer-${type}" data-offer-title="${currentOffer.title}" ${getCheckedOfferAttribute()}>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${currentOfferIndex}" type="checkbox" name="event-offer-${type}" data-offer-title="${currentOffer.title}" ${getCheckedOfferAttribute()} ${disabledAttribute}>
             <label class="event__offer-label" for="event-offer-${type}-${currentOfferIndex}">
               <span class="event__offer-title">${currentOffer.title}</span>
               &plus;&euro;&nbsp;
@@ -119,7 +134,7 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
               <span class="visually-hidden">Choose event type</span>
               <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
             </label>
-            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+            <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${disabledAttribute}>
 
             <div class="event__type-list">
               <fieldset class="event__type-group">
@@ -133,7 +148,7 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
             <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destination.NAME)}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destination.NAME)}" list="destination-list-1" ${disabledAttribute}>
             <datalist id="destination-list-1">
               ${createDestinationOptionsTemplate()}
             </datalist>
@@ -141,10 +156,10 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${he.encode(eventDate.START)}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${he.encode(eventDate.START)}" ${disabledAttribute}>
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${he.encode(eventDate.END)}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${he.encode(eventDate.END)}" ${disabledAttribute}>
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -152,12 +167,16 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}" ${disabledAttribute}>
           </div>
 
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
-          <button class="event__rollup-btn" type="button">
+          <button class="event__save-btn  btn  btn--blue" type="submit" ${disabledAttribute}>
+            ${SaveBtnLabelName}
+          </button>
+          <button class="event__reset-btn" type="reset" ${disabledAttribute}>
+            ${deleteBtnLabelName}
+          </button>
+          <button class="event__rollup-btn" type="button" ${disabledAttribute}>
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
@@ -403,6 +422,9 @@ export default class EventEdit extends SmartView {
         {
           eventHasInfo: event.destination.INFO.length !== 0,
           eventHasPhotos: event.destination.PHOTOS.length !== 0,
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false,
         });
   }
 
@@ -415,6 +437,9 @@ export default class EventEdit extends SmartView {
     );
     delete data.eventHasInfo;
     delete data.eventHasPhotos;
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
 
     return data;
   }

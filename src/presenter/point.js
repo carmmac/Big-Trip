@@ -1,7 +1,8 @@
 import EventView from '../view/event.js';
 import EventEditView from '../view/event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/utils-render.js';
-import {UserAction, UpdateType, Mode} from '../const.js';
+import {UserAction, UpdateType, Mode, FormState} from '../const.js';
+import {resetFormState} from '../utils/utils-event.js';
 
 export default class Point {
   constructor(listContainer, changeData, changeMode, offers, destinations) {
@@ -66,6 +67,25 @@ export default class Point {
     }
   }
 
+  setViewState(state) {
+    switch (state) {
+      case FormState.SAVING:
+        this._eventEditComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case FormState.DELETING:
+        this._eventEditComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case FormState.ABORTING:
+        this._eventEditComponent.shake(resetFormState(this._eventEditComponent));
+    }
+  }
+
   _eventFormOpenHandler() {
     this._replaceCardToForm();
     this._addHandlers();
@@ -77,7 +97,6 @@ export default class Point {
         UpdateType.MINOR,
         event
     );
-    this._replaceFormToCard();
     this._removeHandlers();
   }
 

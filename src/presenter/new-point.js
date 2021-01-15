@@ -1,6 +1,7 @@
 import EventEditView from '../view/event-edit.js';
 import {render, RenderPosition, remove} from '../utils/utils-render.js';
 import {UserAction, UpdateType, BLANK_EVENT} from '../const.js';
+import {resetFormState} from '../utils/utils-event.js';
 
 export default class NewPoint {
   constructor(listContainer, changeData, offers, destinations) {
@@ -44,13 +45,23 @@ export default class NewPoint {
     document.removeEventListener(`keydown`, this._EscPressHandler);
   }
 
+  setSavingState() {
+    this._eventEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    this._eventEditComponent.shake(resetFormState(this._eventEditComponent));
+  }
+
   _newEventFormSubmitHandler(event) {
     this._changeData(
         UserAction.ADD_EVENT,
         UpdateType.MAJOR,
         event
     );
-    this.destroy();
   }
 
   _newEventFormDeleteHandler() {

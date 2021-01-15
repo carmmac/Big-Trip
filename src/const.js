@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 
 const CANVAS_BAR_HEIGHT = 55;
 const MAX_INFO_TITLES = 3;
+const SHAKE_ANIMATION_TIMEOUT = 500;
 
 const eventTypes = [
   `check-in`,
@@ -138,6 +139,12 @@ const BLANK_EVENT = {
   isFavorite: false,
 };
 
+const FormState = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`,
+};
+
 export {
   INFO_SENTENCE_MAX_NUM,
   MAX_INFO_TITLES,
@@ -161,4 +168,6 @@ export {
   eventTypes,
   destinationsOffline,
   BLANK_EVENT,
+  FormState,
+  SHAKE_ANIMATION_TIMEOUT,
 };
