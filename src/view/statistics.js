@@ -38,7 +38,9 @@ const renderMoneyChart = (moneyCtx, events, data) => {
         data: [...prices],
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
+        anchor: `start`,
+        barThickness: 44,
+        minBarLength: 70,
       }]
     },
     options: {
@@ -76,7 +78,6 @@ const renderMoneyChart = (moneyCtx, events, data) => {
             display: false,
             drawBorder: false
           },
-          barThickness: 44,
         }],
         xAxes: [{
           ticks: {
@@ -87,7 +88,6 @@ const renderMoneyChart = (moneyCtx, events, data) => {
             display: false,
             drawBorder: false
           },
-          minBarLength: 50
         }],
       },
       legend: {
@@ -114,7 +114,9 @@ const renderTypeChart = (typeCtx, events, data) => {
         data: [...typeCounts],
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
+        anchor: `start`,
+        barThickness: 44,
+        minBarLength: 70,
       }]
     },
     options: {
@@ -152,7 +154,6 @@ const renderTypeChart = (typeCtx, events, data) => {
             display: false,
             drawBorder: false
           },
-          barThickness: 44,
         }],
         xAxes: [{
           ticks: {
@@ -163,7 +164,6 @@ const renderTypeChart = (typeCtx, events, data) => {
             display: false,
             drawBorder: false
           },
-          minBarLength: 50
         }],
       },
       legend: {
@@ -190,7 +190,9 @@ const renderTimeChart = (timeCtx, events, data) => {
         data: [...timeCounts],
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
+        anchor: `start`,
+        barThickness: 44,
+        minBarLength: 70,
       }]
     },
     options: {
@@ -228,7 +230,6 @@ const renderTimeChart = (timeCtx, events, data) => {
             display: false,
             drawBorder: false
           },
-          barThickness: 44,
         }],
         xAxes: [{
           ticks: {
@@ -239,7 +240,6 @@ const renderTimeChart = (timeCtx, events, data) => {
             display: false,
             drawBorder: false
           },
-          minBarLength: 50
         }],
       },
       legend: {
