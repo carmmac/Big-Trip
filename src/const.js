@@ -1,4 +1,8 @@
+import dayjs from 'dayjs';
+
 const CANVAS_BAR_HEIGHT = 55;
+const MAX_INFO_TITLES = 3;
+const SHAKE_ANIMATION_TIMEOUT = 500;
 
 const eventTypes = [
   `check-in`,
@@ -13,7 +17,7 @@ const eventTypes = [
   `flight`,
 ];
 
-const destinations = [
+const destinationsOffline = [
   `Chamonix`,
   `Geneva`,
   `Amsterdam`,
@@ -98,12 +102,14 @@ const StatsParameter = {
   DURATION: `duration`,
 };
 
-const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
+const ENDPOINT = `https://13.ecmascript.pages.academy/big-trip`;
 const AUTHORIZATION = `Basic tum3498sdl64df0qx`;
 
 const RequestMethod = {
   GET: `GET`,
-  PUT: `PUT`
+  PUT: `PUT`,
+  POST: `POST`,
+  DELETE: `DELETE`,
 };
 
 const SuccessHTTPStatusRange = {
@@ -117,8 +123,31 @@ const RequestAddress = {
   OFFERS: `offers`,
 };
 
+const BLANK_EVENT = {
+  type: eventTypes[0],
+  destination: {
+    NAME: destinationsOffline[0],
+    INFO: ``,
+    PHOTOS: [],
+  },
+  date: {
+    START: dayjs(),
+    END: dayjs(),
+  },
+  price: 0,
+  offers: [],
+  isFavorite: false,
+};
+
+const FormState = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`,
+};
+
 export {
   INFO_SENTENCE_MAX_NUM,
+  MAX_INFO_TITLES,
   OFFERS_MAX_NUM,
   PHOTOS_MAX_NUM,
   OFFER_PRICE,
@@ -131,11 +160,14 @@ export {
   MenuItem,
   CANVAS_BAR_HEIGHT,
   StatsParameter,
-  END_POINT,
+  ENDPOINT,
   AUTHORIZATION,
   RequestMethod,
   SuccessHTTPStatusRange,
   RequestAddress,
   eventTypes,
-  destinations
+  destinationsOffline,
+  BLANK_EVENT,
+  FormState,
+  SHAKE_ANIMATION_TIMEOUT,
 };

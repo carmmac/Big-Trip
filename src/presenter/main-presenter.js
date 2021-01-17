@@ -4,7 +4,7 @@ import {MenuItem} from '../const.js';
 import {remove, render, RenderPosition, replace} from '../utils/utils-render.js';
 import TripPresenter from './trip.js';
 import FilterPresenter from './filter.js';
-import {UpdateType, FilterType, END_POINT, AUTHORIZATION, destinations} from '../const.js';
+import {UpdateType, FilterType, ENDPOINT, AUTHORIZATION} from '../const.js';
 import StatsView from '../view/statistics.js';
 import Api from '../api.js';
 
@@ -19,7 +19,7 @@ export default class MainPresenter {
     this._statsComponent = null;
     this._menuItemActive = MenuItem.TABLE;
 
-    this._api = new Api(END_POINT, AUTHORIZATION);
+    this._api = new Api(ENDPOINT, AUTHORIZATION);
 
     this._tripBoardContainer = document.querySelector(`.page-main .page-body__container`);
     this._tripPresenter = new TripPresenter(this._tripBoardContainer, filterModel, eventsModel, this._api);
@@ -54,7 +54,7 @@ export default class MainPresenter {
         this._renderTripControls();
       })
       .catch(() => {
-        this._eventsModel.setData(UpdateType.INIT, [], [], destinations);
+        this._eventsModel.setData(UpdateType.INIT, [], [], []);
         this._renderInfo();
         this._renderTripControls();
       });
@@ -141,7 +141,7 @@ export default class MainPresenter {
   }
 
   _modelUpdateHandler(updateType) {
-    if (updateType === UpdateType.MINOR) {
+    if (updateType === UpdateType.MINOR || updateType === UpdateType.MAJOR) {
       this._renderInfo();
     }
   }

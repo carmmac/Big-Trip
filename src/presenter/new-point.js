@@ -1,13 +1,20 @@
 import EventEditView from '../view/event-edit.js';
 import {render, RenderPosition, remove} from '../utils/utils-render.js';
-import {UserAction, UpdateType} from '../const.js';
-import {generateId} from '../mock/mock-event.js';
+import {UserAction, UpdateType, BLANK_EVENT} from '../const.js';
+import {resetFormState} from '../utils/utils-event.js';
 
 export default class NewPoint {
-  constructor(listContainer, changeData) {
+  constructor(listContainer, changeData, offers, destinations) {
     this._listContainer = listContainer;
     this._changeData = changeData;
     this._eventEditComponent = null;
+    this._offers = offers;
+    this._destinations = destinations;
+    this._BLANK_EVENT = Object.assign(
+        {},
+        BLANK_EVENT,
+        {destination: this._destinations[0]}
+    );
 
     this._newEventFormSubmitHandler = this._newEventFormSubmitHandler.bind(this);
     this._newEventFormDeleteHandler = this._newEventFormDeleteHandler.bind(this);
@@ -19,7 +26,7 @@ export default class NewPoint {
     if (this._eventEditComponent !== null) {
       return;
     }
-    this._eventEditComponent = new EventEditView();
+    this._eventEditComponent = new EventEditView(this._BLANK_EVENT, this._offers, this._destinations);
     this._eventEditComponent.setFormSubmitHandler(this._newEventFormSubmitHandler);
     this._eventEditComponent.setFormDeleteHandler(this._newEventFormDeleteHandler);
     this._eventEditComponent.setFormCloseHandler(this._newEventFormCloseHandler);
@@ -38,13 +45,23 @@ export default class NewPoint {
     document.removeEventListener(`keydown`, this._EscPressHandler);
   }
 
+  setSavingState() {
+    this._eventEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    this._eventEditComponent.shake(resetFormState(this._eventEditComponent));
+  }
+
   _newEventFormSubmitHandler(event) {
     this._changeData(
         UserAction.ADD_EVENT,
         UpdateType.MAJOR,
-        Object.assign({id: generateId()}, event)
+        event
     );
-    this.destroy();
   }
 
   _newEventFormDeleteHandler() {
