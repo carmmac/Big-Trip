@@ -42,6 +42,11 @@ const renderMoneyChart = (moneyCtx, events, data) => {
       }]
     },
     options: {
+      layout: {
+        padding: {
+          left: 40,
+        }
+      },
       plugins: {
         datalabels: {
           font: {
@@ -113,6 +118,11 @@ const renderTypeChart = (typeCtx, events, data) => {
       }]
     },
     options: {
+      layout: {
+        padding: {
+          left: 40,
+        }
+      },
       plugins: {
         datalabels: {
           font: {
@@ -184,6 +194,11 @@ const renderTimeChart = (timeCtx, events, data) => {
       }]
     },
     options: {
+      layout: {
+        padding: {
+          left: 40,
+        }
+      },
       plugins: {
         datalabels: {
           font: {
