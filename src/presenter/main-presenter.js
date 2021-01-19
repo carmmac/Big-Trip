@@ -6,7 +6,7 @@ import TripPresenter from './trip.js';
 import FilterPresenter from './filter.js';
 import {UpdateType, FilterType, ENDPOINT, AUTHORIZATION} from '../const.js';
 import StatsView from '../view/statistics.js';
-import Api from '../api.js';
+import Api from '../api/api.js';
 
 export default class MainPresenter {
   constructor(headerContainer, menuContainer, filterModel, eventsModel) {

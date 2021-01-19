@@ -121,6 +121,13 @@ const RequestAddress = {
   POINTS: `points`,
   DESTINATIONS: `destinations`,
   OFFERS: `offers`,
+  SYNC: `sync`,
+};
+
+const RequestHeader = {
+  CONTENT_TYPE: {
+    "Content-Type": `application/json`,
+  }
 };
 
 const BLANK_EVENT = {
@@ -170,4 +177,5 @@ export {
   BLANK_EVENT,
   FormState,
   SHAKE_ANIMATION_TIMEOUT,
+  RequestHeader,
 };
