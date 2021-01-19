@@ -10,3 +10,7 @@ const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
 
 const mainPresenter = new MainPresenter(siteHeaderElement, siteMenuElement, filterModel, eventsModel);
 mainPresenter.init();
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/service-worker.js`);
+});
