@@ -152,6 +152,12 @@ const FormState = {
   ABORTING: `ABORTING`,
 };
 
+const LocalstorageKey = {
+  EVENTS: `big-trip-events`,
+  OFFERS: `big-trip-offers`,
+  DESTINATIONS: `big-trip-destinations`,
+};
+
 export {
   INFO_SENTENCE_MAX_NUM,
   MAX_INFO_TITLES,
@@ -178,4 +184,5 @@ export {
   FormState,
   SHAKE_ANIMATION_TIMEOUT,
   RequestHeader,
+  LocalstorageKey,
 };
