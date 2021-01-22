@@ -1,44 +1,44 @@
 export default class Storage {
-  constructor(key, storage) {
+  constructor(storage) {
     this._storage = storage;
-    this._storageKey = key;
   }
-  getItems() {
+
+  getItems(storageKey) {
     try {
-      return JSON.parse(this._storage.getItem(this._storageKey)) || {};
+      return JSON.parse(this._storage.getItem(storageKey)) || {};
     } catch (error) {
       return {};
     }
   }
 
-  setItems(items) {
+  setItems(items, storageKey) {
     this._storage.setItem(
-        this._storage,
+        storageKey,
         JSON.stringify(items)
     );
   }
 
-  setItem(key, value) {
-    const storage = this._storage.getItems();
+  setItem(storageKey, itemKey, value) {
+    const storage = this._storage.getItems(storageKey);
     storage.setItem(
-        this._storageKey,
+        storageKey,
         JSON.stringify(
             Object.assign(
                 {},
                 storage,
                 {
-                  [key]: value,
+                  [itemKey]: value,
                 }
             )
         )
     );
   }
 
-  removeItem(key) {
-    const storage = this._storage.getItems();
-    delete storage[key];
+  removeItem(storageKey, itemKey) {
+    const storage = this._storage.getItems(storageKey);
+    delete storage[itemKey];
     this._storage.setItem(
-        this._storageKey,
+        storageKey,
         JSON.stringify(storage)
     );
   }
