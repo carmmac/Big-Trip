@@ -11,9 +11,9 @@ export default class EventsModel extends Observer {
   }
 
   setData(updateType, [events, offers, destinations]) {
-    this.setEvents(events);
-    this.setOffers(offers);
-    this.setDestinations(destinations);
+    this._setEvents(events);
+    this._setOffers(offers);
+    this._setDestinations(destinations);
     this.notify(updateType);
   }
 
@@ -21,7 +21,7 @@ export default class EventsModel extends Observer {
     return this._events;
   }
 
-  setEvents(events) {
+  _setEvents(events) {
     this._events = events.slice();
   }
 
@@ -29,7 +29,7 @@ export default class EventsModel extends Observer {
     return this._offers;
   }
 
-  setOffers(offers) {
+  _setOffers(offers) {
     this._offers = offers.slice();
   }
 
@@ -37,7 +37,7 @@ export default class EventsModel extends Observer {
     return this._destinations;
   }
 
-  setDestinations(destinations) {
+  _setDestinations(destinations) {
     this._destinations = destinations.slice();
   }
 
@@ -54,7 +54,7 @@ export default class EventsModel extends Observer {
   deleteEvent(updateType, deletedEvent) {
     const index = this._events.findIndex((event) => event.id === deletedEvent.id);
     if (index === -1) {
-      throw new Error(`Can't delete unexisting task`);
+      throw new Error(`Can't delete unexisting event`);
     }
     this._events = [
       ...this._events.slice(0, index),
