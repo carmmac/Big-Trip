@@ -20,7 +20,8 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
     eventHasPhotos,
     isDeleting,
     isDisabled,
-    isSaving
+    isSaving,
+    isNewEvent,
   } = data;
   const destinationsNames = destinationsFromServer.length !== 0 ?
     destinationsFromServer.map((item) => item.NAME) : destinationsOffline;
@@ -31,6 +32,7 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
   const disabledAttribute = isDisabled ? `disabled` : ``;
   const SaveBtnLabelName = isSaving ? `Saving...` : `Save`;
   const deleteBtnLabelName = isDeleting ? `Deleting...` : `Delete`;
+  const cancelBtnLabelName = `Cancel`;
 
   const createEventTypeListTemplate = () => {
     return eventTypes.reduce((finalTemplate, currentType) => {
@@ -63,7 +65,7 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
         const getCheckedOfferAttribute = () => offers.some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
         const currentTemplate = `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${currentOfferIndex}" type="checkbox" name="event-offer-${type}" data-offer-title="${currentOffer.title}" ${getCheckedOfferAttribute()} ${disabledAttribute}>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${currentOfferIndex}" type="checkbox" name="event-offer-${type}" ${getCheckedOfferAttribute()} ${disabledAttribute}>
             <label class="event__offer-label" for="event-offer-${type}-${currentOfferIndex}">
               <span class="event__offer-title">${currentOffer.title}</span>
               &plus;&euro;&nbsp;
@@ -174,7 +176,7 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
             ${SaveBtnLabelName}
           </button>
           <button class="event__reset-btn" type="reset" ${disabledAttribute}>
-            ${deleteBtnLabelName}
+            ${isNewEvent ? cancelBtnLabelName : deleteBtnLabelName}
           </button>
           <button class="event__rollup-btn" type="button" ${disabledAttribute}>
             <span class="visually-hidden">Open event</span>
@@ -287,7 +289,7 @@ export default class EventEdit extends SmartView {
           enableTime: true,
           dateFormat: `d/m/y H:i`,
           altFormat: `d/m/y H:i`,
-          defaultDate: `${this._data.date.END}`,
+          defaultDate: `${this._data.duration < 0 ? this._data.date.START : this._data.date.END}`,
           disable: [
             (date) => {
               const dateToCheck = dayjs(this._data.date.START).hour(0).minute(0).second(0).millisecond(0);
@@ -300,14 +302,16 @@ export default class EventEdit extends SmartView {
   }
 
   _dateStartChangeHandler([selectedDate]) {
-    const setNewDate = () => {
+    const setNewStartDate = () => {
+      if (selectedDate > this._data.date.END) {
+        this._data.date.END = dayjs(selectedDate);
+      }
       this._data.date.START = dayjs(selectedDate);
-      this._data.date.END = dayjs(selectedDate);
       return this._data.date;
     };
     this.updateData(
         {
-          date: setNewDate(),
+          date: setNewStartDate(),
           duration: getEventDuration(this._data.date.END, this._data.date.START)
         },
         true
@@ -369,7 +373,8 @@ export default class EventEdit extends SmartView {
   }
 
   _updateOffersList(evt) {
-    const offerToAdd = this._offersItem.offers.find((offer) => offer.title === evt.target.dataset.offerTitle);
+    const selectedOfferIndex = parseInt(evt.target.id.substring(evt.target.id.length - 1), 10);
+    const offerToAdd = this._offersItem.offers[selectedOfferIndex];
     if (this._data.offers.some((offer) => offer.title === offerToAdd.title)) {
       const offerIndex = this._data.offers.findIndex((offer) => offer.title === offerToAdd.title);
       this._data.offers.splice(offerIndex, 1);
@@ -425,6 +430,7 @@ export default class EventEdit extends SmartView {
           isDisabled: false,
           isSaving: false,
           isDeleting: false,
+          isNewEvent: false,
         });
   }
 
@@ -440,6 +446,7 @@ export default class EventEdit extends SmartView {
     delete data.isDisabled;
     delete data.isSaving;
     delete data.isDeleting;
+    delete data.isNewEvent;
 
     return data;
   }

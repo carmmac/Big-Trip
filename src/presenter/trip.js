@@ -11,11 +11,12 @@ import {filtration} from '../utils/utils-filter.js';
 import LoadingView from '../view/loading.js';
 
 export default class Trip {
-  constructor(tripContainer, filterModel, eventsModel, api) {
+  constructor(tripContainer, filterModel, eventsModel, api, changeView) {
     this._tripContainer = tripContainer;
     this._eventsModel = eventsModel;
     this._filterModel = filterModel;
     this._api = api;
+    this._changeView = changeView;
     this._eventPresenter = {};
     this._tripBoardComponent = new TripBoardView();
     this._sortComponent = null;
@@ -51,7 +52,7 @@ export default class Trip {
   }
 
   createEvent() {
-    this._newEventPresenter = new NewEventPresenter(this._listComponent, this._userActionHandler, this._offers, this._destinations);
+    this._newEventPresenter = new NewEventPresenter(this._listComponent, this._userActionHandler, this._changeView, this._offers, this._destinations);
     this._newEventPresenter.init();
   }
 
