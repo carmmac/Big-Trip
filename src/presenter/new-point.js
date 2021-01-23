@@ -26,10 +26,11 @@ export default class NewPoint {
     if (this._eventEditComponent !== null) {
       return;
     }
-    this._eventEditComponent = new EventEditView(this._BLANK_EVENT, this._offers, this._destinations);
+    this._eventEditComponent = new EventEditView(this._BLANK_EVENT, this._offers, this._destinations, true);
     this._eventEditComponent.setFormSubmitHandler(this._newEventFormSubmitHandler);
     this._eventEditComponent.setFormDeleteHandler(this._newEventFormDeleteHandler);
     this._eventEditComponent.setFormCloseHandler(this._newEventFormCloseHandler);
+    this._eventEditComponent.updateData({isNewEvent: true});
     render(this._listContainer, this._eventEditComponent, RenderPosition.AFTERBEGIN);
 
     document.addEventListener(`keydown`, this._EscPressHandler);

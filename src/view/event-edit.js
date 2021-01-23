@@ -20,7 +20,8 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
     eventHasPhotos,
     isDeleting,
     isDisabled,
-    isSaving
+    isSaving,
+    isNewEvent,
   } = data;
   const destinationsNames = destinationsFromServer.length !== 0 ?
     destinationsFromServer.map((item) => item.NAME) : destinationsOffline;
@@ -31,6 +32,7 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
   const disabledAttribute = isDisabled ? `disabled` : ``;
   const SaveBtnLabelName = isSaving ? `Saving...` : `Save`;
   const deleteBtnLabelName = isDeleting ? `Deleting...` : `Delete`;
+  const cancelBtnLabelName = `Cancel`;
 
   const createEventTypeListTemplate = () => {
     return eventTypes.reduce((finalTemplate, currentType) => {
@@ -174,7 +176,7 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
             ${SaveBtnLabelName}
           </button>
           <button class="event__reset-btn" type="reset" ${disabledAttribute}>
-            ${deleteBtnLabelName}
+            ${isNewEvent ? cancelBtnLabelName : deleteBtnLabelName}
           </button>
           <button class="event__rollup-btn" type="button" ${disabledAttribute}>
             <span class="visually-hidden">Open event</span>
@@ -425,6 +427,7 @@ export default class EventEdit extends SmartView {
           isDisabled: false,
           isSaving: false,
           isDeleting: false,
+          isNewEvent: false,
         });
   }
 
@@ -440,6 +443,7 @@ export default class EventEdit extends SmartView {
     delete data.isDisabled;
     delete data.isSaving;
     delete data.isDeleting;
+    delete data.isNewEvent;
 
     return data;
   }
