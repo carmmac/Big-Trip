@@ -4,12 +4,13 @@ import {UserAction, UpdateType, BLANK_EVENT} from '../const.js';
 import {resetFormState} from '../utils/utils-event.js';
 
 export default class NewPoint {
-  constructor(listContainer, changeData, offers, destinations) {
+  constructor(listContainer, changeData, changeView, offers, destinations) {
     this._listContainer = listContainer;
     this._changeData = changeData;
     this._eventEditComponent = null;
     this._offers = offers;
     this._destinations = destinations;
+    this._changeView = changeView;
     this._BLANK_EVENT = Object.assign(
         {},
         BLANK_EVENT,
@@ -42,6 +43,7 @@ export default class NewPoint {
     }
     remove(this._eventEditComponent);
     this._eventEditComponent = null;
+    this._changeView(UserAction.FORM_CLOSE);
 
     document.removeEventListener(`keydown`, this._EscPressHandler);
   }
