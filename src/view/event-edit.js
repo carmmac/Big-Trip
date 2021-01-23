@@ -65,7 +65,7 @@ const createEventEditTemplate = (data, offerItem, destinationsFromServer) => {
         const getCheckedOfferAttribute = () => offers.some((eventOffer) => eventOffer.title === currentOffer.title) ? `checked` : ``;
         const currentTemplate = `
           <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${currentOfferIndex}" type="checkbox" name="event-offer-${type}" data-offer-title="${currentOffer.title}" ${getCheckedOfferAttribute()} ${disabledAttribute}>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${currentOfferIndex}" type="checkbox" name="event-offer-${type}" ${getCheckedOfferAttribute()} ${disabledAttribute}>
             <label class="event__offer-label" for="event-offer-${type}-${currentOfferIndex}">
               <span class="event__offer-title">${currentOffer.title}</span>
               &plus;&euro;&nbsp;
@@ -373,7 +373,8 @@ export default class EventEdit extends SmartView {
   }
 
   _updateOffersList(evt) {
-    const offerToAdd = this._offersItem.offers.find((offer) => offer.title === evt.target.dataset.offerTitle);
+    const selectedOfferIndex = parseInt(evt.target.id.substring(evt.target.id.length - 1), 10);
+    const offerToAdd = this._offersItem.offers[selectedOfferIndex];
     if (this._data.offers.some((offer) => offer.title === offerToAdd.title)) {
       const offerIndex = this._data.offers.findIndex((offer) => offer.title === offerToAdd.title);
       this._data.offers.splice(offerIndex, 1);
