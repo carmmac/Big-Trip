@@ -289,7 +289,7 @@ export default class EventEdit extends SmartView {
           enableTime: true,
           dateFormat: `d/m/y H:i`,
           altFormat: `d/m/y H:i`,
-          defaultDate: `${this._data.date.END}`,
+          defaultDate: `${this._data.duration < 0 ? this._data.date.START : this._data.date.END}`,
           disable: [
             (date) => {
               const dateToCheck = dayjs(this._data.date.START).hour(0).minute(0).second(0).millisecond(0);
@@ -302,14 +302,16 @@ export default class EventEdit extends SmartView {
   }
 
   _dateStartChangeHandler([selectedDate]) {
-    const setNewDate = () => {
+    const setNewStartDate = () => {
+      if (selectedDate > this._data.date.END) {
+        this._data.date.END = dayjs(selectedDate);
+      }
       this._data.date.START = dayjs(selectedDate);
-      this._data.date.END = dayjs(selectedDate);
       return this._data.date;
     };
     this.updateData(
         {
-          date: setNewDate(),
+          date: setNewStartDate(),
           duration: getEventDuration(this._data.date.END, this._data.date.START)
         },
         true
