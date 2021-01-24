@@ -45,6 +45,10 @@ export default class MainPresenter {
     this._requestData();
   }
 
+  syncData() {
+    this._provider.sync();
+  }
+
   _requestData() {
     const requestedEvents = this._provider.getEvents();
     const requestedOffers = this._provider.getOffers();

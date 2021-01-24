@@ -14,3 +14,12 @@ mainPresenter.init();
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/service-worker.js`);
 });
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  mainPresenter.syncData();
+});
