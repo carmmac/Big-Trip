@@ -156,7 +156,7 @@ export default class MainPresenter {
     this._tripPresenter.destroy();
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._tripPresenter.init();
-    if (!isOnline) {
+    if (!isOnline()) {
       toast(`Unable to create new event offline!`);
       return;
     }
