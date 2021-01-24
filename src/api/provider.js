@@ -96,7 +96,7 @@ export default class Provider {
 
   addEvent(event) {
     if (isOnline()) {
-      this._api.addEvent(event)
+      return this._api.addEvent(event)
         .then((newEvent) => {
           this._storage.setItem(LocalstorageKey.EVENTS, newEvent.id, EventsModel.adaptEventToServer(newEvent));
           return newEvent;
