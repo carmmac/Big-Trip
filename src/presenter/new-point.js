@@ -2,6 +2,8 @@ import EventEditView from '../view/event-edit.js';
 import {render, RenderPosition, remove} from '../utils/utils-render.js';
 import {UserAction, UpdateType, BLANK_EVENT} from '../const.js';
 import {resetFormState} from '../utils/utils-event.js';
+import {isOnline} from '../utils/utils-common.js';
+import {toast} from '../utils/toast/toast.js';
 
 export default class NewPoint {
   constructor(listContainer, changeData, changeView, offers, destinations) {
@@ -60,6 +62,10 @@ export default class NewPoint {
   }
 
   _newEventFormSubmitHandler(event) {
+    if (!isOnline()) {
+      toast(`Unable to save new event offline!`);
+      return;
+    }
     this._changeData(
         UserAction.ADD_EVENT,
         UpdateType.MAJOR,
