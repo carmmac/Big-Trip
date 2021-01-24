@@ -19,8 +19,8 @@ export default class Storage {
   }
 
   setItem(storageKey, itemKey, value) {
-    const storage = this._storage.getItems(storageKey);
-    storage.setItem(
+    const storage = this.getItems(storageKey);
+    this._storage.setItem(
         storageKey,
         JSON.stringify(
             Object.assign(
@@ -35,7 +35,7 @@ export default class Storage {
   }
 
   removeItem(storageKey, itemKey) {
-    const storage = this._storage.getItems(storageKey);
+    const storage = this.getItems(storageKey);
     delete storage[itemKey];
     this._storage.setItem(
         storageKey,
