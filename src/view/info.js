@@ -8,6 +8,9 @@ import {MAX_INFO_TITLES} from '../const.js';
 const createInfoTemplate = (events) => {
   const sortedEvents = sortData(events, SortType.DAY);
   const getTripInfoTitle = () => {
+    if (sortedEvents.length === 0) {
+      return ``;
+    }
     if (sortedEvents.length > MAX_INFO_TITLES) {
       return `${sortedEvents[0].destination.NAME}&nbsp;&mdash;&nbsp;...&nbsp;&mdash;&nbsp;${sortedEvents[sortedEvents.length - 1].destination.NAME}`;
     }
@@ -20,6 +23,9 @@ const createInfoTemplate = (events) => {
     }, draft);
   };
   const getTripInfoDates = () => {
+    if (sortedEvents.length === 0) {
+      return ``;
+    }
     return `
       ${humanizeDate(`D MMM`, sortedEvents[0].date.START)}&nbsp;&mdash;&nbsp;${humanizeDate(`D MMM`, sortedEvents[sortedEvents.length - 1].date.START)}
     `;
