@@ -12,7 +12,7 @@ const mainPresenter = new MainPresenter(siteHeaderElement, siteMenuElement, filt
 mainPresenter.init();
 
 window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`/service-worker.js`);
+  navigator.serviceWorker.register(`./service-worker.js`);
 });
 
 window.addEventListener(`offline`, () => {
