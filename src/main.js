@@ -12,7 +12,15 @@ const mainPresenter = new MainPresenter(siteHeaderElement, siteMenuElement, filt
 mainPresenter.init();
 
 window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`./service-worker.js`, {scope: `./`});
+  navigator.serviceWorker.register(`./service-worker.js`, {scope: `./`})
+    .then((reg) => {
+      // registration worked
+      console.log(`Registration succeeded. Scope is ` + reg.scope);
+    })
+    .catch((error) => {
+      // registration failed
+      console.log(`Registration failed with ` + error);
+    });
 });
 
 window.addEventListener(`offline`, () => {
