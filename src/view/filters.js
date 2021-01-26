@@ -2,13 +2,14 @@ import AbstractView from './absract.js';
 import {FilterType} from '../const.js';
 import {draft} from '../utils/utils-render.js';
 
-const createFiltersTemplate = (filters, currentFilter) => {
+const createFiltersTemplate = (filters, currentFilter, filterButtonsState) => {
   const renderFilterItems = () => {
     return filters.reduce((finalTemplate, currentFilterItem) => {
       const getCheckedFilterAttribute = FilterType[currentFilterItem] === currentFilter ? `checked` : ``;
+      const getDisabledFilterAttribute = filterButtonsState[currentFilterItem] ? `disabled` : ``;
       const currentTemplate = `
         <div class="trip-filters__filter">
-          <input id="filter-${FilterType[currentFilterItem].toLowerCase()}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${FilterType[currentFilterItem]}" ${getCheckedFilterAttribute}>
+          <input id="filter-${FilterType[currentFilterItem].toLowerCase()}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${FilterType[currentFilterItem]}" ${getCheckedFilterAttribute} ${getDisabledFilterAttribute}>
           <label class="trip-filters__filter-label" for="filter-${FilterType[currentFilterItem].toLowerCase()}">${FilterType[currentFilterItem]}</label>
         </div>
       `;
@@ -25,15 +26,16 @@ const createFiltersTemplate = (filters, currentFilter) => {
 };
 
 export default class Filters extends AbstractView {
-  constructor(filters, currentFilter) {
+  constructor(filters, currentFilter, filterButtonsState) {
     super();
     this._filters = filters;
     this._currentFilter = currentFilter;
+    this._filterButtonsState = filterButtonsState;
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createFiltersTemplate(this._filters, this._currentFilter);
+    return createFiltersTemplate(this._filters, this._currentFilter, this._filterButtonsState);
   }
 
   _filterTypeChangeHandler(evt) {
