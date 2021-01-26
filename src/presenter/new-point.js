@@ -4,12 +4,13 @@ import {UserAction, UpdateType, BLANK_EVENT} from '../const.js';
 import {resetFormState} from '../utils/utils-event.js';
 
 export default class NewPoint {
-  constructor(listContainer, changeData, offers, destinations) {
+  constructor(listContainer, changeData, changeView, offers, destinations) {
     this._listContainer = listContainer;
     this._changeData = changeData;
     this._eventEditComponent = null;
     this._offers = offers;
     this._destinations = destinations;
+    this._changeView = changeView;
     this._BLANK_EVENT = Object.assign(
         {},
         BLANK_EVENT,
@@ -26,10 +27,11 @@ export default class NewPoint {
     if (this._eventEditComponent !== null) {
       return;
     }
-    this._eventEditComponent = new EventEditView(this._BLANK_EVENT, this._offers, this._destinations);
+    this._eventEditComponent = new EventEditView(this._BLANK_EVENT, this._offers, this._destinations, true);
     this._eventEditComponent.setFormSubmitHandler(this._newEventFormSubmitHandler);
     this._eventEditComponent.setFormDeleteHandler(this._newEventFormDeleteHandler);
     this._eventEditComponent.setFormCloseHandler(this._newEventFormCloseHandler);
+    this._eventEditComponent.updateData({isNewEvent: true});
     render(this._listContainer, this._eventEditComponent, RenderPosition.AFTERBEGIN);
 
     document.addEventListener(`keydown`, this._EscPressHandler);
@@ -41,6 +43,7 @@ export default class NewPoint {
     }
     remove(this._eventEditComponent);
     this._eventEditComponent = null;
+    this._changeView(UserAction.FORM_CLOSE);
 
     document.removeEventListener(`keydown`, this._EscPressHandler);
   }

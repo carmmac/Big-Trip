@@ -1,12 +1,13 @@
 import InfoView from '../view/info.js';
 import MenuView from '../view/menu.js';
-import {MenuItem} from '../const.js';
+import {MenuItem, UserAction} from '../const.js';
 import {remove, render, RenderPosition, replace} from '../utils/utils-render.js';
 import TripPresenter from './trip.js';
 import FilterPresenter from './filter.js';
 import {UpdateType, FilterType, ENDPOINT, AUTHORIZATION} from '../const.js';
 import StatsView from '../view/statistics.js';
 import Api from '../api.js';
+import NewEventButtonView from '../view/new-event-button.js';
 
 export default class MainPresenter {
   constructor(headerContainer, menuContainer, filterModel, eventsModel) {
@@ -17,19 +18,19 @@ export default class MainPresenter {
     this._infoComponent = null;
     this._menuComponent = null;
     this._statsComponent = null;
+    this._newEventButtonComponent = null;
     this._menuItemActive = MenuItem.TABLE;
 
     this._api = new Api(ENDPOINT, AUTHORIZATION);
 
-    this._tripBoardContainer = document.querySelector(`.page-main .page-body__container`);
-    this._tripPresenter = new TripPresenter(this._tripBoardContainer, filterModel, eventsModel, this._api);
-    this._filterPresenter = new FilterPresenter(this._menuContainer, filterModel, eventsModel);
-
     this._menuClickHandler = this._menuClickHandler.bind(this);
     this._newEventClickHandler = this._newEventClickHandler.bind(this);
     this._modelUpdateHandler = this._modelUpdateHandler.bind(this);
+    this._userActionHandler = this._userActionHandler.bind(this);
 
-    this._setNewEventClickHandler();
+    this._tripBoardContainer = document.querySelector(`.page-main .page-body__container`);
+    this._tripPresenter = new TripPresenter(this._tripBoardContainer, filterModel, eventsModel, this._api, this._userActionHandler);
+    this._filterPresenter = new FilterPresenter(this._menuContainer, filterModel, eventsModel);
   }
 
   init() {
@@ -63,6 +64,7 @@ export default class MainPresenter {
   _renderTripControls() {
     this._renderMenu();
     this._renderFilters();
+    this._renderNewEventButton();
   }
 
   _renderInfo() {
@@ -121,6 +123,18 @@ export default class MainPresenter {
     this._filterPresenter.init();
   }
 
+  _renderNewEventButton({isButtonDisabled = false} = {}) {
+    const prevNewEventButtonComponent = this._newEventButtonComponent;
+    this._newEventButtonComponent = new NewEventButtonView(isButtonDisabled);
+    this._newEventButtonComponent.setNewEventClickHandler(this._newEventClickHandler);
+    if (prevNewEventButtonComponent === null) {
+      render(this._headerContainer, this._newEventButtonComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+    replace(this._newEventButtonComponent, prevNewEventButtonComponent);
+    remove(prevNewEventButtonComponent);
+  }
+
   _renderTripBoard() {
     this._tripPresenter.init();
   }
@@ -134,10 +148,13 @@ export default class MainPresenter {
     this._tripPresenter.init();
     this._setActiveMenuItem(MenuItem.TABLE);
     this._tripPresenter.createEvent();
+    this._renderNewEventButton({isButtonDisabled: true});
   }
 
-  _setNewEventClickHandler() {
-    document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, this._newEventClickHandler);
+  _userActionHandler(actionType) {
+    if (actionType === UserAction.FORM_CLOSE) {
+      this._renderNewEventButton();
+    }
   }
 
   _modelUpdateHandler(updateType) {

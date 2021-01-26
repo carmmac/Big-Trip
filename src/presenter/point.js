@@ -83,6 +83,7 @@ export default class Point {
         break;
       case FormState.ABORTING:
         this._eventEditComponent.shake(resetFormState(this._eventEditComponent));
+        break;
     }
   }
 
