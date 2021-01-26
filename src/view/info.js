@@ -4,7 +4,6 @@ import {humanizeDate, sortData, SortType} from '../utils/utils-event.js';
 import {draft} from '../utils/utils-render.js';
 import {MAX_INFO_TITLES} from '../const.js';
 
-
 const createInfoTemplate = (events) => {
   const sortedEvents = sortData(events, SortType.DAY);
   const getTripInfoTitle = () => {

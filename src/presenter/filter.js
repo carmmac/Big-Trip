@@ -4,7 +4,6 @@ import {FilterType} from '../const.js';
 import {render, RenderPosition, replace, remove} from '../utils/utils-render.js';
 import {filtration} from '../utils/utils-filter.js';
 
-
 export default class Filter {
   constructor(filterContainer, filterModel, eventModel) {
     this._filterContainer = filterContainer;

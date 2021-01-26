@@ -110,7 +110,9 @@ export default class Trip {
   _clearTripBoard({resetSortType = false} = {}) {
     this._clearList();
     remove(this._emptyListComponent);
-    remove(this._sortComponent);
+    if (this._sortComponent !== null) {
+      remove(this._sortComponent);
+    }
     remove(this._loadingComponent);
 
     if (resetSortType) {
