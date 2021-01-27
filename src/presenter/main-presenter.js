@@ -6,8 +6,12 @@ import TripPresenter from './trip.js';
 import FilterPresenter from './filter.js';
 import {UpdateType, FilterType, ENDPOINT, AUTHORIZATION} from '../const.js';
 import StatsView from '../view/statistics.js';
-import Api from '../api.js';
-import NewEventButtonView from '../view/new-event-button.js';
+import NewEventButtonView from '../view/new-event-button';
+import Api from '../api/api.js';
+import Storage from '../api/storage.js';
+import Provider from '../api/provider.js';
+import {isOnline} from '../utils/utils-common.js';
+import {toast} from '../utils/toast/toast.js';
 
 export default class MainPresenter {
   constructor(headerContainer, menuContainer, filterModel, eventsModel) {
@@ -22,6 +26,8 @@ export default class MainPresenter {
     this._menuItemActive = MenuItem.TABLE;
 
     this._api = new Api(ENDPOINT, AUTHORIZATION);
+    this._storage = new Storage(window.localStorage);
+    this._provider = new Provider(this._api, this._storage);
 
     this._menuClickHandler = this._menuClickHandler.bind(this);
     this._newEventClickHandler = this._newEventClickHandler.bind(this);
@@ -29,7 +35,7 @@ export default class MainPresenter {
     this._userActionHandler = this._userActionHandler.bind(this);
 
     this._tripBoardContainer = document.querySelector(`.page-main .page-body__container`);
-    this._tripPresenter = new TripPresenter(this._tripBoardContainer, filterModel, eventsModel, this._api, this._userActionHandler);
+    this._tripPresenter = new TripPresenter(this._tripBoardContainer, filterModel, eventsModel, this._provider, this._userActionHandler);
     this._filterPresenter = new FilterPresenter(this._menuContainer, filterModel, eventsModel);
   }
 
@@ -39,10 +45,14 @@ export default class MainPresenter {
     this._requestData();
   }
 
+  syncData() {
+    this._provider.sync();
+  }
+
   _requestData() {
-    const requestedEvents = this._api.getEvents();
-    const requestedOffers = this._api.getOffers();
-    const requestedDestinations = this._api.getDestinations();
+    const requestedEvents = this._provider.getEvents();
+    const requestedOffers = this._provider.getOffers();
+    const requestedDestinations = this._provider.getDestinations();
 
     Promise.all([
       requestedEvents,
@@ -54,7 +64,8 @@ export default class MainPresenter {
         this._renderInfo();
         this._renderTripControls();
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         this._eventsModel.setData(UpdateType.INIT, [], [], []);
         this._renderInfo();
         this._renderTripControls();
@@ -146,6 +157,10 @@ export default class MainPresenter {
     this._tripPresenter.destroy();
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._tripPresenter.init();
+    if (!isOnline()) {
+      toast(`Unable to create new event offline!`);
+      return;
+    }
     this._setActiveMenuItem(MenuItem.TABLE);
     this._tripPresenter.createEvent();
     this._renderNewEventButton({isButtonDisabled: true});

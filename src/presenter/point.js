@@ -3,6 +3,8 @@ import EventEditView from '../view/event-edit.js';
 import {render, RenderPosition, replace, remove} from '../utils/utils-render.js';
 import {UserAction, UpdateType, Mode, FormState} from '../const.js';
 import {resetFormState} from '../utils/utils-event.js';
+import {isOnline} from '../utils/utils-common.js';
+import {toast} from '../utils/toast/toast.js';
 
 export default class Point {
   constructor(listContainer, changeData, changeMode, offers, destinations) {
@@ -88,11 +90,19 @@ export default class Point {
   }
 
   _eventFormOpenHandler() {
+    if (!isOnline()) {
+      toast(`Unable to edit event offline!`);
+      return;
+    }
     this._replaceCardToForm();
     this._addHandlers();
   }
 
   _eventFormSubmitHandler(event) {
+    if (!isOnline()) {
+      toast(`Unable to save event offline!`);
+      return;
+    }
     this._changeData(
         UserAction.UPDATE_EVENT,
         UpdateType.MINOR,
@@ -108,6 +118,10 @@ export default class Point {
   }
 
   _eventFormDeleteHandler(event) {
+    if (!isOnline()) {
+      toast(`Unable to delete event offline!`);
+      return;
+    }
     this._changeData(
         UserAction.DELETE_EVENT,
         UpdateType.MINOR,

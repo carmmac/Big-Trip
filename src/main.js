@@ -10,3 +10,24 @@ const siteMenuElement = siteHeaderElement.querySelector(`.trip-controls`);
 
 const mainPresenter = new MainPresenter(siteHeaderElement, siteMenuElement, filterModel, eventsModel);
 mainPresenter.init();
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`./service-worker.js`, {scope: `./`})
+    .then((reg) => {
+      // registration worked
+      console.log(`Registration succeeded. Scope is ` + reg.scope);
+    })
+    .catch((error) => {
+      // registration failed
+      console.log(`Registration failed with ` + error);
+    });
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  mainPresenter.syncData();
+});

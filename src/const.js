@@ -122,6 +122,13 @@ const RequestAddress = {
   POINTS: `points`,
   DESTINATIONS: `destinations`,
   OFFERS: `offers`,
+  SYNC: `sync`,
+};
+
+const RequestHeader = {
+  CONTENT_TYPE: {
+    "Content-Type": `application/json`,
+  }
 };
 
 const BLANK_EVENT = {
@@ -144,6 +151,12 @@ const FormState = {
   SAVING: `SAVING`,
   DELETING: `DELETING`,
   ABORTING: `ABORTING`,
+};
+
+const LocalstorageKey = {
+  EVENTS: `big-trip-events`,
+  OFFERS: `big-trip-offers`,
+  DESTINATIONS: `big-trip-destinations`,
 };
 
 export {
@@ -171,4 +184,6 @@ export {
   BLANK_EVENT,
   FormState,
   SHAKE_ANIMATION_TIMEOUT,
+  RequestHeader,
+  LocalstorageKey,
 };

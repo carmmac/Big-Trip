@@ -1,5 +1,5 @@
-import {RequestMethod, SuccessHTTPStatusRange, RequestAddress} from './const.js';
-import EventsModel from './model/events-model.js';
+import {RequestMethod, SuccessHTTPStatusRange, RequestAddress, RequestHeader} from '../const.js';
+import EventsModel from '../model/events-model.js';
 
 export default class Api {
   constructor(endPoint, authorization) {
@@ -29,7 +29,7 @@ export default class Api {
       url: `${RequestAddress.POINTS}/${event.id}`,
       method: RequestMethod.PUT,
       body: JSON.stringify(EventsModel.adaptEventToServer(event)),
-      headers: new Headers({"Content-Type": `application/json`}),
+      headers: new Headers(RequestHeader.CONTENT_TYPE),
     })
     .then(Api.toJSON)
     .then(EventsModel.adaptEventToClient);
@@ -40,7 +40,7 @@ export default class Api {
       url: `${RequestAddress.POINTS}`,
       method: RequestMethod.POST,
       body: JSON.stringify(EventsModel.adaptEventToServer(event)),
-      headers: new Headers({"Content-Type": `application/json`}),
+      headers: new Headers(RequestHeader.CONTENT_TYPE),
     })
     .then(Api.toJSON)
     .then(EventsModel.adaptEventToClient);
@@ -82,5 +82,15 @@ export default class Api {
 
   static toJSON(response) {
     return response.json();
+  }
+
+  sync(data) {
+    return this._load({
+      url: `${RequestAddress.POINTS}/${RequestAddress.SYNC}`,
+      method: RequestMethod.POST,
+      body: JSON.stringify(data),
+      headers: new Headers(RequestHeader.CONTENT_TYPE)
+    })
+      .then(Api.toJSON);
   }
 }
