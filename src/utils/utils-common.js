@@ -1,3 +1,6 @@
+import dayjs from "dayjs";
+import {humanizeDate} from "./utils-event";
+
 const getRandomNum = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -18,13 +21,14 @@ const formatEventDuration = (duration) => {
   const hours = Math.trunc(duration / 60);
   const days = Math.trunc(hours / 24);
   const minutes = duration % 60;
+  const timeToShow = dayjs().hour(hours).minute(minutes);
   if (days > 0) {
-    return `${days}D ${hours - (days * 24)}H ${minutes}M`;
+    return `${days}D ${humanizeDate(`HH`, timeToShow)}H ${humanizeDate(`mm`, timeToShow)}M`;
   }
   if (hours > 0) {
-    return `${hours}H ${minutes}M`;
+    return `${humanizeDate(`HH`, timeToShow)}H ${humanizeDate(`mm`, timeToShow)}M`;
   }
-  return `${minutes}M`;
+  return `${humanizeDate(`mm`, timeToShow)}M`;
 };
 
 const getEventDuration = (endDate, startDate) => {
