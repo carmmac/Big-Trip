@@ -64,8 +64,7 @@ export default class MainPresenter {
         this._renderInfo();
         this._renderTripControls();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         this._eventsModel.setData(UpdateType.INIT, [], [], []);
         this._renderInfo();
         this._renderTripControls();
