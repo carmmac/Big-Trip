@@ -1,11 +1,5 @@
 import dayjs from 'dayjs';
-import {getRandomNum} from './utils-common.js';
 import {SortType} from '../const.js';
-
-const generateRandomIndex = (data) => {
-  const randomData = data[getRandomNum(0, data.length - 1)];
-  return randomData;
-};
 
 const humanizeDate = (format, date) => {
   return dayjs(date).format(format);
@@ -44,7 +38,6 @@ const resetFormState = (formComponent) => {
 };
 
 export {
-  generateRandomIndex,
   humanizeDate,
   sortData,
   SortType,

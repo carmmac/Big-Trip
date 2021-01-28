@@ -1,12 +1,6 @@
 import dayjs from "dayjs";
 import {humanizeDate} from "./utils-event";
 
-const getRandomNum = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
 const getEmptyDataClassName = (data) => data.length === 0 ? `visually-hidden` : ``;
 
 const getUpdatedList = (items, update) => {
@@ -46,7 +40,6 @@ const isOnline = () => {
 };
 
 export {
-  getRandomNum,
   getEmptyDataClassName,
   getUpdatedList,
   formatEventDuration,

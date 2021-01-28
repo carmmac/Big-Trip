@@ -3,7 +3,6 @@ import Abstract from './absract.js';
 export default class Smart extends Abstract {
   constructor() {
     super();
-    this._event = {};
     this._data = {};
   }
 
