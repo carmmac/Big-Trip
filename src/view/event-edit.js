@@ -389,7 +389,6 @@ export default class EventEdit extends SmartView {
     if (!this._destinations.some((destination) => destination.NAME === evt.target.value)) {
       evt.target.setCustomValidity(`Please choose specified destination from list!`);
       evt.target.reportValidity();
-      return;
     } else {
       evt.target.setCustomValidity(``);
       const getNewDestination = () => {
